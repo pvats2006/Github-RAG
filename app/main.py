@@ -134,6 +134,17 @@ def print_result(result: dict) -> None:
             f"Validation: {timing.get('validation', 0.0):.2f}s | "
             f"Total: {timing.get('total', 0.0):.2f}s"
         )
+        vb = timing.get("validation_breakdown", {})
+        if vb:
+            parts = []
+            if vb.get("grounding", 0) > 0:
+                parts.append(f"Grounding: {vb['grounding']:.2f}s")
+            if vb.get("repair", 0) > 0:
+                parts.append(f"Repair: {vb['repair']:.2f}s")
+            if vb.get("confidence", 0) > 0:
+                parts.append(f"Confidence: {vb['confidence']:.3f}s")
+            if parts:
+                print(f"             {' | '.join(parts)}")
     print(SEPARATOR)
 
 

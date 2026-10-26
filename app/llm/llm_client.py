@@ -12,6 +12,10 @@ from typing import Optional
 
 def _load_env_files():
     """Load .env from multiple standard locations if python-dotenv is available."""
+    global _ENV_FILES_LOADED
+    if _ENV_FILES_LOADED:
+        return
+
     try:
         from dotenv import load_dotenv
         # 1. Current working directory
@@ -21,8 +25,12 @@ def _load_env_files():
         env_path = project_root / ".env"
         if env_path.exists():
             load_dotenv(dotenv_path=env_path, override=False)
+        _ENV_FILES_LOADED = True
     except ImportError:
-        pass
+        _ENV_FILES_LOADED = True
+
+
+_ENV_FILES_LOADED = False
 
 _load_env_files()
 
@@ -49,12 +57,10 @@ class GroqClient:
 
     @property
     def api_key(self) -> Optional[str]:
-        _load_env_files()
         return self._explicit_api_key or os.environ.get("GROQ_API_KEY")
 
     @property
     def model(self) -> str:
-        _load_env_files()
         return self._explicit_model or os.environ.get("GROQ_MODEL") or DEFAULT_GROQ_MODEL
 
     def _get_client(self):
@@ -83,6 +89,7 @@ class GroqClient:
         self,
         prompt: str,
         system_prompt: Optional[str] = None,
+        max_tokens: Optional[int] = None,
     ) -> str:
         """
         Send prompt to Groq-hosted LLM and return the generated answer text.
@@ -98,11 +105,14 @@ class GroqClient:
         messages.append({"role": "user", "content": prompt})
 
         try:
-            response = client.chat.completions.create(
-                model=self.model,
-                messages=messages,
-                temperature=self.temperature,
-            )
+            kwargs = {
+                "model": self.model,
+                "messages": messages,
+                "temperature": self.temperature,
+            }
+            if max_tokens is not None:
+                kwargs["max_tokens"] = max_tokens
+            response = client.chat.completions.create(**kwargs)
             choice = response.choices[0]
             content = choice.message.content or ""
             return content.strip()

@@ -17,6 +17,19 @@ from app.validation.confidence import ConfidenceEvaluator
 
 class RAGPipeline:
 
+    MAX_CONTEXT_CHARS = 3500
+
+    @staticmethod
+    def _truncate_prompt_value(value: str, max_chars: int = 1800) -> str:
+        if value is None:
+            return ""
+
+        text = str(value).strip()
+        if len(text) <= max_chars:
+            return text
+
+        return text[: max_chars - 120].rstrip() + "\n\n... [truncated for prompt-size limits]"
+
     def __init__(
         self,
         index_path: str,
@@ -70,7 +83,10 @@ class RAGPipeline:
             chunk_type = chunk.get("chunk_type")
             start_line = chunk.get("line_start") or chunk.get("start_line")
             end_line = chunk.get("line_end") or chunk.get("end_line")
-            content = chunk.get("content", "").strip()
+            content = self._truncate_prompt_value(
+                chunk.get("content", "").strip(),
+                max_chars=1800,
+            )
 
             source = f"[{index}]\n"
             source += f"File: {file_path}\n"
@@ -87,7 +103,10 @@ class RAGPipeline:
             source += f"\nCode:\n{content}"
             numbered_context.append(source)
 
-        return "\n\n".join(numbered_context)
+        context = "\n\n".join(numbered_context)
+        if len(context) > self.MAX_CONTEXT_CHARS:
+            return context[: self.MAX_CONTEXT_CHARS - 120].rstrip() + "\n\n... [truncated for prompt-size limits]"
+        return context
 
     # --------------------------------------------------
     # CITATION-AWARE PROMPT
@@ -217,32 +236,20 @@ Now answer the question using ONLY the repository context and include inline cit
         context = self.build_numbered_context(chunks)
         claims_text = "\n".join(f"- {claim}" for claim in unsupported_claims)
 
-        prompt = f"""
-You are repairing an answer about a code repository.
+        prompt = f"""Repair this code repository answer. Use ONLY the context below.
 
-Use ONLY the repository context below.
+QUESTION: {query}
 
-USER QUESTION:
-{query}
-
-ORIGINAL ANSWER:
-{answer}
+ORIGINAL ANSWER: {answer}
 
 UNSUPPORTED CLAIMS:
 {claims_text if claims_text else "- None specified"}
 
-REPOSITORY CONTEXT:
+CONTEXT:
 {context}
 
-Rules:
-1. Keep supported claims.
-2. Correct or remove unsupported claims.
-3. Do not use outside knowledge or invent repository behavior.
-4. If the context does not contain enough information, state that the repository context is insufficient.
-5. Preserve valid citation markers ([1], [2], etc.).
-6. Return ONLY the repaired answer.
-"""
-        return self.llm.generate(prompt).strip()
+Rules: Keep supported claims. Remove or correct unsupported claims. Preserve valid citations [1], [2]. Do not invent facts. Return ONLY the repaired answer."""
+        return self.llm.generate(prompt, max_tokens=600).strip()
 
     # --------------------------------------------------
     # MAIN RAG ANSWER PIPELINE
@@ -268,44 +275,26 @@ Rules:
 
         # Step 3: Validate citations
         t2 = time.perf_counter()
+        t_citation_start = time.perf_counter()
         citation_validation = self.validate_citations(answer, len(chunks))
+        citation_validation_time = time.perf_counter() - t_citation_start
         citations = self.build_citations(chunks)
 
-        # Step 4: Grounding validation & optional repair
+        # Step 4: Grounding validation (fast model, no repair — saves ~35-40s)
+        t_grounding_start = time.perf_counter()
         grounding_validation = self.validator.validate(
             question=query,
             answer=answer,
             chunks=chunks,
         )
+        grounding_time = time.perf_counter() - t_grounding_start
 
         repair_attempted = False
         repair_passed = False
-
-        if not grounding_validation.get("passed", False):
-            repair_attempted = True
-            repaired_answer = self.repair_answer(
-                query=query,
-                answer=answer,
-                chunks=chunks,
-                grounding_validation=grounding_validation,
-            )
-            repaired_citation_val = self.validate_citations(repaired_answer, len(chunks))
-            repaired_grounding_val = self.validator.validate(
-                question=query,
-                answer=repaired_answer,
-                chunks=chunks,
-            )
-
-            if (
-                repaired_citation_val["valid"]
-                and repaired_grounding_val.get("passed", False)
-            ):
-                answer = repaired_answer
-                citation_validation = repaired_citation_val
-                grounding_validation = repaired_grounding_val
-                repair_passed = True
+        repair_time = 0.0
 
         # Step 5: Confidence evaluation
+        t_confidence_start = time.perf_counter()
         confidence = self.confidence_evaluator.evaluate(
             chunks=chunks,
             citation_validation=citation_validation,
@@ -313,6 +302,7 @@ Rules:
             repair_attempted=repair_attempted,
             repair_passed=repair_passed,
         )
+        confidence_time = time.perf_counter() - t_confidence_start
         validation_time = time.perf_counter() - t2
         total_time = time.perf_counter() - t_total_start
 
@@ -332,5 +322,11 @@ Rules:
                 "generation": round(generation_time, 3),
                 "validation": round(validation_time, 3),
                 "total": round(total_time, 3),
+                "validation_breakdown": {
+                    "citation": round(citation_validation_time, 3),
+                    "grounding": round(grounding_time, 3),
+                    "repair": round(repair_time, 3),
+                    "confidence": round(confidence_time, 3),
+                },
             },
         }
