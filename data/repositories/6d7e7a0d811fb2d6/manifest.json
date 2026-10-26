@@ -1,0 +1,13 @@
+{
+  "repo_key": "6d7e7a0d811fb2d6",
+  "repo_name": "pvats2006/Image-Classification-ML",
+  "source_url": "https://github.com/pvats2006/Image-Classification-ML.git",
+  "display_url": "https://github.com/pvats2006/Image-Classification-ML",
+  "files_indexed": 17,
+  "chunk_count": 55,
+  "embedding_model": "all-MiniLM-L6-v2",
+  "embedding_dimension": 384,
+  "index_path": "data/repositories/6d7e7a0d811fb2d6/repository.index",
+  "chunks_path": "data/repositories/6d7e7a0d811fb2d6/chunks.json",
+  "metadata_path": "data/repositories/6d7e7a0d811fb2d6/embedding_metadata.json"
+}

@@ -1,0 +1,18 @@
+{
+  "repository_url": "https://github.com/bottlepy/bottle.git",
+  "repository_hash": "4bc9c644197d663b",
+  "repo_key": "4bc9c644197d663b",
+  "repo_name": "bottlepy/bottle",
+  "source_url": "https://github.com/bottlepy/bottle.git",
+  "display_url": "https://github.com/bottlepy/bottle",
+  "indexed_at": "2026-08-29T13:32:59.590664+00:00",
+  "files_indexed": 36,
+  "chunk_count": 1111,
+  "embedding_model": "all-MiniLM-L6-v2",
+  "embedding_dimension": 384,
+  "index_type": "FAISS",
+  "version": "1.0",
+  "index_path": "data/repositories/4bc9c644197d663b/repository.index",
+  "chunks_path": "data/repositories/4bc9c644197d663b/chunks.json",
+  "metadata_path": "data/repositories/4bc9c644197d663b/embedding_metadata.json"
+}

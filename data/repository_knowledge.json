@@ -1,0 +1,3306 @@
+{
+  "repository": "ML-Project",
+  "root_path": "data/repos/ML-Project",
+  "files": [
+    {
+      "path": "requirements.txt",
+      "name": "requirements.txt",
+      "extension": ".txt",
+      "language": "text",
+      "size_bytes": 72,
+      "line_count": 9,
+      "content": "pandas\nnumpy\nseaborn\nmatplotlib\nscikit-learn\ndill\nxgboost\ncatboost\n#-e .",
+      "symbols": [],
+      "imports": [],
+      "relationships": []
+    },
+    {
+      "path": "README.md",
+      "name": "README.md",
+      "extension": ".md",
+      "language": "markdown",
+      "size_bytes": 2076,
+      "line_count": 64,
+      "content": "## End to End Machine Learning project\n## Overview\nThis is an end-to-end Machine Learning project that predicts a student's math score based on various demographic and academic factors. It provides a complete pipeline from data ingestion to model training and deployment via a web application.\n\n## Features\n- Provides an interactive **Flask Web Application** for user input.\n- Takes the following user inputs to make a prediction:\n  - Gender\n  - Race/Ethnicity\n  - Parental Level of Education\n  - Lunch Type (Standard or Free/Reduced)\n  - Test Preparation Course (Completed or None)\n  - Reading Score\n  - Writing Score\n- Predicts the **Math Score** continuously based on a trained machine learning model.\n\n## Project Structure\n- `src/`: Contains the complete modular machine learning pipeline.\n  - `components/`: Data ingestion, data transformation, and model training modules.\n  - `pipeline/`: Training and prediction pipeline logic.\n  - `logger.py` & `exception.py`: Custom logging and exception handling.\n- `notebook/`: Jupyter notebooks for **Exploratory Data Analysis (EDA)** and model experimentation.\n- `application.py`: The entry point for the Flask web application.\n- `templates/`: Contains the HTML templates for the user interface (`index.html`, `home.html`).\n- `requirements.txt`: List of all project dependencies.\n- `setup.py`: Script to make the project installable as a package.\n\n## Installation\n\n1. **Clone the repository:**\n   ```bash\n   git clone <repository_url>\n   cd ML-Project\n   ```\n\n2. **Create a virtual environment:**\n   ```bash\n   python -m venv venv\n   source venv/bin/activate  # On Windows use: venv\\Scripts\\activate\n   ```\n\n3. **Install the dependencies:**\n   ```bash\n   pip install -r requirements.txt\n   ```\n\n## Usage\n\n1. Start the Flask web server:\n   ```bash\n   python application.py\n   ```\n\n2. Open your web browser and go to:\n   ```\n   http://127.0.0.1:5000/\n   ```\n\n3. Navigate to the prediction page to enter student details and hit \"Predict\" to see the expected math score!\n\n## Author\n**Priyanshu**  \nEmail: priyanshuvats8806@gmail.com\n",
+      "symbols": [],
+      "imports": [],
+      "relationships": []
+    },
+    {
+      "path": "application.py",
+      "name": "application.py",
+      "extension": ".py",
+      "language": "python",
+      "size_bytes": 1301,
+      "line_count": 40,
+      "content": "from flask import Flask,request,render_template\nimport numpy as np\nimport pandas as pd\n\nfrom sklearn.preprocessing import StandardScaler\nfrom src.pipeline.predict_pipeline import CustomData,PredictPipeline\napplication=Flask(__name__)\n\napp=application\n\n##Route for a home page \n\n@app.route('/')\ndef index():\n    return render_template('index.html')\n\n@app.route('/predictdata',methods=['GET','POST'])\ndef predict_datapoint():\n    if request.method=='GET':\n        return render_template('home.html')\n    else:\n        data=CustomData(\n            gender=request.form.get('gender'),\n            race_ethnicity=request.form.get('race_ethnicity'),\n            parental_level_of_education=request.form.get('parental_level_of_education'),\n            lunch=request.form.get('lunch'),\n            test_preparation_course=request.form.get('test_preparation_course'),\n            reading_score=float(request.form.get('reading_score')),\n            writing_score=float(request.form.get('writing_score'))\n        )\n\n        pred_df = data.get_data_as_data_frame()\n\n        predict_pipeline = PredictPipeline()\n        results = predict_pipeline.predict(pred_df)\n\n        return render_template('home.html', results=results[0])\n        \nif __name__ == \"__main__\":\n    app.run(host=\"0.0.0.0\", port=5000, debug=True)",
+      "symbols": [
+        {
+          "name": "index",
+          "type": "function",
+          "line_start": 14,
+          "line_end": 15
+        },
+        {
+          "name": "predict_datapoint",
+          "type": "function",
+          "line_start": 18,
+          "line_end": 37
+        }
+      ],
+      "imports": [
+        {
+          "target_file": "src/pipeline/predict_pipeline.py",
+          "symbols": [
+            "CustomData",
+            "PredictPipeline"
+          ],
+          "line": 6
+        }
+      ],
+      "relationships": [
+        {
+          "source": "application.py",
+          "relation": "imports",
+          "target": "src/pipeline/predict_pipeline.py",
+          "line": 6,
+          "symbols": [
+            "CustomData",
+            "PredictPipeline"
+          ]
+        },
+        {
+          "source": "application.py",
+          "relation": "contains",
+          "target": "application.py:function:index"
+        },
+        {
+          "source": "application.py:function:index",
+          "relation": "calls",
+          "target": "application.py:call:app.route:13",
+          "line": 13
+        },
+        {
+          "source": "application.py:function:index",
+          "relation": "calls",
+          "target": "application.py:call:render_template:15",
+          "line": 15
+        },
+        {
+          "source": "application.py",
+          "relation": "contains",
+          "target": "application.py:function:predict_datapoint"
+        },
+        {
+          "source": "application.py:function:predict_datapoint",
+          "relation": "calls",
+          "target": "application.py:call:app.route:17",
+          "line": 17
+        },
+        {
+          "source": "application.py:function:predict_datapoint",
+          "relation": "calls",
+          "target": "application.py:call:render_template:20",
+          "line": 20
+        },
+        {
+          "source": "application.py:function:predict_datapoint",
+          "relation": "calls",
+          "target": "application.py:call:CustomData:22",
+          "line": 22
+        },
+        {
+          "source": "application.py:function:predict_datapoint",
+          "relation": "calls",
+          "target": "application.py:call:data.get_data_as_data_frame:32",
+          "line": 32
+        },
+        {
+          "source": "application.py:function:predict_datapoint",
+          "relation": "calls",
+          "target": "application.py:call:PredictPipeline:34",
+          "line": 34
+        },
+        {
+          "source": "application.py:function:predict_datapoint",
+          "relation": "calls",
+          "target": "application.py:call:predict_pipeline.predict:35",
+          "line": 35
+        },
+        {
+          "source": "application.py:function:predict_datapoint",
+          "relation": "calls",
+          "target": "application.py:call:render_template:37",
+          "line": 37
+        },
+        {
+          "source": "application.py:function:predict_datapoint",
+          "relation": "calls",
+          "target": "application.py:call:get:23",
+          "line": 23
+        },
+        {
+          "source": "application.py:function:predict_datapoint",
+          "relation": "calls",
+          "target": "application.py:call:get:24",
+          "line": 24
+        },
+        {
+          "source": "application.py:function:predict_datapoint",
+          "relation": "calls",
+          "target": "application.py:call:get:25",
+          "line": 25
+        },
+        {
+          "source": "application.py:function:predict_datapoint",
+          "relation": "calls",
+          "target": "application.py:call:get:26",
+          "line": 26
+        },
+        {
+          "source": "application.py:function:predict_datapoint",
+          "relation": "calls",
+          "target": "application.py:call:get:27",
+          "line": 27
+        },
+        {
+          "source": "application.py:function:predict_datapoint",
+          "relation": "calls",
+          "target": "application.py:call:float:28",
+          "line": 28
+        },
+        {
+          "source": "application.py:function:predict_datapoint",
+          "relation": "calls",
+          "target": "application.py:call:float:29",
+          "line": 29
+        },
+        {
+          "source": "application.py:function:predict_datapoint",
+          "relation": "calls",
+          "target": "application.py:call:get:28",
+          "line": 28
+        },
+        {
+          "source": "application.py:function:predict_datapoint",
+          "relation": "calls",
+          "target": "application.py:call:get:29",
+          "line": 29
+        },
+        {
+          "source": "application.py:call:CustomData:22",
+          "relation": "resolves_to",
+          "target": "src/pipeline/predict_pipeline.py:class:CustomData",
+          "line": 22
+        },
+        {
+          "source": "application.py:call:PredictPipeline:34",
+          "relation": "resolves_to",
+          "target": "src/pipeline/predict_pipeline.py:class:PredictPipeline",
+          "line": 34
+        }
+      ]
+    },
+    {
+      "path": "setup.py",
+      "name": "setup.py",
+      "extension": ".py",
+      "language": "python",
+      "size_bytes": 675,
+      "line_count": 30,
+      "content": "from setuptools import find_packages,setup\nfrom typing import List\n\n\n\ndef get_requirements(file_path:str)->list[str]:\n    '''\n    This function will return the list of requirements\n    '''\n\n    requirements=[]\n    with open(file_path) as file_obj:\n        requirements=file_obj.readlines()\n        requirements=[req.replace(\"\\n\",\"\") for req in requirements]\n\n        if \"-e .\" in requirements:\n            requirements.remove(\"-e .\")\n\n    return requirements\n\nsetup(\n    name='ML_Project',\n    version='0.0.1',\n    author='Priyanshu',\n    author_email='priyanshuvats8806@gmail.com',\n    packages=find_packages(),\n    install_requires=get_requirements('requirements.txt'),\n\n\n)",
+      "symbols": [
+        {
+          "name": "get_requirements",
+          "type": "function",
+          "line_start": 6,
+          "line_end": 19
+        }
+      ],
+      "imports": [],
+      "relationships": [
+        {
+          "source": "setup.py",
+          "relation": "contains",
+          "target": "setup.py:function:get_requirements"
+        },
+        {
+          "source": "setup.py:function:get_requirements",
+          "relation": "calls",
+          "target": "setup.py:call:open:12",
+          "line": 12
+        },
+        {
+          "source": "setup.py:function:get_requirements",
+          "relation": "calls",
+          "target": "setup.py:call:file_obj.readlines:13",
+          "line": 13
+        },
+        {
+          "source": "setup.py:function:get_requirements",
+          "relation": "calls",
+          "target": "setup.py:call:req.replace:14",
+          "line": 14
+        },
+        {
+          "source": "setup.py:function:get_requirements",
+          "relation": "calls",
+          "target": "setup.py:call:requirements.remove:17",
+          "line": 17
+        }
+      ]
+    },
+    {
+      "path": "app.py",
+      "name": "app.py",
+      "extension": ".py",
+      "language": "python",
+      "size_bytes": 1473,
+      "line_count": 45,
+      "content": "from flask import Flask,request,render_template\nimport numpy as np\nimport pandas as pd\n\nfrom sklearn.preprocessing import StandardScaler\nfrom src.pipeline.predict_pipeline import CustomData,PredictPipeline\napplication=Flask(__name__)\n\napp=application\n\n##Route for a home page \n\n@app.route('/')\ndef index():\n    return render_template('index.html')\n\n@app.route('/predictdata',methods=['GET','POST'])\ndef predict_datapoint():\n    if request.method=='GET':\n        return render_template('home.html')\n    else:\n        data=CustomData(\n            gender=request.form.get('gender'),\n            race_ethnicity=request.form.get('race_ethnicity'),\n            parental_level_of_education=request.form.get('parental_level_of_education'),\n            lunch=request.form.get('lunch'),\n            test_preparation_course=request.form.get('test_preparation_course'),\n            reading_score=float(request.form.get('reading_score')),\n            writing_score=float(request.form.get('writing_score'))\n        )\n\n        pred_df = data.get_data_as_data_frame()\n\n        predict_pipeline = PredictPipeline()\n        results = predict_pipeline.predict(pred_df)\n\n        return render_template('home.html', results=results[0])\n        \nif __name__ == \"__main__\":\n    app.run(host=\"0.0.0.0\", port=5000, debug=True)\n      \n# Initialize Flask app\n# Define routes for home and prediction\n# GET → render form\n# POST → collect input → convert to DataFrame → predict → return result",
+      "symbols": [
+        {
+          "name": "index",
+          "type": "function",
+          "line_start": 14,
+          "line_end": 15
+        },
+        {
+          "name": "predict_datapoint",
+          "type": "function",
+          "line_start": 18,
+          "line_end": 37
+        }
+      ],
+      "imports": [
+        {
+          "target_file": "src/pipeline/predict_pipeline.py",
+          "symbols": [
+            "CustomData",
+            "PredictPipeline"
+          ],
+          "line": 6
+        }
+      ],
+      "relationships": [
+        {
+          "source": "app.py",
+          "relation": "imports",
+          "target": "src/pipeline/predict_pipeline.py",
+          "line": 6,
+          "symbols": [
+            "CustomData",
+            "PredictPipeline"
+          ]
+        },
+        {
+          "source": "app.py",
+          "relation": "contains",
+          "target": "app.py:function:index"
+        },
+        {
+          "source": "app.py:function:index",
+          "relation": "calls",
+          "target": "app.py:call:app.route:13",
+          "line": 13
+        },
+        {
+          "source": "app.py:function:index",
+          "relation": "calls",
+          "target": "app.py:call:render_template:15",
+          "line": 15
+        },
+        {
+          "source": "app.py",
+          "relation": "contains",
+          "target": "app.py:function:predict_datapoint"
+        },
+        {
+          "source": "app.py:function:predict_datapoint",
+          "relation": "calls",
+          "target": "app.py:call:app.route:17",
+          "line": 17
+        },
+        {
+          "source": "app.py:function:predict_datapoint",
+          "relation": "calls",
+          "target": "app.py:call:render_template:20",
+          "line": 20
+        },
+        {
+          "source": "app.py:function:predict_datapoint",
+          "relation": "calls",
+          "target": "app.py:call:CustomData:22",
+          "line": 22
+        },
+        {
+          "source": "app.py:function:predict_datapoint",
+          "relation": "calls",
+          "target": "app.py:call:data.get_data_as_data_frame:32",
+          "line": 32
+        },
+        {
+          "source": "app.py:function:predict_datapoint",
+          "relation": "calls",
+          "target": "app.py:call:PredictPipeline:34",
+          "line": 34
+        },
+        {
+          "source": "app.py:function:predict_datapoint",
+          "relation": "calls",
+          "target": "app.py:call:predict_pipeline.predict:35",
+          "line": 35
+        },
+        {
+          "source": "app.py:function:predict_datapoint",
+          "relation": "calls",
+          "target": "app.py:call:render_template:37",
+          "line": 37
+        },
+        {
+          "source": "app.py:function:predict_datapoint",
+          "relation": "calls",
+          "target": "app.py:call:get:23",
+          "line": 23
+        },
+        {
+          "source": "app.py:function:predict_datapoint",
+          "relation": "calls",
+          "target": "app.py:call:get:24",
+          "line": 24
+        },
+        {
+          "source": "app.py:function:predict_datapoint",
+          "relation": "calls",
+          "target": "app.py:call:get:25",
+          "line": 25
+        },
+        {
+          "source": "app.py:function:predict_datapoint",
+          "relation": "calls",
+          "target": "app.py:call:get:26",
+          "line": 26
+        },
+        {
+          "source": "app.py:function:predict_datapoint",
+          "relation": "calls",
+          "target": "app.py:call:get:27",
+          "line": 27
+        },
+        {
+          "source": "app.py:function:predict_datapoint",
+          "relation": "calls",
+          "target": "app.py:call:float:28",
+          "line": 28
+        },
+        {
+          "source": "app.py:function:predict_datapoint",
+          "relation": "calls",
+          "target": "app.py:call:float:29",
+          "line": 29
+        },
+        {
+          "source": "app.py:function:predict_datapoint",
+          "relation": "calls",
+          "target": "app.py:call:get:28",
+          "line": 28
+        },
+        {
+          "source": "app.py:function:predict_datapoint",
+          "relation": "calls",
+          "target": "app.py:call:get:29",
+          "line": 29
+        },
+        {
+          "source": "app.py:call:CustomData:22",
+          "relation": "resolves_to",
+          "target": "src/pipeline/predict_pipeline.py:class:CustomData",
+          "line": 22
+        },
+        {
+          "source": "app.py:call:PredictPipeline:34",
+          "relation": "resolves_to",
+          "target": "src/pipeline/predict_pipeline.py:class:PredictPipeline",
+          "line": 34
+        }
+      ]
+    },
+    {
+      "path": "templates/index.html",
+      "name": "index.html",
+      "extension": ".html",
+      "language": "html",
+      "size_bytes": 34,
+      "line_count": 1,
+      "content": "<h1>Welcome to the home page </h1>",
+      "symbols": [],
+      "imports": [],
+      "relationships": []
+    },
+    {
+      "path": "templates/home.html",
+      "name": "home.html",
+      "extension": ".html",
+      "language": "html",
+      "size_bytes": 4565,
+      "line_count": 117,
+      "content": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <title>Student Exam Performance Indicator</title>\n\n    <!-- Bootstrap for styling -->\n    <link href=\"https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css\" rel=\"stylesheet\">\n\n    <style>\n        body {\n            background-color: #f5f5f5;\n        }\n        .login {\n            width: 50%;\n            margin: auto;\n            margin-top: 50px;\n            padding: 30px;\n            background: white;\n            border-radius: 10px;\n            box-shadow: 0px 0px 10px rgba(0,0,0,0.1);\n        }\n    </style>\n</head>\n\n<body>\n    <div class=\"login\">\n        <h1 class=\"text-center\">Student Exam Performance Indicator</h1>\n\n        <form action=\"{{ url_for('predict_datapoint') }}\" method=\"post\">\n\n            <h3 class=\"text-center mb-3\">Student Exam Performance Prediction</h3>\n\n            <!-- Gender -->\n            <div class=\"mb-3\">\n                <label class=\"form-label\">Gender</label>\n                <select class=\"form-control\" name=\"gender\" required>\n                    <option selected disabled value=\"\">Select your Gender</option>\n                    <option value=\"male\">Male</option>\n                    <option value=\"female\">Female</option>\n                </select>\n            </div>\n\n            <!-- Race / Ethnicity -->\n            <div class=\"mb-3\">\n                <label class=\"form-label\">Race or Ethnicity</label>\n                <select class=\"form-control\" name=\"race_ethnicity\" required>\n                    <option selected disabled value=\"\">Select</option>\n                    <option value=\"group A\">Group A</option>\n                    <option value=\"group B\">Group B</option>\n                    <option value=\"group C\">Group C</option>\n                    <option value=\"group D\">Group D</option>\n                    <option value=\"group E\">Group E</option>\n                </select>\n            </div>\n\n            <!-- Parental Education -->\n            <div class=\"mb-3\">\n                <label class=\"form-label\">Parental Level of Education</label>\n                <select class=\"form-control\" name=\"parental_level_of_education\" required>\n                    <option selected disabled value=\"\">Select</option>\n                    <option value=\"some high school\">Some High School</option>\n                    <option value=\"high school\">High School</option>\n                    <option value=\"some college\">Some College</option>\n                    <option value=\"associate's degree\">Associate's Degree</option>\n                    <option value=\"bachelor's degree\">Bachelor's Degree</option>\n                    <option value=\"master's degree\">Master's Degree</option>\n                </select>\n            </div>\n\n            <!-- Lunch -->\n            <div class=\"mb-3\">\n                <label class=\"form-label\">Lunch Type</label>\n                <select class=\"form-control\" name=\"lunch\" required>\n                    <option selected disabled value=\"\">Select</option>\n                    <option value=\"standard\">Standard</option>\n                    <option value=\"free/reduced\">Free/Reduced</option>\n                </select>\n            </div>\n\n            <!-- Test Prep -->\n            <div class=\"mb-3\">\n                <label class=\"form-label\">Test Preparation Course</label>\n                <select class=\"form-control\" name=\"test_preparation_course\" required>\n                    <option selected disabled value=\"\">Select</option>\n                    <option value=\"none\">None</option>\n                    <option value=\"completed\">Completed</option>\n                </select>\n            </div>\n\n            <!-- Reading Score -->\n            <div class=\"mb-3\">\n                <label class=\"form-label\">Reading Score (out of 100)</label>\n                <input type=\"number\" class=\"form-control\" name=\"reading_score\" placeholder=\"Enter reading score\" required>\n            </div>\n\n            <!-- Writing Score -->\n            <div class=\"mb-3\">\n                <label class=\"form-label\">Writing Score (out of 100)</label>\n                <input type=\"number\" class=\"form-control\" name=\"writing_score\" placeholder=\"Enter writing score\" required>\n            </div>\n\n            <!-- Submit -->\n            <div class=\"text-center\">\n                <button type=\"submit\" class=\"btn btn-primary\">Predict Math Score</button>\n            </div>\n\n        </form>\n\n        <!-- Prediction Result -->\n        <br>\n        <h4 class=\"text-center\">\n            {{ results }}\n        </h4>\n    </div>\n</body>\n</html>",
+      "symbols": [],
+      "imports": [],
+      "relationships": []
+    },
+    {
+      "path": "src/exception.py",
+      "name": "exception.py",
+      "extension": ".py",
+      "language": "python",
+      "size_bytes": 619,
+      "line_count": 24,
+      "content": "import sys\n\n\ndef error_message_details(error, error_detail: sys):\n    _, _, exc_tb = error_detail.exc_info()\n    file_name = exc_tb.tb_frame.f_code.co_filename\n\n    error_message = \"Error occurred in python script name [{0}] line [{1}] error message [{2}]\".format(\n        file_name, exc_tb.tb_lineno, str(error)\n    )\n\n    return error_message\n\n\nclass CustomException(Exception):\n    def __init__(self, error_message, error_detail: sys):\n        super().__init__(error_message)\n        self.error_message = error_message_details(error_message, error_detail)\n\n    def __str__(self):\n        return self.error_message\n\n\n",
+      "symbols": [
+        {
+          "name": "CustomException",
+          "type": "class",
+          "line_start": 15,
+          "line_end": 21
+        },
+        {
+          "name": "__init__",
+          "qualified_name": "CustomException.__init__",
+          "type": "method",
+          "line_start": 16,
+          "line_end": 18
+        },
+        {
+          "name": "__str__",
+          "qualified_name": "CustomException.__str__",
+          "type": "method",
+          "line_start": 20,
+          "line_end": 21
+        },
+        {
+          "name": "error_message_details",
+          "type": "function",
+          "line_start": 4,
+          "line_end": 12
+        }
+      ],
+      "imports": [],
+      "relationships": [
+        {
+          "source": "src/utils.py",
+          "relation": "imports",
+          "target": "src/exception.py",
+          "line": 6,
+          "symbols": [
+            "CustomException"
+          ]
+        },
+        {
+          "source": "src/pipeline/predict_pipeline.py",
+          "relation": "imports",
+          "target": "src/exception.py",
+          "line": 3,
+          "symbols": [
+            "CustomException"
+          ]
+        },
+        {
+          "source": "src/components/data_ingestion.py",
+          "relation": "imports",
+          "target": "src/exception.py",
+          "line": 8,
+          "symbols": [
+            "CustomException"
+          ]
+        },
+        {
+          "source": "src/components/model_trainer.py",
+          "relation": "imports",
+          "target": "src/exception.py",
+          "line": 17,
+          "symbols": [
+            "CustomException"
+          ]
+        },
+        {
+          "source": "src/components/data_transformation.py",
+          "relation": "imports",
+          "target": "src/exception.py",
+          "line": 12,
+          "symbols": [
+            "CustomException"
+          ]
+        },
+        {
+          "source": "src/exception.py",
+          "relation": "contains",
+          "target": "src/exception.py:class:CustomException"
+        },
+        {
+          "source": "src/exception.py:class:CustomException",
+          "relation": "contains",
+          "target": "src/exception.py:class:CustomException:method:__init__"
+        },
+        {
+          "source": "src/exception.py:class:CustomException:method:__init__",
+          "relation": "calls",
+          "target": "src/exception.py:call:__init__:17",
+          "line": 17
+        },
+        {
+          "source": "src/exception.py:class:CustomException:method:__init__",
+          "relation": "calls",
+          "target": "src/exception.py:call:error_message_details:18",
+          "line": 18
+        },
+        {
+          "source": "src/exception.py:class:CustomException:method:__init__",
+          "relation": "calls",
+          "target": "src/exception.py:call:super:17",
+          "line": 17
+        },
+        {
+          "source": "src/exception.py:class:CustomException",
+          "relation": "contains",
+          "target": "src/exception.py:class:CustomException:method:__str__"
+        },
+        {
+          "source": "src/exception.py",
+          "relation": "contains",
+          "target": "src/exception.py:function:error_message_details"
+        },
+        {
+          "source": "src/exception.py:function:error_message_details",
+          "relation": "calls",
+          "target": "src/exception.py:call:error_detail.exc_info:5",
+          "line": 5
+        },
+        {
+          "source": "src/exception.py:function:error_message_details",
+          "relation": "calls",
+          "target": "src/exception.py:call:format:8",
+          "line": 8
+        },
+        {
+          "source": "src/exception.py:function:error_message_details",
+          "relation": "calls",
+          "target": "src/exception.py:call:str:9",
+          "line": 9
+        },
+        {
+          "source": "src/exception.py:call:__init__:17",
+          "relation": "resolves_to",
+          "target": "src/exception.py:method:__init__",
+          "line": 17
+        },
+        {
+          "source": "src/exception.py:call:error_message_details:18",
+          "relation": "resolves_to",
+          "target": "src/exception.py:function:error_message_details",
+          "line": 18
+        },
+        {
+          "source": "src/utils.py:call:CustomException:18",
+          "relation": "resolves_to",
+          "target": "src/exception.py:class:CustomException",
+          "line": 18
+        },
+        {
+          "source": "src/utils.py:call:CustomException:39",
+          "relation": "resolves_to",
+          "target": "src/exception.py:class:CustomException",
+          "line": 39
+        },
+        {
+          "source": "src/utils.py:call:CustomException:47",
+          "relation": "resolves_to",
+          "target": "src/exception.py:class:CustomException",
+          "line": 47
+        },
+        {
+          "source": "src/pipeline/predict_pipeline.py:call:CustomException:25",
+          "relation": "resolves_to",
+          "target": "src/exception.py:class:CustomException",
+          "line": 25
+        },
+        {
+          "source": "src/pipeline/predict_pipeline.py:call:CustomException:62",
+          "relation": "resolves_to",
+          "target": "src/exception.py:class:CustomException",
+          "line": 62
+        },
+        {
+          "source": "src/components/data_ingestion.py:call:CustomException:55",
+          "relation": "resolves_to",
+          "target": "src/exception.py:class:CustomException",
+          "line": 55
+        },
+        {
+          "source": "src/components/model_trainer.py:call:CustomException:69",
+          "relation": "resolves_to",
+          "target": "src/exception.py:class:CustomException",
+          "line": 69
+        },
+        {
+          "source": "src/components/model_trainer.py:call:CustomException:86",
+          "relation": "resolves_to",
+          "target": "src/exception.py:class:CustomException",
+          "line": 86
+        },
+        {
+          "source": "src/components/data_transformation.py:call:CustomException:69",
+          "relation": "resolves_to",
+          "target": "src/exception.py:class:CustomException",
+          "line": 69
+        },
+        {
+          "source": "src/components/data_transformation.py:call:CustomException:114",
+          "relation": "resolves_to",
+          "target": "src/exception.py:class:CustomException",
+          "line": 114
+        }
+      ]
+    },
+    {
+      "path": "src/__init__.py",
+      "name": "__init__.py",
+      "extension": ".py",
+      "language": "python",
+      "size_bytes": 0,
+      "line_count": 0,
+      "content": "",
+      "symbols": [],
+      "imports": [],
+      "relationships": []
+    },
+    {
+      "path": "src/logger.py",
+      "name": "logger.py",
+      "extension": ".py",
+      "language": "python",
+      "size_bytes": 495,
+      "line_count": 18,
+      "content": "## This file is used for logging the information during the execution of the code. \n\nimport logging\nimport os\nfrom datetime import datetime\n\nLOG_FILE=f\"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.log\"\nlogs_path=os.path.join(os.getcwd(),\"logs\",LOG_FILE)\nos.makedirs(logs_path,exist_ok=True)\n\nLOG_FILE_PATH=os.path.join(logs_path,LOG_FILE)\n\nlogging.basicConfig(\n    filename=LOG_FILE_PATH,\n    format=\"[%(asctime)s] %(lineno)d %(name)s - %(levelname)s - %(message)s\",\n    level=logging.INFO,\n)\n",
+      "symbols": [],
+      "imports": [],
+      "relationships": [
+        {
+          "source": "src/components/data_ingestion.py",
+          "relation": "imports",
+          "target": "src/logger.py",
+          "line": 9,
+          "symbols": [
+            "logging"
+          ]
+        },
+        {
+          "source": "src/components/model_trainer.py",
+          "relation": "imports",
+          "target": "src/logger.py",
+          "line": 18,
+          "symbols": [
+            "logging"
+          ]
+        },
+        {
+          "source": "src/components/data_transformation.py",
+          "relation": "imports",
+          "target": "src/logger.py",
+          "line": 13,
+          "symbols": [
+            "logging"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "src/utils.py",
+      "name": "utils.py",
+      "extension": ".py",
+      "language": "python",
+      "size_bytes": 1113,
+      "line_count": 47,
+      "content": "import os\nimport sys\nimport dill\n\nfrom sklearn.metrics import r2_score\nfrom src.exception import CustomException\n\n\ndef save_object(file_path, obj):\n    try:\n        dir_path = os.path.dirname(file_path)\n        os.makedirs(dir_path, exist_ok=True)\n\n        with open(file_path, \"wb\") as file_obj:\n            dill.dump(obj, file_obj)\n\n    except Exception as e:\n        raise CustomException(e, sys)\n\n\ndef evaluate_models(X_train, y_train, X_test, y_test, models):\n    try:\n        report = {}\n\n        for name, model in models.items():\n            model.fit(X_train, y_train)\n\n            y_train_pred = model.predict(X_train)\n            y_test_pred = model.predict(X_test)\n\n            train_score = r2_score(y_train, y_train_pred)\n            test_score = r2_score(y_test, y_test_pred)\n\n            report[name] = test_score\n\n        return report\n\n    except Exception as e:\n        raise CustomException(e, sys)\n    \ndef load_object(file_path):\n    try:\n        with open(file_path, \"rb\") as file_obj:\n            return dill.load(file_obj)\n\n    except Exception as e:\n        raise CustomException(e, sys)",
+      "symbols": [
+        {
+          "name": "save_object",
+          "type": "function",
+          "line_start": 9,
+          "line_end": 18
+        },
+        {
+          "name": "evaluate_models",
+          "type": "function",
+          "line_start": 21,
+          "line_end": 39
+        },
+        {
+          "name": "load_object",
+          "type": "function",
+          "line_start": 41,
+          "line_end": 47
+        }
+      ],
+      "imports": [
+        {
+          "target_file": "src/exception.py",
+          "symbols": [
+            "CustomException"
+          ],
+          "line": 6
+        }
+      ],
+      "relationships": [
+        {
+          "source": "src/utils.py",
+          "relation": "imports",
+          "target": "src/exception.py",
+          "line": 6,
+          "symbols": [
+            "CustomException"
+          ]
+        },
+        {
+          "source": "src/pipeline/predict_pipeline.py",
+          "relation": "imports",
+          "target": "src/utils.py",
+          "line": 4,
+          "symbols": [
+            "load_object"
+          ]
+        },
+        {
+          "source": "src/components/model_trainer.py",
+          "relation": "imports",
+          "target": "src/utils.py",
+          "line": 19,
+          "symbols": [
+            "save_object",
+            "evaluate_models"
+          ]
+        },
+        {
+          "source": "src/components/data_transformation.py",
+          "relation": "imports",
+          "target": "src/utils.py",
+          "line": 14,
+          "symbols": [
+            "save_object"
+          ]
+        },
+        {
+          "source": "src/utils.py",
+          "relation": "contains",
+          "target": "src/utils.py:function:save_object"
+        },
+        {
+          "source": "src/utils.py:function:save_object",
+          "relation": "calls",
+          "target": "src/utils.py:call:dirname:11",
+          "line": 11
+        },
+        {
+          "source": "src/utils.py:function:save_object",
+          "relation": "calls",
+          "target": "src/utils.py:call:os.makedirs:12",
+          "line": 12
+        },
+        {
+          "source": "src/utils.py:function:save_object",
+          "relation": "calls",
+          "target": "src/utils.py:call:open:14",
+          "line": 14
+        },
+        {
+          "source": "src/utils.py:function:save_object",
+          "relation": "calls",
+          "target": "src/utils.py:call:dill.dump:15",
+          "line": 15
+        },
+        {
+          "source": "src/utils.py:function:save_object",
+          "relation": "calls",
+          "target": "src/utils.py:call:CustomException:18",
+          "line": 18
+        },
+        {
+          "source": "src/utils.py",
+          "relation": "contains",
+          "target": "src/utils.py:function:evaluate_models"
+        },
+        {
+          "source": "src/utils.py:function:evaluate_models",
+          "relation": "calls",
+          "target": "src/utils.py:call:models.items:25",
+          "line": 25
+        },
+        {
+          "source": "src/utils.py:function:evaluate_models",
+          "relation": "calls",
+          "target": "src/utils.py:call:model.fit:26",
+          "line": 26
+        },
+        {
+          "source": "src/utils.py:function:evaluate_models",
+          "relation": "calls",
+          "target": "src/utils.py:call:model.predict:28",
+          "line": 28
+        },
+        {
+          "source": "src/utils.py:function:evaluate_models",
+          "relation": "calls",
+          "target": "src/utils.py:call:model.predict:29",
+          "line": 29
+        },
+        {
+          "source": "src/utils.py:function:evaluate_models",
+          "relation": "calls",
+          "target": "src/utils.py:call:r2_score:31",
+          "line": 31
+        },
+        {
+          "source": "src/utils.py:function:evaluate_models",
+          "relation": "calls",
+          "target": "src/utils.py:call:r2_score:32",
+          "line": 32
+        },
+        {
+          "source": "src/utils.py:function:evaluate_models",
+          "relation": "calls",
+          "target": "src/utils.py:call:CustomException:39",
+          "line": 39
+        },
+        {
+          "source": "src/utils.py",
+          "relation": "contains",
+          "target": "src/utils.py:function:load_object"
+        },
+        {
+          "source": "src/utils.py:function:load_object",
+          "relation": "calls",
+          "target": "src/utils.py:call:open:43",
+          "line": 43
+        },
+        {
+          "source": "src/utils.py:function:load_object",
+          "relation": "calls",
+          "target": "src/utils.py:call:dill.load:44",
+          "line": 44
+        },
+        {
+          "source": "src/utils.py:function:load_object",
+          "relation": "calls",
+          "target": "src/utils.py:call:CustomException:47",
+          "line": 47
+        },
+        {
+          "source": "src/utils.py:call:CustomException:18",
+          "relation": "resolves_to",
+          "target": "src/exception.py:class:CustomException",
+          "line": 18
+        },
+        {
+          "source": "src/utils.py:call:CustomException:39",
+          "relation": "resolves_to",
+          "target": "src/exception.py:class:CustomException",
+          "line": 39
+        },
+        {
+          "source": "src/utils.py:call:CustomException:47",
+          "relation": "resolves_to",
+          "target": "src/exception.py:class:CustomException",
+          "line": 47
+        },
+        {
+          "source": "src/pipeline/predict_pipeline.py:call:load_object:16",
+          "relation": "resolves_to",
+          "target": "src/utils.py:function:load_object",
+          "line": 16
+        },
+        {
+          "source": "src/pipeline/predict_pipeline.py:call:load_object:17",
+          "relation": "resolves_to",
+          "target": "src/utils.py:function:load_object",
+          "line": 17
+        },
+        {
+          "source": "src/components/model_trainer.py:call:evaluate_models:55",
+          "relation": "resolves_to",
+          "target": "src/utils.py:function:evaluate_models",
+          "line": 55
+        },
+        {
+          "source": "src/components/model_trainer.py:call:save_object:75",
+          "relation": "resolves_to",
+          "target": "src/utils.py:function:save_object",
+          "line": 75
+        },
+        {
+          "source": "src/components/data_transformation.py:call:save_object:100",
+          "relation": "resolves_to",
+          "target": "src/utils.py:function:save_object",
+          "line": 100
+        }
+      ]
+    },
+    {
+      "path": "src/pipeline/train_pipeline.py",
+      "name": "train_pipeline.py",
+      "extension": ".py",
+      "language": "python",
+      "size_bytes": 0,
+      "line_count": 0,
+      "content": "",
+      "symbols": [],
+      "imports": [],
+      "relationships": []
+    },
+    {
+      "path": "src/pipeline/__init__.py",
+      "name": "__init__.py",
+      "extension": ".py",
+      "language": "python",
+      "size_bytes": 0,
+      "line_count": 0,
+      "content": "",
+      "symbols": [],
+      "imports": [],
+      "relationships": []
+    },
+    {
+      "path": "src/pipeline/predict_pipeline.py",
+      "name": "predict_pipeline.py",
+      "extension": ".py",
+      "language": "python",
+      "size_bytes": 1878,
+      "line_count": 62,
+      "content": "import sys\nimport pandas as pd\nfrom src.exception import CustomException\nfrom src.utils import load_object\n\n\nclass PredictPipeline:\n    def __init__(self):\n        pass\n\n    def predict(self, features):\n        try:\n            model_path = \"artifacts/model.pkl\"\n            preprocessor_path = \"artifacts/preprocessor.pkl\"\n\n            model = load_object(file_path=model_path)\n            preprocessor = load_object(file_path=preprocessor_path)\n\n            data_scaled = preprocessor.transform(features)\n            preds = model.predict(data_scaled)\n\n            return preds\n\n        except Exception as e:\n            raise CustomException(e, sys)\n\n\nclass CustomData:\n    def __init__(\n        self,\n        gender: str,\n        race_ethnicity: str,\n        parental_level_of_education: str,\n        lunch: str,\n        test_preparation_course: str,\n        reading_score: int,\n        writing_score: int\n    ):\n        self.gender = gender\n        self.race_ethnicity = race_ethnicity\n        self.parental_level_of_education = parental_level_of_education\n        self.lunch = lunch\n        self.test_preparation_course = test_preparation_course\n        self.reading_score = reading_score\n        self.writing_score = writing_score\n\n    def get_data_as_data_frame(self):\n        try:\n            custom_data_input_dict = {\n                \"gender\": [self.gender],\n                \"race/ethnicity\": [self.race_ethnicity],\n                \"parental_level_of_education\": [self.parental_level_of_education],\n                \"lunch\": [self.lunch],\n                \"test_preparation_course\": [self.test_preparation_course],\n                \"reading_score\": [self.reading_score],\n                \"writing_score\": [self.writing_score]\n            }\n\n            return pd.DataFrame(custom_data_input_dict)\n\n        except Exception as e:\n            raise CustomException(e, sys)",
+      "symbols": [
+        {
+          "name": "PredictPipeline",
+          "type": "class",
+          "line_start": 7,
+          "line_end": 25
+        },
+        {
+          "name": "__init__",
+          "qualified_name": "PredictPipeline.__init__",
+          "type": "method",
+          "line_start": 8,
+          "line_end": 9
+        },
+        {
+          "name": "predict",
+          "qualified_name": "PredictPipeline.predict",
+          "type": "method",
+          "line_start": 11,
+          "line_end": 25
+        },
+        {
+          "name": "CustomData",
+          "type": "class",
+          "line_start": 28,
+          "line_end": 62
+        },
+        {
+          "name": "__init__",
+          "qualified_name": "CustomData.__init__",
+          "type": "method",
+          "line_start": 29,
+          "line_end": 45
+        },
+        {
+          "name": "get_data_as_data_frame",
+          "qualified_name": "CustomData.get_data_as_data_frame",
+          "type": "method",
+          "line_start": 47,
+          "line_end": 62
+        }
+      ],
+      "imports": [
+        {
+          "target_file": "src/exception.py",
+          "symbols": [
+            "CustomException"
+          ],
+          "line": 3
+        },
+        {
+          "target_file": "src/utils.py",
+          "symbols": [
+            "load_object"
+          ],
+          "line": 4
+        }
+      ],
+      "relationships": [
+        {
+          "source": "application.py",
+          "relation": "imports",
+          "target": "src/pipeline/predict_pipeline.py",
+          "line": 6,
+          "symbols": [
+            "CustomData",
+            "PredictPipeline"
+          ]
+        },
+        {
+          "source": "app.py",
+          "relation": "imports",
+          "target": "src/pipeline/predict_pipeline.py",
+          "line": 6,
+          "symbols": [
+            "CustomData",
+            "PredictPipeline"
+          ]
+        },
+        {
+          "source": "src/pipeline/predict_pipeline.py",
+          "relation": "imports",
+          "target": "src/exception.py",
+          "line": 3,
+          "symbols": [
+            "CustomException"
+          ]
+        },
+        {
+          "source": "src/pipeline/predict_pipeline.py",
+          "relation": "imports",
+          "target": "src/utils.py",
+          "line": 4,
+          "symbols": [
+            "load_object"
+          ]
+        },
+        {
+          "source": "src/pipeline/predict_pipeline.py",
+          "relation": "contains",
+          "target": "src/pipeline/predict_pipeline.py:class:PredictPipeline"
+        },
+        {
+          "source": "src/pipeline/predict_pipeline.py:class:PredictPipeline",
+          "relation": "contains",
+          "target": "src/pipeline/predict_pipeline.py:class:PredictPipeline:method:__init__"
+        },
+        {
+          "source": "src/pipeline/predict_pipeline.py:class:PredictPipeline",
+          "relation": "contains",
+          "target": "src/pipeline/predict_pipeline.py:class:PredictPipeline:method:predict"
+        },
+        {
+          "source": "src/pipeline/predict_pipeline.py:class:PredictPipeline:method:predict",
+          "relation": "calls",
+          "target": "src/pipeline/predict_pipeline.py:call:load_object:16",
+          "line": 16
+        },
+        {
+          "source": "src/pipeline/predict_pipeline.py:class:PredictPipeline:method:predict",
+          "relation": "calls",
+          "target": "src/pipeline/predict_pipeline.py:call:load_object:17",
+          "line": 17
+        },
+        {
+          "source": "src/pipeline/predict_pipeline.py:class:PredictPipeline:method:predict",
+          "relation": "calls",
+          "target": "src/pipeline/predict_pipeline.py:call:preprocessor.transform:19",
+          "line": 19
+        },
+        {
+          "source": "src/pipeline/predict_pipeline.py:class:PredictPipeline:method:predict",
+          "relation": "calls",
+          "target": "src/pipeline/predict_pipeline.py:call:model.predict:20",
+          "line": 20
+        },
+        {
+          "source": "src/pipeline/predict_pipeline.py:class:PredictPipeline:method:predict",
+          "relation": "calls",
+          "target": "src/pipeline/predict_pipeline.py:call:CustomException:25",
+          "line": 25
+        },
+        {
+          "source": "src/pipeline/predict_pipeline.py",
+          "relation": "contains",
+          "target": "src/pipeline/predict_pipeline.py:class:CustomData"
+        },
+        {
+          "source": "src/pipeline/predict_pipeline.py:class:CustomData",
+          "relation": "contains",
+          "target": "src/pipeline/predict_pipeline.py:class:CustomData:method:__init__"
+        },
+        {
+          "source": "src/pipeline/predict_pipeline.py:class:CustomData",
+          "relation": "contains",
+          "target": "src/pipeline/predict_pipeline.py:class:CustomData:method:get_data_as_data_frame"
+        },
+        {
+          "source": "src/pipeline/predict_pipeline.py:class:CustomData:method:get_data_as_data_frame",
+          "relation": "calls",
+          "target": "src/pipeline/predict_pipeline.py:call:pd.DataFrame:59",
+          "line": 59
+        },
+        {
+          "source": "src/pipeline/predict_pipeline.py:class:CustomData:method:get_data_as_data_frame",
+          "relation": "calls",
+          "target": "src/pipeline/predict_pipeline.py:call:CustomException:62",
+          "line": 62
+        },
+        {
+          "source": "application.py:call:CustomData:22",
+          "relation": "resolves_to",
+          "target": "src/pipeline/predict_pipeline.py:class:CustomData",
+          "line": 22
+        },
+        {
+          "source": "application.py:call:PredictPipeline:34",
+          "relation": "resolves_to",
+          "target": "src/pipeline/predict_pipeline.py:class:PredictPipeline",
+          "line": 34
+        },
+        {
+          "source": "app.py:call:CustomData:22",
+          "relation": "resolves_to",
+          "target": "src/pipeline/predict_pipeline.py:class:CustomData",
+          "line": 22
+        },
+        {
+          "source": "app.py:call:PredictPipeline:34",
+          "relation": "resolves_to",
+          "target": "src/pipeline/predict_pipeline.py:class:PredictPipeline",
+          "line": 34
+        },
+        {
+          "source": "src/pipeline/predict_pipeline.py:call:load_object:16",
+          "relation": "resolves_to",
+          "target": "src/utils.py:function:load_object",
+          "line": 16
+        },
+        {
+          "source": "src/pipeline/predict_pipeline.py:call:load_object:17",
+          "relation": "resolves_to",
+          "target": "src/utils.py:function:load_object",
+          "line": 17
+        },
+        {
+          "source": "src/pipeline/predict_pipeline.py:call:model.predict:20",
+          "relation": "resolves_to",
+          "target": "src/pipeline/predict_pipeline.py:method:predict",
+          "line": 20
+        },
+        {
+          "source": "src/pipeline/predict_pipeline.py:call:CustomException:25",
+          "relation": "resolves_to",
+          "target": "src/exception.py:class:CustomException",
+          "line": 25
+        },
+        {
+          "source": "src/pipeline/predict_pipeline.py:call:CustomException:62",
+          "relation": "resolves_to",
+          "target": "src/exception.py:class:CustomException",
+          "line": 62
+        }
+      ]
+    },
+    {
+      "path": "src/components/data_ingestion.py",
+      "name": "data_ingestion.py",
+      "extension": ".py",
+      "language": "python",
+      "size_bytes": 2499,
+      "line_count": 76,
+      "content": "import os\nimport sys\nfrom dataclasses import dataclass\nimport pandas as pd\n\nfrom sklearn.model_selection import train_test_split\n\nfrom src.exception import CustomException\nfrom src.logger import logging\nfrom src.components.data_transformation import DataTransformation\n\nfrom src.components.model_trainer import ModelTrainerConfig\nfrom src.components.model_trainer import ModelTrainer\n\n\n@dataclass\nclass DataIngestionConfig:\n    train_data_path: str = os.path.join('artifact', \"train.csv\")\n    test_data_path: str = os.path.join('artifact', \"test.csv\")\n    raw_data_path: str = os.path.join('artifact', \"raw.csv\")\n\n\nclass DataIngestion:\n    def __init__(self):\n        self.ingestion_config = DataIngestionConfig()\n\n    def initiate_data_ingestion(self):\n        logging.info(\"Entered data ingestion component\")\n        try:\n            df = pd.read_csv(r'D:\\ML-Project\\notebook\\StudentsPerformance.csv')\n\n            df.columns = df.columns.str.strip().str.replace(\" \", \"_\")\n\n            logging.info(\"Dataset read and columns normalized\")\n\n            os.makedirs(os.path.dirname(self.ingestion_config.train_data_path), exist_ok=True)\n\n            df.to_csv(self.ingestion_config.raw_data_path, index=False, header=True)\n\n            logging.info(\"Raw data saved\")\n\n            train_set, test_set = train_test_split(df, test_size=0.2, random_state=42)\n\n            train_set.to_csv(self.ingestion_config.train_data_path, index=False, header=True)\n            test_set.to_csv(self.ingestion_config.test_data_path, index=False, header=True)\n\n            logging.info(\"Train-test split completed\")\n\n            return (\n                self.ingestion_config.train_data_path,\n                self.ingestion_config.test_data_path\n            )\n\n        except Exception as e:\n            raise CustomException(e, sys)\n\n\nif __name__ == \"__main__\":\n    obj = DataIngestion()\n    train_data, test_data = obj.initiate_data_ingestion()\n\n    logging.info(\"Starting Data Transformation\")\n\n    data_transformation = DataTransformation()\n    train_arr, test_arr, _ = data_transformation.initiate_data_transformation(train_data, test_data)\n    modelTrainer=ModelTrainer()\n    print( modelTrainer.initiate_model_trainer(train_arr,test_arr))\n \n # ================================\n# DATA INGESTION MODULE\n# ================================\n# Ye file ML pipeline ka first step hai jisme:\n# 1. Dataset read hota hai\n# 2. Raw data store hota hai\n# 3. Train-test split hota hai\n# 4. Alag-alag CSV files me save hota hai",
+      "symbols": [
+        {
+          "name": "DataIngestionConfig",
+          "type": "class",
+          "line_start": 17,
+          "line_end": 20
+        },
+        {
+          "name": "DataIngestion",
+          "type": "class",
+          "line_start": 23,
+          "line_end": 55
+        },
+        {
+          "name": "__init__",
+          "qualified_name": "DataIngestion.__init__",
+          "type": "method",
+          "line_start": 24,
+          "line_end": 25
+        },
+        {
+          "name": "initiate_data_ingestion",
+          "qualified_name": "DataIngestion.initiate_data_ingestion",
+          "type": "method",
+          "line_start": 27,
+          "line_end": 55
+        }
+      ],
+      "imports": [
+        {
+          "target_file": "src/exception.py",
+          "symbols": [
+            "CustomException"
+          ],
+          "line": 8
+        },
+        {
+          "target_file": "src/logger.py",
+          "symbols": [
+            "logging"
+          ],
+          "line": 9
+        },
+        {
+          "target_file": "src/components/data_transformation.py",
+          "symbols": [
+            "DataTransformation"
+          ],
+          "line": 10
+        },
+        {
+          "target_file": "src/components/model_trainer.py",
+          "symbols": [
+            "ModelTrainerConfig"
+          ],
+          "line": 12
+        },
+        {
+          "target_file": "src/components/model_trainer.py",
+          "symbols": [
+            "ModelTrainer"
+          ],
+          "line": 13
+        }
+      ],
+      "relationships": [
+        {
+          "source": "src/components/data_ingestion.py",
+          "relation": "imports",
+          "target": "src/exception.py",
+          "line": 8,
+          "symbols": [
+            "CustomException"
+          ]
+        },
+        {
+          "source": "src/components/data_ingestion.py",
+          "relation": "imports",
+          "target": "src/logger.py",
+          "line": 9,
+          "symbols": [
+            "logging"
+          ]
+        },
+        {
+          "source": "src/components/data_ingestion.py",
+          "relation": "imports",
+          "target": "src/components/data_transformation.py",
+          "line": 10,
+          "symbols": [
+            "DataTransformation"
+          ]
+        },
+        {
+          "source": "src/components/data_ingestion.py",
+          "relation": "imports",
+          "target": "src/components/model_trainer.py",
+          "line": 12,
+          "symbols": [
+            "ModelTrainerConfig"
+          ]
+        },
+        {
+          "source": "src/components/data_ingestion.py",
+          "relation": "imports",
+          "target": "src/components/model_trainer.py",
+          "line": 13,
+          "symbols": [
+            "ModelTrainer"
+          ]
+        },
+        {
+          "source": "src/components/data_ingestion.py",
+          "relation": "contains",
+          "target": "src/components/data_ingestion.py:class:DataIngestionConfig"
+        },
+        {
+          "source": "src/components/data_ingestion.py",
+          "relation": "contains",
+          "target": "src/components/data_ingestion.py:class:DataIngestion"
+        },
+        {
+          "source": "src/components/data_ingestion.py:class:DataIngestion",
+          "relation": "contains",
+          "target": "src/components/data_ingestion.py:class:DataIngestion:method:__init__"
+        },
+        {
+          "source": "src/components/data_ingestion.py:class:DataIngestion:method:__init__",
+          "relation": "calls",
+          "target": "src/components/data_ingestion.py:call:DataIngestionConfig:25",
+          "line": 25
+        },
+        {
+          "source": "src/components/data_ingestion.py:class:DataIngestion",
+          "relation": "contains",
+          "target": "src/components/data_ingestion.py:class:DataIngestion:method:initiate_data_ingestion"
+        },
+        {
+          "source": "src/components/data_ingestion.py:class:DataIngestion:method:initiate_data_ingestion",
+          "relation": "calls",
+          "target": "src/components/data_ingestion.py:call:logging.info:28",
+          "line": 28
+        },
+        {
+          "source": "src/components/data_ingestion.py:class:DataIngestion:method:initiate_data_ingestion",
+          "relation": "calls",
+          "target": "src/components/data_ingestion.py:call:pd.read_csv:30",
+          "line": 30
+        },
+        {
+          "source": "src/components/data_ingestion.py:class:DataIngestion:method:initiate_data_ingestion",
+          "relation": "calls",
+          "target": "src/components/data_ingestion.py:call:replace:32",
+          "line": 32
+        },
+        {
+          "source": "src/components/data_ingestion.py:class:DataIngestion:method:initiate_data_ingestion",
+          "relation": "calls",
+          "target": "src/components/data_ingestion.py:call:logging.info:34",
+          "line": 34
+        },
+        {
+          "source": "src/components/data_ingestion.py:class:DataIngestion:method:initiate_data_ingestion",
+          "relation": "calls",
+          "target": "src/components/data_ingestion.py:call:os.makedirs:36",
+          "line": 36
+        },
+        {
+          "source": "src/components/data_ingestion.py:class:DataIngestion:method:initiate_data_ingestion",
+          "relation": "calls",
+          "target": "src/components/data_ingestion.py:call:df.to_csv:38",
+          "line": 38
+        },
+        {
+          "source": "src/components/data_ingestion.py:class:DataIngestion:method:initiate_data_ingestion",
+          "relation": "calls",
+          "target": "src/components/data_ingestion.py:call:logging.info:40",
+          "line": 40
+        },
+        {
+          "source": "src/components/data_ingestion.py:class:DataIngestion:method:initiate_data_ingestion",
+          "relation": "calls",
+          "target": "src/components/data_ingestion.py:call:train_test_split:42",
+          "line": 42
+        },
+        {
+          "source": "src/components/data_ingestion.py:class:DataIngestion:method:initiate_data_ingestion",
+          "relation": "calls",
+          "target": "src/components/data_ingestion.py:call:train_set.to_csv:44",
+          "line": 44
+        },
+        {
+          "source": "src/components/data_ingestion.py:class:DataIngestion:method:initiate_data_ingestion",
+          "relation": "calls",
+          "target": "src/components/data_ingestion.py:call:test_set.to_csv:45",
+          "line": 45
+        },
+        {
+          "source": "src/components/data_ingestion.py:class:DataIngestion:method:initiate_data_ingestion",
+          "relation": "calls",
+          "target": "src/components/data_ingestion.py:call:logging.info:47",
+          "line": 47
+        },
+        {
+          "source": "src/components/data_ingestion.py:class:DataIngestion:method:initiate_data_ingestion",
+          "relation": "calls",
+          "target": "src/components/data_ingestion.py:call:dirname:36",
+          "line": 36
+        },
+        {
+          "source": "src/components/data_ingestion.py:class:DataIngestion:method:initiate_data_ingestion",
+          "relation": "calls",
+          "target": "src/components/data_ingestion.py:call:CustomException:55",
+          "line": 55
+        },
+        {
+          "source": "src/components/data_ingestion.py:class:DataIngestion:method:initiate_data_ingestion",
+          "relation": "calls",
+          "target": "src/components/data_ingestion.py:call:strip:32",
+          "line": 32
+        },
+        {
+          "source": "src/components/data_ingestion.py:call:DataIngestionConfig:25",
+          "relation": "resolves_to",
+          "target": "src/components/data_ingestion.py:class:DataIngestionConfig",
+          "line": 25
+        },
+        {
+          "source": "src/components/data_ingestion.py:call:CustomException:55",
+          "relation": "resolves_to",
+          "target": "src/exception.py:class:CustomException",
+          "line": 55
+        }
+      ]
+    },
+    {
+      "path": "src/components/model_trainer.py",
+      "name": "model_trainer.py",
+      "extension": ".py",
+      "language": "python",
+      "size_bytes": 2657,
+      "line_count": 86,
+      "content": "import os\nimport sys\nfrom dataclasses import dataclass\n\nfrom catboost import CatBoostRegressor\nfrom sklearn.ensemble import (\n    AdaBoostRegressor,\n    GradientBoostingRegressor,\n    RandomForestRegressor,\n)\nfrom sklearn.linear_model import LinearRegression\nfrom sklearn.metrics import r2_score\nfrom sklearn.neighbors import KNeighborsRegressor\nfrom sklearn.tree import DecisionTreeRegressor\nfrom xgboost import XGBRegressor\n\nfrom src.exception import CustomException\nfrom src.logger import logging\nfrom src.utils import save_object, evaluate_models\n\n\n@dataclass\nclass ModelTrainerConfig:\n    trained_model_file_path = os.path.join(\"artifacts\", \"model.pkl\")\n\n\nclass ModelTrainer:\n    def __init__(self):\n        self.model_trainer_config = ModelTrainerConfig()\n\n    def initiate_model_trainer(self, train_array, test_array):\n        try:\n            logging.info(\"Splitting training and test input data\")\n\n            X_train, y_train, X_test, y_test = (\n                train_array[:, :-1],\n                train_array[:, -1],\n                test_array[:, :-1],\n                test_array[:, -1]\n            )\n\n            models = {\n                \"Random Forest\": RandomForestRegressor(),\n                \"Decision Tree\": DecisionTreeRegressor(),\n                \"Gradient Boosting\": GradientBoostingRegressor(),\n                \"Linear Regression\": LinearRegression(),\n                \"K-Neighbors Regressor\": KNeighborsRegressor(),\n                \"XGBRegressor\": XGBRegressor(),\n                \"CatBoost Regressor\": CatBoostRegressor(verbose=False),\n                \"AdaBoost Regressor\": AdaBoostRegressor()\n            }\n\n            logging.info(\"Evaluating models\")\n\n            model_report: dict = evaluate_models(\n                X_train=X_train,\n                y_train=y_train,\n                X_test=X_test,\n                y_test=y_test,\n                models=models\n            )\n\n            best_model_name = max(model_report, key=model_report.get)\n            best_model_score = model_report[best_model_name]\n\n            best_model = models[best_model_name]\n\n            if best_model_score < 0.6:\n                raise CustomException(\"No best model found\", sys)\n\n            logging.info(f\"Best model found: {best_model_name}\")\n\n            best_model.fit(X_train, y_train)\n\n            save_object(\n                file_path=self.model_trainer_config.trained_model_file_path,\n                obj=best_model\n            )\n\n            predicted = best_model.predict(X_test)\n            r2_square = r2_score(y_test, predicted)\n\n            return r2_square\n\n        except Exception as e:\n            raise CustomException(e, sys)",
+      "symbols": [
+        {
+          "name": "ModelTrainerConfig",
+          "type": "class",
+          "line_start": 23,
+          "line_end": 24
+        },
+        {
+          "name": "ModelTrainer",
+          "type": "class",
+          "line_start": 27,
+          "line_end": 86
+        },
+        {
+          "name": "__init__",
+          "qualified_name": "ModelTrainer.__init__",
+          "type": "method",
+          "line_start": 28,
+          "line_end": 29
+        },
+        {
+          "name": "initiate_model_trainer",
+          "qualified_name": "ModelTrainer.initiate_model_trainer",
+          "type": "method",
+          "line_start": 31,
+          "line_end": 86
+        }
+      ],
+      "imports": [
+        {
+          "target_file": "src/exception.py",
+          "symbols": [
+            "CustomException"
+          ],
+          "line": 17
+        },
+        {
+          "target_file": "src/logger.py",
+          "symbols": [
+            "logging"
+          ],
+          "line": 18
+        },
+        {
+          "target_file": "src/utils.py",
+          "symbols": [
+            "save_object",
+            "evaluate_models"
+          ],
+          "line": 19
+        }
+      ],
+      "relationships": [
+        {
+          "source": "src/components/data_ingestion.py",
+          "relation": "imports",
+          "target": "src/components/model_trainer.py",
+          "line": 12,
+          "symbols": [
+            "ModelTrainerConfig"
+          ]
+        },
+        {
+          "source": "src/components/data_ingestion.py",
+          "relation": "imports",
+          "target": "src/components/model_trainer.py",
+          "line": 13,
+          "symbols": [
+            "ModelTrainer"
+          ]
+        },
+        {
+          "source": "src/components/model_trainer.py",
+          "relation": "imports",
+          "target": "src/exception.py",
+          "line": 17,
+          "symbols": [
+            "CustomException"
+          ]
+        },
+        {
+          "source": "src/components/model_trainer.py",
+          "relation": "imports",
+          "target": "src/logger.py",
+          "line": 18,
+          "symbols": [
+            "logging"
+          ]
+        },
+        {
+          "source": "src/components/model_trainer.py",
+          "relation": "imports",
+          "target": "src/utils.py",
+          "line": 19,
+          "symbols": [
+            "save_object",
+            "evaluate_models"
+          ]
+        },
+        {
+          "source": "src/components/model_trainer.py",
+          "relation": "contains",
+          "target": "src/components/model_trainer.py:class:ModelTrainerConfig"
+        },
+        {
+          "source": "src/components/model_trainer.py",
+          "relation": "contains",
+          "target": "src/components/model_trainer.py:class:ModelTrainer"
+        },
+        {
+          "source": "src/components/model_trainer.py:class:ModelTrainer",
+          "relation": "contains",
+          "target": "src/components/model_trainer.py:class:ModelTrainer:method:__init__"
+        },
+        {
+          "source": "src/components/model_trainer.py:class:ModelTrainer:method:__init__",
+          "relation": "calls",
+          "target": "src/components/model_trainer.py:call:ModelTrainerConfig:29",
+          "line": 29
+        },
+        {
+          "source": "src/components/model_trainer.py:class:ModelTrainer",
+          "relation": "contains",
+          "target": "src/components/model_trainer.py:class:ModelTrainer:method:initiate_model_trainer"
+        },
+        {
+          "source": "src/components/model_trainer.py:class:ModelTrainer:method:initiate_model_trainer",
+          "relation": "calls",
+          "target": "src/components/model_trainer.py:call:logging.info:33",
+          "line": 33
+        },
+        {
+          "source": "src/components/model_trainer.py:class:ModelTrainer:method:initiate_model_trainer",
+          "relation": "calls",
+          "target": "src/components/model_trainer.py:call:logging.info:53",
+          "line": 53
+        },
+        {
+          "source": "src/components/model_trainer.py:class:ModelTrainer:method:initiate_model_trainer",
+          "relation": "calls",
+          "target": "src/components/model_trainer.py:call:evaluate_models:55",
+          "line": 55
+        },
+        {
+          "source": "src/components/model_trainer.py:class:ModelTrainer:method:initiate_model_trainer",
+          "relation": "calls",
+          "target": "src/components/model_trainer.py:call:max:63",
+          "line": 63
+        },
+        {
+          "source": "src/components/model_trainer.py:class:ModelTrainer:method:initiate_model_trainer",
+          "relation": "calls",
+          "target": "src/components/model_trainer.py:call:logging.info:71",
+          "line": 71
+        },
+        {
+          "source": "src/components/model_trainer.py:class:ModelTrainer:method:initiate_model_trainer",
+          "relation": "calls",
+          "target": "src/components/model_trainer.py:call:best_model.fit:73",
+          "line": 73
+        },
+        {
+          "source": "src/components/model_trainer.py:class:ModelTrainer:method:initiate_model_trainer",
+          "relation": "calls",
+          "target": "src/components/model_trainer.py:call:save_object:75",
+          "line": 75
+        },
+        {
+          "source": "src/components/model_trainer.py:class:ModelTrainer:method:initiate_model_trainer",
+          "relation": "calls",
+          "target": "src/components/model_trainer.py:call:best_model.predict:80",
+          "line": 80
+        },
+        {
+          "source": "src/components/model_trainer.py:class:ModelTrainer:method:initiate_model_trainer",
+          "relation": "calls",
+          "target": "src/components/model_trainer.py:call:r2_score:81",
+          "line": 81
+        },
+        {
+          "source": "src/components/model_trainer.py:class:ModelTrainer:method:initiate_model_trainer",
+          "relation": "calls",
+          "target": "src/components/model_trainer.py:call:RandomForestRegressor:43",
+          "line": 43
+        },
+        {
+          "source": "src/components/model_trainer.py:class:ModelTrainer:method:initiate_model_trainer",
+          "relation": "calls",
+          "target": "src/components/model_trainer.py:call:DecisionTreeRegressor:44",
+          "line": 44
+        },
+        {
+          "source": "src/components/model_trainer.py:class:ModelTrainer:method:initiate_model_trainer",
+          "relation": "calls",
+          "target": "src/components/model_trainer.py:call:GradientBoostingRegressor:45",
+          "line": 45
+        },
+        {
+          "source": "src/components/model_trainer.py:class:ModelTrainer:method:initiate_model_trainer",
+          "relation": "calls",
+          "target": "src/components/model_trainer.py:call:LinearRegression:46",
+          "line": 46
+        },
+        {
+          "source": "src/components/model_trainer.py:class:ModelTrainer:method:initiate_model_trainer",
+          "relation": "calls",
+          "target": "src/components/model_trainer.py:call:KNeighborsRegressor:47",
+          "line": 47
+        },
+        {
+          "source": "src/components/model_trainer.py:class:ModelTrainer:method:initiate_model_trainer",
+          "relation": "calls",
+          "target": "src/components/model_trainer.py:call:XGBRegressor:48",
+          "line": 48
+        },
+        {
+          "source": "src/components/model_trainer.py:class:ModelTrainer:method:initiate_model_trainer",
+          "relation": "calls",
+          "target": "src/components/model_trainer.py:call:CatBoostRegressor:49",
+          "line": 49
+        },
+        {
+          "source": "src/components/model_trainer.py:class:ModelTrainer:method:initiate_model_trainer",
+          "relation": "calls",
+          "target": "src/components/model_trainer.py:call:AdaBoostRegressor:50",
+          "line": 50
+        },
+        {
+          "source": "src/components/model_trainer.py:class:ModelTrainer:method:initiate_model_trainer",
+          "relation": "calls",
+          "target": "src/components/model_trainer.py:call:CustomException:69",
+          "line": 69
+        },
+        {
+          "source": "src/components/model_trainer.py:class:ModelTrainer:method:initiate_model_trainer",
+          "relation": "calls",
+          "target": "src/components/model_trainer.py:call:CustomException:86",
+          "line": 86
+        },
+        {
+          "source": "src/components/model_trainer.py:call:ModelTrainerConfig:29",
+          "relation": "resolves_to",
+          "target": "src/components/model_trainer.py:class:ModelTrainerConfig",
+          "line": 29
+        },
+        {
+          "source": "src/components/model_trainer.py:call:evaluate_models:55",
+          "relation": "resolves_to",
+          "target": "src/utils.py:function:evaluate_models",
+          "line": 55
+        },
+        {
+          "source": "src/components/model_trainer.py:call:save_object:75",
+          "relation": "resolves_to",
+          "target": "src/utils.py:function:save_object",
+          "line": 75
+        },
+        {
+          "source": "src/components/model_trainer.py:call:CustomException:69",
+          "relation": "resolves_to",
+          "target": "src/exception.py:class:CustomException",
+          "line": 69
+        },
+        {
+          "source": "src/components/model_trainer.py:call:CustomException:86",
+          "relation": "resolves_to",
+          "target": "src/exception.py:class:CustomException",
+          "line": 86
+        }
+      ]
+    },
+    {
+      "path": "src/components/__init__.py",
+      "name": "__init__.py",
+      "extension": ".py",
+      "language": "python",
+      "size_bytes": 0,
+      "line_count": 0,
+      "content": "",
+      "symbols": [],
+      "imports": [],
+      "relationships": []
+    },
+    {
+      "path": "src/components/data_transformation.py",
+      "name": "data_transformation.py",
+      "extension": ".py",
+      "language": "python",
+      "size_bytes": 3989,
+      "line_count": 119,
+      "content": "import sys\nfrom dataclasses import dataclass\nimport numpy as np\nimport pandas as pd\nimport os\n\nfrom sklearn.compose import ColumnTransformer\nfrom sklearn.impute import SimpleImputer\nfrom sklearn.pipeline import Pipeline\nfrom sklearn.preprocessing import OneHotEncoder, StandardScaler\n\nfrom src.exception import CustomException\nfrom src.logger import logging\nfrom src.utils import save_object\n\n\n@dataclass\nclass DataTransformationConfig:\n    preprocessor_obj_file_path: str = os.path.join('artifact', \"preprocessor.pkl\")\n\n\nclass DataTransformation:\n    def __init__(self):\n        self.data_transformation_config = DataTransformationConfig()\n\n    def get_data_transformer_object(self):\n        try:\n            logging.info(\"Creating data transformation pipelines\")\n\n            numerical_columns = [\"writing_score\", \"reading_score\"]\n\n            categorical_columns = [\n                \"gender\",\n                \"race/ethnicity\",\n                \"parental_level_of_education\",\n                \"lunch\",\n                \"test_preparation_course\",\n            ]\n\n            num_pipeline = Pipeline(\n                steps=[\n                    (\"imputer\", SimpleImputer(strategy=\"median\")),\n                    (\"scaler\", StandardScaler())\n                ]\n            )\n\n            cat_pipeline = Pipeline(\n                steps=[\n                    (\"imputer\", SimpleImputer(strategy=\"most_frequent\")),\n                    (\"one_hot_encoder\", OneHotEncoder(handle_unknown=\"ignore\")),\n                    (\"scaler\", StandardScaler(with_mean=False))\n                ]\n            )\n\n            logging.info(\"Pipelines created successfully\")\n\n            preprocessor = ColumnTransformer(\n                transformers=[\n                    (\"num_pipeline\", num_pipeline, numerical_columns),\n                    (\"cat_pipeline\", cat_pipeline, categorical_columns)\n                ]\n            )\n\n            logging.info(\"ColumnTransformer created successfully\")\n\n            return preprocessor\n\n        except Exception as e:\n            raise CustomException(e, sys)\n\n    def initiate_data_transformation(self, train_path, test_path):\n        try:\n            logging.info(\"Reading train and test data\")\n\n            train_df = pd.read_csv(train_path)\n            test_df = pd.read_csv(test_path)\n\n            logging.info(\"Obtaining preprocessing object\")\n\n            preprocessing_obj = self.get_data_transformer_object()\n\n            target_column_name = \"math_score\"\n\n            input_feature_train_df = train_df.drop(columns=[target_column_name], axis=1)\n            target_feature_train_df = train_df[target_column_name]\n\n            input_feature_test_df = test_df.drop(columns=[target_column_name], axis=1)\n            target_feature_test_df = test_df[target_column_name]\n\n            logging.info(\"Applying preprocessing on training and testing data\")\n\n            input_feature_train_arr = preprocessing_obj.fit_transform(input_feature_train_df)\n            input_feature_test_arr = preprocessing_obj.transform(input_feature_test_df)\n\n            train_arr = np.c_[input_feature_train_arr, target_feature_train_df.values]\n            test_arr = np.c_[input_feature_test_arr, target_feature_test_df.values]\n\n            logging.info(\"Saving preprocessing object\")\n\n            save_object(\n                file_path=self.data_transformation_config.preprocessor_obj_file_path,\n                obj=preprocessing_obj\n            )\n\n            logging.info(\"Data transformation completed\")\n\n            return (\n                train_arr,\n                test_arr,\n                self.data_transformation_config.preprocessor_obj_file_path\n            )\n\n        except Exception as e:\n            raise CustomException(e, sys)\n        \n\n        # Data Transformation Module:\n# Builds preprocessing pipeline (imputation, encoding, scaling), applies it on train/test data,\n# prevents data leakage, converts data into model-ready arrays, and saves the preprocessor for future use.",
+      "symbols": [
+        {
+          "name": "DataTransformationConfig",
+          "type": "class",
+          "line_start": 18,
+          "line_end": 19
+        },
+        {
+          "name": "DataTransformation",
+          "type": "class",
+          "line_start": 22,
+          "line_end": 114
+        },
+        {
+          "name": "__init__",
+          "qualified_name": "DataTransformation.__init__",
+          "type": "method",
+          "line_start": 23,
+          "line_end": 24
+        },
+        {
+          "name": "get_data_transformer_object",
+          "qualified_name": "DataTransformation.get_data_transformer_object",
+          "type": "method",
+          "line_start": 26,
+          "line_end": 69
+        },
+        {
+          "name": "initiate_data_transformation",
+          "qualified_name": "DataTransformation.initiate_data_transformation",
+          "type": "method",
+          "line_start": 71,
+          "line_end": 114
+        }
+      ],
+      "imports": [
+        {
+          "target_file": "src/exception.py",
+          "symbols": [
+            "CustomException"
+          ],
+          "line": 12
+        },
+        {
+          "target_file": "src/logger.py",
+          "symbols": [
+            "logging"
+          ],
+          "line": 13
+        },
+        {
+          "target_file": "src/utils.py",
+          "symbols": [
+            "save_object"
+          ],
+          "line": 14
+        }
+      ],
+      "relationships": [
+        {
+          "source": "src/components/data_ingestion.py",
+          "relation": "imports",
+          "target": "src/components/data_transformation.py",
+          "line": 10,
+          "symbols": [
+            "DataTransformation"
+          ]
+        },
+        {
+          "source": "src/components/data_transformation.py",
+          "relation": "imports",
+          "target": "src/exception.py",
+          "line": 12,
+          "symbols": [
+            "CustomException"
+          ]
+        },
+        {
+          "source": "src/components/data_transformation.py",
+          "relation": "imports",
+          "target": "src/logger.py",
+          "line": 13,
+          "symbols": [
+            "logging"
+          ]
+        },
+        {
+          "source": "src/components/data_transformation.py",
+          "relation": "imports",
+          "target": "src/utils.py",
+          "line": 14,
+          "symbols": [
+            "save_object"
+          ]
+        },
+        {
+          "source": "src/components/data_transformation.py",
+          "relation": "contains",
+          "target": "src/components/data_transformation.py:class:DataTransformationConfig"
+        },
+        {
+          "source": "src/components/data_transformation.py",
+          "relation": "contains",
+          "target": "src/components/data_transformation.py:class:DataTransformation"
+        },
+        {
+          "source": "src/components/data_transformation.py:class:DataTransformation",
+          "relation": "contains",
+          "target": "src/components/data_transformation.py:class:DataTransformation:method:__init__"
+        },
+        {
+          "source": "src/components/data_transformation.py:class:DataTransformation:method:__init__",
+          "relation": "calls",
+          "target": "src/components/data_transformation.py:call:DataTransformationConfig:24",
+          "line": 24
+        },
+        {
+          "source": "src/components/data_transformation.py:class:DataTransformation",
+          "relation": "contains",
+          "target": "src/components/data_transformation.py:class:DataTransformation:method:get_data_transformer_object"
+        },
+        {
+          "source": "src/components/data_transformation.py:class:DataTransformation:method:get_data_transformer_object",
+          "relation": "calls",
+          "target": "src/components/data_transformation.py:call:logging.info:28",
+          "line": 28
+        },
+        {
+          "source": "src/components/data_transformation.py:class:DataTransformation:method:get_data_transformer_object",
+          "relation": "calls",
+          "target": "src/components/data_transformation.py:call:Pipeline:40",
+          "line": 40
+        },
+        {
+          "source": "src/components/data_transformation.py:class:DataTransformation:method:get_data_transformer_object",
+          "relation": "calls",
+          "target": "src/components/data_transformation.py:call:Pipeline:47",
+          "line": 47
+        },
+        {
+          "source": "src/components/data_transformation.py:class:DataTransformation:method:get_data_transformer_object",
+          "relation": "calls",
+          "target": "src/components/data_transformation.py:call:logging.info:55",
+          "line": 55
+        },
+        {
+          "source": "src/components/data_transformation.py:class:DataTransformation:method:get_data_transformer_object",
+          "relation": "calls",
+          "target": "src/components/data_transformation.py:call:ColumnTransformer:57",
+          "line": 57
+        },
+        {
+          "source": "src/components/data_transformation.py:class:DataTransformation:method:get_data_transformer_object",
+          "relation": "calls",
+          "target": "src/components/data_transformation.py:call:logging.info:64",
+          "line": 64
+        },
+        {
+          "source": "src/components/data_transformation.py:class:DataTransformation:method:get_data_transformer_object",
+          "relation": "calls",
+          "target": "src/components/data_transformation.py:call:CustomException:69",
+          "line": 69
+        },
+        {
+          "source": "src/components/data_transformation.py:class:DataTransformation:method:get_data_transformer_object",
+          "relation": "calls",
+          "target": "src/components/data_transformation.py:call:SimpleImputer:42",
+          "line": 42
+        },
+        {
+          "source": "src/components/data_transformation.py:class:DataTransformation:method:get_data_transformer_object",
+          "relation": "calls",
+          "target": "src/components/data_transformation.py:call:StandardScaler:43",
+          "line": 43
+        },
+        {
+          "source": "src/components/data_transformation.py:class:DataTransformation:method:get_data_transformer_object",
+          "relation": "calls",
+          "target": "src/components/data_transformation.py:call:SimpleImputer:49",
+          "line": 49
+        },
+        {
+          "source": "src/components/data_transformation.py:class:DataTransformation:method:get_data_transformer_object",
+          "relation": "calls",
+          "target": "src/components/data_transformation.py:call:OneHotEncoder:50",
+          "line": 50
+        },
+        {
+          "source": "src/components/data_transformation.py:class:DataTransformation:method:get_data_transformer_object",
+          "relation": "calls",
+          "target": "src/components/data_transformation.py:call:StandardScaler:51",
+          "line": 51
+        },
+        {
+          "source": "src/components/data_transformation.py:class:DataTransformation",
+          "relation": "contains",
+          "target": "src/components/data_transformation.py:class:DataTransformation:method:initiate_data_transformation"
+        },
+        {
+          "source": "src/components/data_transformation.py:class:DataTransformation:method:initiate_data_transformation",
+          "relation": "calls",
+          "target": "src/components/data_transformation.py:call:logging.info:73",
+          "line": 73
+        },
+        {
+          "source": "src/components/data_transformation.py:class:DataTransformation:method:initiate_data_transformation",
+          "relation": "calls",
+          "target": "src/components/data_transformation.py:call:pd.read_csv:75",
+          "line": 75
+        },
+        {
+          "source": "src/components/data_transformation.py:class:DataTransformation:method:initiate_data_transformation",
+          "relation": "calls",
+          "target": "src/components/data_transformation.py:call:pd.read_csv:76",
+          "line": 76
+        },
+        {
+          "source": "src/components/data_transformation.py:class:DataTransformation:method:initiate_data_transformation",
+          "relation": "calls",
+          "target": "src/components/data_transformation.py:call:logging.info:78",
+          "line": 78
+        },
+        {
+          "source": "src/components/data_transformation.py:class:DataTransformation:method:initiate_data_transformation",
+          "relation": "calls",
+          "target": "src/components/data_transformation.py:call:self.get_data_transformer_object:80",
+          "line": 80
+        },
+        {
+          "source": "src/components/data_transformation.py:class:DataTransformation:method:initiate_data_transformation",
+          "relation": "calls",
+          "target": "src/components/data_transformation.py:call:train_df.drop:84",
+          "line": 84
+        },
+        {
+          "source": "src/components/data_transformation.py:class:DataTransformation:method:initiate_data_transformation",
+          "relation": "calls",
+          "target": "src/components/data_transformation.py:call:test_df.drop:87",
+          "line": 87
+        },
+        {
+          "source": "src/components/data_transformation.py:class:DataTransformation:method:initiate_data_transformation",
+          "relation": "calls",
+          "target": "src/components/data_transformation.py:call:logging.info:90",
+          "line": 90
+        },
+        {
+          "source": "src/components/data_transformation.py:class:DataTransformation:method:initiate_data_transformation",
+          "relation": "calls",
+          "target": "src/components/data_transformation.py:call:preprocessing_obj.fit_transform:92",
+          "line": 92
+        },
+        {
+          "source": "src/components/data_transformation.py:class:DataTransformation:method:initiate_data_transformation",
+          "relation": "calls",
+          "target": "src/components/data_transformation.py:call:preprocessing_obj.transform:93",
+          "line": 93
+        },
+        {
+          "source": "src/components/data_transformation.py:class:DataTransformation:method:initiate_data_transformation",
+          "relation": "calls",
+          "target": "src/components/data_transformation.py:call:logging.info:98",
+          "line": 98
+        },
+        {
+          "source": "src/components/data_transformation.py:class:DataTransformation:method:initiate_data_transformation",
+          "relation": "calls",
+          "target": "src/components/data_transformation.py:call:save_object:100",
+          "line": 100
+        },
+        {
+          "source": "src/components/data_transformation.py:class:DataTransformation:method:initiate_data_transformation",
+          "relation": "calls",
+          "target": "src/components/data_transformation.py:call:logging.info:105",
+          "line": 105
+        },
+        {
+          "source": "src/components/data_transformation.py:class:DataTransformation:method:initiate_data_transformation",
+          "relation": "calls",
+          "target": "src/components/data_transformation.py:call:CustomException:114",
+          "line": 114
+        },
+        {
+          "source": "src/components/data_transformation.py:call:DataTransformationConfig:24",
+          "relation": "resolves_to",
+          "target": "src/components/data_transformation.py:class:DataTransformationConfig",
+          "line": 24
+        },
+        {
+          "source": "src/components/data_transformation.py:call:CustomException:69",
+          "relation": "resolves_to",
+          "target": "src/exception.py:class:CustomException",
+          "line": 69
+        },
+        {
+          "source": "src/components/data_transformation.py:call:self.get_data_transformer_object:80",
+          "relation": "resolves_to",
+          "target": "src/components/data_transformation.py:method:get_data_transformer_object",
+          "line": 80
+        },
+        {
+          "source": "src/components/data_transformation.py:call:save_object:100",
+          "relation": "resolves_to",
+          "target": "src/utils.py:function:save_object",
+          "line": 100
+        },
+        {
+          "source": "src/components/data_transformation.py:call:CustomException:114",
+          "relation": "resolves_to",
+          "target": "src/exception.py:class:CustomException",
+          "line": 114
+        }
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "source": "application.py",
+      "relation": "imports",
+      "target": "src/pipeline/predict_pipeline.py",
+      "line": 6,
+      "symbols": [
+        "CustomData",
+        "PredictPipeline"
+      ]
+    },
+    {
+      "source": "app.py",
+      "relation": "imports",
+      "target": "src/pipeline/predict_pipeline.py",
+      "line": 6,
+      "symbols": [
+        "CustomData",
+        "PredictPipeline"
+      ]
+    },
+    {
+      "source": "src/utils.py",
+      "relation": "imports",
+      "target": "src/exception.py",
+      "line": 6,
+      "symbols": [
+        "CustomException"
+      ]
+    },
+    {
+      "source": "src/pipeline/predict_pipeline.py",
+      "relation": "imports",
+      "target": "src/exception.py",
+      "line": 3,
+      "symbols": [
+        "CustomException"
+      ]
+    },
+    {
+      "source": "src/pipeline/predict_pipeline.py",
+      "relation": "imports",
+      "target": "src/utils.py",
+      "line": 4,
+      "symbols": [
+        "load_object"
+      ]
+    },
+    {
+      "source": "src/components/data_ingestion.py",
+      "relation": "imports",
+      "target": "src/exception.py",
+      "line": 8,
+      "symbols": [
+        "CustomException"
+      ]
+    },
+    {
+      "source": "src/components/data_ingestion.py",
+      "relation": "imports",
+      "target": "src/logger.py",
+      "line": 9,
+      "symbols": [
+        "logging"
+      ]
+    },
+    {
+      "source": "src/components/data_ingestion.py",
+      "relation": "imports",
+      "target": "src/components/data_transformation.py",
+      "line": 10,
+      "symbols": [
+        "DataTransformation"
+      ]
+    },
+    {
+      "source": "src/components/data_ingestion.py",
+      "relation": "imports",
+      "target": "src/components/model_trainer.py",
+      "line": 12,
+      "symbols": [
+        "ModelTrainerConfig"
+      ]
+    },
+    {
+      "source": "src/components/data_ingestion.py",
+      "relation": "imports",
+      "target": "src/components/model_trainer.py",
+      "line": 13,
+      "symbols": [
+        "ModelTrainer"
+      ]
+    },
+    {
+      "source": "src/components/model_trainer.py",
+      "relation": "imports",
+      "target": "src/exception.py",
+      "line": 17,
+      "symbols": [
+        "CustomException"
+      ]
+    },
+    {
+      "source": "src/components/model_trainer.py",
+      "relation": "imports",
+      "target": "src/logger.py",
+      "line": 18,
+      "symbols": [
+        "logging"
+      ]
+    },
+    {
+      "source": "src/components/model_trainer.py",
+      "relation": "imports",
+      "target": "src/utils.py",
+      "line": 19,
+      "symbols": [
+        "save_object",
+        "evaluate_models"
+      ]
+    },
+    {
+      "source": "src/components/data_transformation.py",
+      "relation": "imports",
+      "target": "src/exception.py",
+      "line": 12,
+      "symbols": [
+        "CustomException"
+      ]
+    },
+    {
+      "source": "src/components/data_transformation.py",
+      "relation": "imports",
+      "target": "src/logger.py",
+      "line": 13,
+      "symbols": [
+        "logging"
+      ]
+    },
+    {
+      "source": "src/components/data_transformation.py",
+      "relation": "imports",
+      "target": "src/utils.py",
+      "line": 14,
+      "symbols": [
+        "save_object"
+      ]
+    },
+    {
+      "source": "application.py",
+      "relation": "contains",
+      "target": "application.py:function:index"
+    },
+    {
+      "source": "application.py:function:index",
+      "relation": "calls",
+      "target": "application.py:call:app.route:13",
+      "line": 13
+    },
+    {
+      "source": "application.py:function:index",
+      "relation": "calls",
+      "target": "application.py:call:render_template:15",
+      "line": 15
+    },
+    {
+      "source": "application.py",
+      "relation": "contains",
+      "target": "application.py:function:predict_datapoint"
+    },
+    {
+      "source": "application.py:function:predict_datapoint",
+      "relation": "calls",
+      "target": "application.py:call:app.route:17",
+      "line": 17
+    },
+    {
+      "source": "application.py:function:predict_datapoint",
+      "relation": "calls",
+      "target": "application.py:call:render_template:20",
+      "line": 20
+    },
+    {
+      "source": "application.py:function:predict_datapoint",
+      "relation": "calls",
+      "target": "application.py:call:CustomData:22",
+      "line": 22
+    },
+    {
+      "source": "application.py:function:predict_datapoint",
+      "relation": "calls",
+      "target": "application.py:call:data.get_data_as_data_frame:32",
+      "line": 32
+    },
+    {
+      "source": "application.py:function:predict_datapoint",
+      "relation": "calls",
+      "target": "application.py:call:PredictPipeline:34",
+      "line": 34
+    },
+    {
+      "source": "application.py:function:predict_datapoint",
+      "relation": "calls",
+      "target": "application.py:call:predict_pipeline.predict:35",
+      "line": 35
+    },
+    {
+      "source": "application.py:function:predict_datapoint",
+      "relation": "calls",
+      "target": "application.py:call:render_template:37",
+      "line": 37
+    },
+    {
+      "source": "application.py:function:predict_datapoint",
+      "relation": "calls",
+      "target": "application.py:call:get:23",
+      "line": 23
+    },
+    {
+      "source": "application.py:function:predict_datapoint",
+      "relation": "calls",
+      "target": "application.py:call:get:24",
+      "line": 24
+    },
+    {
+      "source": "application.py:function:predict_datapoint",
+      "relation": "calls",
+      "target": "application.py:call:get:25",
+      "line": 25
+    },
+    {
+      "source": "application.py:function:predict_datapoint",
+      "relation": "calls",
+      "target": "application.py:call:get:26",
+      "line": 26
+    },
+    {
+      "source": "application.py:function:predict_datapoint",
+      "relation": "calls",
+      "target": "application.py:call:get:27",
+      "line": 27
+    },
+    {
+      "source": "application.py:function:predict_datapoint",
+      "relation": "calls",
+      "target": "application.py:call:float:28",
+      "line": 28
+    },
+    {
+      "source": "application.py:function:predict_datapoint",
+      "relation": "calls",
+      "target": "application.py:call:float:29",
+      "line": 29
+    },
+    {
+      "source": "application.py:function:predict_datapoint",
+      "relation": "calls",
+      "target": "application.py:call:get:28",
+      "line": 28
+    },
+    {
+      "source": "application.py:function:predict_datapoint",
+      "relation": "calls",
+      "target": "application.py:call:get:29",
+      "line": 29
+    },
+    {
+      "source": "setup.py",
+      "relation": "contains",
+      "target": "setup.py:function:get_requirements"
+    },
+    {
+      "source": "setup.py:function:get_requirements",
+      "relation": "calls",
+      "target": "setup.py:call:open:12",
+      "line": 12
+    },
+    {
+      "source": "setup.py:function:get_requirements",
+      "relation": "calls",
+      "target": "setup.py:call:file_obj.readlines:13",
+      "line": 13
+    },
+    {
+      "source": "setup.py:function:get_requirements",
+      "relation": "calls",
+      "target": "setup.py:call:req.replace:14",
+      "line": 14
+    },
+    {
+      "source": "setup.py:function:get_requirements",
+      "relation": "calls",
+      "target": "setup.py:call:requirements.remove:17",
+      "line": 17
+    },
+    {
+      "source": "app.py",
+      "relation": "contains",
+      "target": "app.py:function:index"
+    },
+    {
+      "source": "app.py:function:index",
+      "relation": "calls",
+      "target": "app.py:call:app.route:13",
+      "line": 13
+    },
+    {
+      "source": "app.py:function:index",
+      "relation": "calls",
+      "target": "app.py:call:render_template:15",
+      "line": 15
+    },
+    {
+      "source": "app.py",
+      "relation": "contains",
+      "target": "app.py:function:predict_datapoint"
+    },
+    {
+      "source": "app.py:function:predict_datapoint",
+      "relation": "calls",
+      "target": "app.py:call:app.route:17",
+      "line": 17
+    },
+    {
+      "source": "app.py:function:predict_datapoint",
+      "relation": "calls",
+      "target": "app.py:call:render_template:20",
+      "line": 20
+    },
+    {
+      "source": "app.py:function:predict_datapoint",
+      "relation": "calls",
+      "target": "app.py:call:CustomData:22",
+      "line": 22
+    },
+    {
+      "source": "app.py:function:predict_datapoint",
+      "relation": "calls",
+      "target": "app.py:call:data.get_data_as_data_frame:32",
+      "line": 32
+    },
+    {
+      "source": "app.py:function:predict_datapoint",
+      "relation": "calls",
+      "target": "app.py:call:PredictPipeline:34",
+      "line": 34
+    },
+    {
+      "source": "app.py:function:predict_datapoint",
+      "relation": "calls",
+      "target": "app.py:call:predict_pipeline.predict:35",
+      "line": 35
+    },
+    {
+      "source": "app.py:function:predict_datapoint",
+      "relation": "calls",
+      "target": "app.py:call:render_template:37",
+      "line": 37
+    },
+    {
+      "source": "app.py:function:predict_datapoint",
+      "relation": "calls",
+      "target": "app.py:call:get:23",
+      "line": 23
+    },
+    {
+      "source": "app.py:function:predict_datapoint",
+      "relation": "calls",
+      "target": "app.py:call:get:24",
+      "line": 24
+    },
+    {
+      "source": "app.py:function:predict_datapoint",
+      "relation": "calls",
+      "target": "app.py:call:get:25",
+      "line": 25
+    },
+    {
+      "source": "app.py:function:predict_datapoint",
+      "relation": "calls",
+      "target": "app.py:call:get:26",
+      "line": 26
+    },
+    {
+      "source": "app.py:function:predict_datapoint",
+      "relation": "calls",
+      "target": "app.py:call:get:27",
+      "line": 27
+    },
+    {
+      "source": "app.py:function:predict_datapoint",
+      "relation": "calls",
+      "target": "app.py:call:float:28",
+      "line": 28
+    },
+    {
+      "source": "app.py:function:predict_datapoint",
+      "relation": "calls",
+      "target": "app.py:call:float:29",
+      "line": 29
+    },
+    {
+      "source": "app.py:function:predict_datapoint",
+      "relation": "calls",
+      "target": "app.py:call:get:28",
+      "line": 28
+    },
+    {
+      "source": "app.py:function:predict_datapoint",
+      "relation": "calls",
+      "target": "app.py:call:get:29",
+      "line": 29
+    },
+    {
+      "source": "src/exception.py",
+      "relation": "contains",
+      "target": "src/exception.py:class:CustomException"
+    },
+    {
+      "source": "src/exception.py:class:CustomException",
+      "relation": "contains",
+      "target": "src/exception.py:class:CustomException:method:__init__"
+    },
+    {
+      "source": "src/exception.py:class:CustomException:method:__init__",
+      "relation": "calls",
+      "target": "src/exception.py:call:__init__:17",
+      "line": 17
+    },
+    {
+      "source": "src/exception.py:class:CustomException:method:__init__",
+      "relation": "calls",
+      "target": "src/exception.py:call:error_message_details:18",
+      "line": 18
+    },
+    {
+      "source": "src/exception.py:class:CustomException:method:__init__",
+      "relation": "calls",
+      "target": "src/exception.py:call:super:17",
+      "line": 17
+    },
+    {
+      "source": "src/exception.py:class:CustomException",
+      "relation": "contains",
+      "target": "src/exception.py:class:CustomException:method:__str__"
+    },
+    {
+      "source": "src/exception.py",
+      "relation": "contains",
+      "target": "src/exception.py:function:error_message_details"
+    },
+    {
+      "source": "src/exception.py:function:error_message_details",
+      "relation": "calls",
+      "target": "src/exception.py:call:error_detail.exc_info:5",
+      "line": 5
+    },
+    {
+      "source": "src/exception.py:function:error_message_details",
+      "relation": "calls",
+      "target": "src/exception.py:call:format:8",
+      "line": 8
+    },
+    {
+      "source": "src/exception.py:function:error_message_details",
+      "relation": "calls",
+      "target": "src/exception.py:call:str:9",
+      "line": 9
+    },
+    {
+      "source": "src/utils.py",
+      "relation": "contains",
+      "target": "src/utils.py:function:save_object"
+    },
+    {
+      "source": "src/utils.py:function:save_object",
+      "relation": "calls",
+      "target": "src/utils.py:call:dirname:11",
+      "line": 11
+    },
+    {
+      "source": "src/utils.py:function:save_object",
+      "relation": "calls",
+      "target": "src/utils.py:call:os.makedirs:12",
+      "line": 12
+    },
+    {
+      "source": "src/utils.py:function:save_object",
+      "relation": "calls",
+      "target": "src/utils.py:call:open:14",
+      "line": 14
+    },
+    {
+      "source": "src/utils.py:function:save_object",
+      "relation": "calls",
+      "target": "src/utils.py:call:dill.dump:15",
+      "line": 15
+    },
+    {
+      "source": "src/utils.py:function:save_object",
+      "relation": "calls",
+      "target": "src/utils.py:call:CustomException:18",
+      "line": 18
+    },
+    {
+      "source": "src/utils.py",
+      "relation": "contains",
+      "target": "src/utils.py:function:evaluate_models"
+    },
+    {
+      "source": "src/utils.py:function:evaluate_models",
+      "relation": "calls",
+      "target": "src/utils.py:call:models.items:25",
+      "line": 25
+    },
+    {
+      "source": "src/utils.py:function:evaluate_models",
+      "relation": "calls",
+      "target": "src/utils.py:call:model.fit:26",
+      "line": 26
+    },
+    {
+      "source": "src/utils.py:function:evaluate_models",
+      "relation": "calls",
+      "target": "src/utils.py:call:model.predict:28",
+      "line": 28
+    },
+    {
+      "source": "src/utils.py:function:evaluate_models",
+      "relation": "calls",
+      "target": "src/utils.py:call:model.predict:29",
+      "line": 29
+    },
+    {
+      "source": "src/utils.py:function:evaluate_models",
+      "relation": "calls",
+      "target": "src/utils.py:call:r2_score:31",
+      "line": 31
+    },
+    {
+      "source": "src/utils.py:function:evaluate_models",
+      "relation": "calls",
+      "target": "src/utils.py:call:r2_score:32",
+      "line": 32
+    },
+    {
+      "source": "src/utils.py:function:evaluate_models",
+      "relation": "calls",
+      "target": "src/utils.py:call:CustomException:39",
+      "line": 39
+    },
+    {
+      "source": "src/utils.py",
+      "relation": "contains",
+      "target": "src/utils.py:function:load_object"
+    },
+    {
+      "source": "src/utils.py:function:load_object",
+      "relation": "calls",
+      "target": "src/utils.py:call:open:43",
+      "line": 43
+    },
+    {
+      "source": "src/utils.py:function:load_object",
+      "relation": "calls",
+      "target": "src/utils.py:call:dill.load:44",
+      "line": 44
+    },
+    {
+      "source": "src/utils.py:function:load_object",
+      "relation": "calls",
+      "target": "src/utils.py:call:CustomException:47",
+      "line": 47
+    },
+    {
+      "source": "src/pipeline/predict_pipeline.py",
+      "relation": "contains",
+      "target": "src/pipeline/predict_pipeline.py:class:PredictPipeline"
+    },
+    {
+      "source": "src/pipeline/predict_pipeline.py:class:PredictPipeline",
+      "relation": "contains",
+      "target": "src/pipeline/predict_pipeline.py:class:PredictPipeline:method:__init__"
+    },
+    {
+      "source": "src/pipeline/predict_pipeline.py:class:PredictPipeline",
+      "relation": "contains",
+      "target": "src/pipeline/predict_pipeline.py:class:PredictPipeline:method:predict"
+    },
+    {
+      "source": "src/pipeline/predict_pipeline.py:class:PredictPipeline:method:predict",
+      "relation": "calls",
+      "target": "src/pipeline/predict_pipeline.py:call:load_object:16",
+      "line": 16
+    },
+    {
+      "source": "src/pipeline/predict_pipeline.py:class:PredictPipeline:method:predict",
+      "relation": "calls",
+      "target": "src/pipeline/predict_pipeline.py:call:load_object:17",
+      "line": 17
+    },
+    {
+      "source": "src/pipeline/predict_pipeline.py:class:PredictPipeline:method:predict",
+      "relation": "calls",
+      "target": "src/pipeline/predict_pipeline.py:call:preprocessor.transform:19",
+      "line": 19
+    },
+    {
+      "source": "src/pipeline/predict_pipeline.py:class:PredictPipeline:method:predict",
+      "relation": "calls",
+      "target": "src/pipeline/predict_pipeline.py:call:model.predict:20",
+      "line": 20
+    },
+    {
+      "source": "src/pipeline/predict_pipeline.py:class:PredictPipeline:method:predict",
+      "relation": "calls",
+      "target": "src/pipeline/predict_pipeline.py:call:CustomException:25",
+      "line": 25
+    },
+    {
+      "source": "src/pipeline/predict_pipeline.py",
+      "relation": "contains",
+      "target": "src/pipeline/predict_pipeline.py:class:CustomData"
+    },
+    {
+      "source": "src/pipeline/predict_pipeline.py:class:CustomData",
+      "relation": "contains",
+      "target": "src/pipeline/predict_pipeline.py:class:CustomData:method:__init__"
+    },
+    {
+      "source": "src/pipeline/predict_pipeline.py:class:CustomData",
+      "relation": "contains",
+      "target": "src/pipeline/predict_pipeline.py:class:CustomData:method:get_data_as_data_frame"
+    },
+    {
+      "source": "src/pipeline/predict_pipeline.py:class:CustomData:method:get_data_as_data_frame",
+      "relation": "calls",
+      "target": "src/pipeline/predict_pipeline.py:call:pd.DataFrame:59",
+      "line": 59
+    },
+    {
+      "source": "src/pipeline/predict_pipeline.py:class:CustomData:method:get_data_as_data_frame",
+      "relation": "calls",
+      "target": "src/pipeline/predict_pipeline.py:call:CustomException:62",
+      "line": 62
+    },
+    {
+      "source": "src/components/data_ingestion.py",
+      "relation": "contains",
+      "target": "src/components/data_ingestion.py:class:DataIngestionConfig"
+    },
+    {
+      "source": "src/components/data_ingestion.py",
+      "relation": "contains",
+      "target": "src/components/data_ingestion.py:class:DataIngestion"
+    },
+    {
+      "source": "src/components/data_ingestion.py:class:DataIngestion",
+      "relation": "contains",
+      "target": "src/components/data_ingestion.py:class:DataIngestion:method:__init__"
+    },
+    {
+      "source": "src/components/data_ingestion.py:class:DataIngestion:method:__init__",
+      "relation": "calls",
+      "target": "src/components/data_ingestion.py:call:DataIngestionConfig:25",
+      "line": 25
+    },
+    {
+      "source": "src/components/data_ingestion.py:class:DataIngestion",
+      "relation": "contains",
+      "target": "src/components/data_ingestion.py:class:DataIngestion:method:initiate_data_ingestion"
+    },
+    {
+      "source": "src/components/data_ingestion.py:class:DataIngestion:method:initiate_data_ingestion",
+      "relation": "calls",
+      "target": "src/components/data_ingestion.py:call:logging.info:28",
+      "line": 28
+    },
+    {
+      "source": "src/components/data_ingestion.py:class:DataIngestion:method:initiate_data_ingestion",
+      "relation": "calls",
+      "target": "src/components/data_ingestion.py:call:pd.read_csv:30",
+      "line": 30
+    },
+    {
+      "source": "src/components/data_ingestion.py:class:DataIngestion:method:initiate_data_ingestion",
+      "relation": "calls",
+      "target": "src/components/data_ingestion.py:call:replace:32",
+      "line": 32
+    },
+    {
+      "source": "src/components/data_ingestion.py:class:DataIngestion:method:initiate_data_ingestion",
+      "relation": "calls",
+      "target": "src/components/data_ingestion.py:call:logging.info:34",
+      "line": 34
+    },
+    {
+      "source": "src/components/data_ingestion.py:class:DataIngestion:method:initiate_data_ingestion",
+      "relation": "calls",
+      "target": "src/components/data_ingestion.py:call:os.makedirs:36",
+      "line": 36
+    },
+    {
+      "source": "src/components/data_ingestion.py:class:DataIngestion:method:initiate_data_ingestion",
+      "relation": "calls",
+      "target": "src/components/data_ingestion.py:call:df.to_csv:38",
+      "line": 38
+    },
+    {
+      "source": "src/components/data_ingestion.py:class:DataIngestion:method:initiate_data_ingestion",
+      "relation": "calls",
+      "target": "src/components/data_ingestion.py:call:logging.info:40",
+      "line": 40
+    },
+    {
+      "source": "src/components/data_ingestion.py:class:DataIngestion:method:initiate_data_ingestion",
+      "relation": "calls",
+      "target": "src/components/data_ingestion.py:call:train_test_split:42",
+      "line": 42
+    },
+    {
+      "source": "src/components/data_ingestion.py:class:DataIngestion:method:initiate_data_ingestion",
+      "relation": "calls",
+      "target": "src/components/data_ingestion.py:call:train_set.to_csv:44",
+      "line": 44
+    },
+    {
+      "source": "src/components/data_ingestion.py:class:DataIngestion:method:initiate_data_ingestion",
+      "relation": "calls",
+      "target": "src/components/data_ingestion.py:call:test_set.to_csv:45",
+      "line": 45
+    },
+    {
+      "source": "src/components/data_ingestion.py:class:DataIngestion:method:initiate_data_ingestion",
+      "relation": "calls",
+      "target": "src/components/data_ingestion.py:call:logging.info:47",
+      "line": 47
+    },
+    {
+      "source": "src/components/data_ingestion.py:class:DataIngestion:method:initiate_data_ingestion",
+      "relation": "calls",
+      "target": "src/components/data_ingestion.py:call:dirname:36",
+      "line": 36
+    },
+    {
+      "source": "src/components/data_ingestion.py:class:DataIngestion:method:initiate_data_ingestion",
+      "relation": "calls",
+      "target": "src/components/data_ingestion.py:call:CustomException:55",
+      "line": 55
+    },
+    {
+      "source": "src/components/data_ingestion.py:class:DataIngestion:method:initiate_data_ingestion",
+      "relation": "calls",
+      "target": "src/components/data_ingestion.py:call:strip:32",
+      "line": 32
+    },
+    {
+      "source": "src/components/model_trainer.py",
+      "relation": "contains",
+      "target": "src/components/model_trainer.py:class:ModelTrainerConfig"
+    },
+    {
+      "source": "src/components/model_trainer.py",
+      "relation": "contains",
+      "target": "src/components/model_trainer.py:class:ModelTrainer"
+    },
+    {
+      "source": "src/components/model_trainer.py:class:ModelTrainer",
+      "relation": "contains",
+      "target": "src/components/model_trainer.py:class:ModelTrainer:method:__init__"
+    },
+    {
+      "source": "src/components/model_trainer.py:class:ModelTrainer:method:__init__",
+      "relation": "calls",
+      "target": "src/components/model_trainer.py:call:ModelTrainerConfig:29",
+      "line": 29
+    },
+    {
+      "source": "src/components/model_trainer.py:class:ModelTrainer",
+      "relation": "contains",
+      "target": "src/components/model_trainer.py:class:ModelTrainer:method:initiate_model_trainer"
+    },
+    {
+      "source": "src/components/model_trainer.py:class:ModelTrainer:method:initiate_model_trainer",
+      "relation": "calls",
+      "target": "src/components/model_trainer.py:call:logging.info:33",
+      "line": 33
+    },
+    {
+      "source": "src/components/model_trainer.py:class:ModelTrainer:method:initiate_model_trainer",
+      "relation": "calls",
+      "target": "src/components/model_trainer.py:call:logging.info:53",
+      "line": 53
+    },
+    {
+      "source": "src/components/model_trainer.py:class:ModelTrainer:method:initiate_model_trainer",
+      "relation": "calls",
+      "target": "src/components/model_trainer.py:call:evaluate_models:55",
+      "line": 55
+    },
+    {
+      "source": "src/components/model_trainer.py:class:ModelTrainer:method:initiate_model_trainer",
+      "relation": "calls",
+      "target": "src/components/model_trainer.py:call:max:63",
+      "line": 63
+    },
+    {
+      "source": "src/components/model_trainer.py:class:ModelTrainer:method:initiate_model_trainer",
+      "relation": "calls",
+      "target": "src/components/model_trainer.py:call:logging.info:71",
+      "line": 71
+    },
+    {
+      "source": "src/components/model_trainer.py:class:ModelTrainer:method:initiate_model_trainer",
+      "relation": "calls",
+      "target": "src/components/model_trainer.py:call:best_model.fit:73",
+      "line": 73
+    },
+    {
+      "source": "src/components/model_trainer.py:class:ModelTrainer:method:initiate_model_trainer",
+      "relation": "calls",
+      "target": "src/components/model_trainer.py:call:save_object:75",
+      "line": 75
+    },
+    {
+      "source": "src/components/model_trainer.py:class:ModelTrainer:method:initiate_model_trainer",
+      "relation": "calls",
+      "target": "src/components/model_trainer.py:call:best_model.predict:80",
+      "line": 80
+    },
+    {
+      "source": "src/components/model_trainer.py:class:ModelTrainer:method:initiate_model_trainer",
+      "relation": "calls",
+      "target": "src/components/model_trainer.py:call:r2_score:81",
+      "line": 81
+    },
+    {
+      "source": "src/components/model_trainer.py:class:ModelTrainer:method:initiate_model_trainer",
+      "relation": "calls",
+      "target": "src/components/model_trainer.py:call:RandomForestRegressor:43",
+      "line": 43
+    },
+    {
+      "source": "src/components/model_trainer.py:class:ModelTrainer:method:initiate_model_trainer",
+      "relation": "calls",
+      "target": "src/components/model_trainer.py:call:DecisionTreeRegressor:44",
+      "line": 44
+    },
+    {
+      "source": "src/components/model_trainer.py:class:ModelTrainer:method:initiate_model_trainer",
+      "relation": "calls",
+      "target": "src/components/model_trainer.py:call:GradientBoostingRegressor:45",
+      "line": 45
+    },
+    {
+      "source": "src/components/model_trainer.py:class:ModelTrainer:method:initiate_model_trainer",
+      "relation": "calls",
+      "target": "src/components/model_trainer.py:call:LinearRegression:46",
+      "line": 46
+    },
+    {
+      "source": "src/components/model_trainer.py:class:ModelTrainer:method:initiate_model_trainer",
+      "relation": "calls",
+      "target": "src/components/model_trainer.py:call:KNeighborsRegressor:47",
+      "line": 47
+    },
+    {
+      "source": "src/components/model_trainer.py:class:ModelTrainer:method:initiate_model_trainer",
+      "relation": "calls",
+      "target": "src/components/model_trainer.py:call:XGBRegressor:48",
+      "line": 48
+    },
+    {
+      "source": "src/components/model_trainer.py:class:ModelTrainer:method:initiate_model_trainer",
+      "relation": "calls",
+      "target": "src/components/model_trainer.py:call:CatBoostRegressor:49",
+      "line": 49
+    },
+    {
+      "source": "src/components/model_trainer.py:class:ModelTrainer:method:initiate_model_trainer",
+      "relation": "calls",
+      "target": "src/components/model_trainer.py:call:AdaBoostRegressor:50",
+      "line": 50
+    },
+    {
+      "source": "src/components/model_trainer.py:class:ModelTrainer:method:initiate_model_trainer",
+      "relation": "calls",
+      "target": "src/components/model_trainer.py:call:CustomException:69",
+      "line": 69
+    },
+    {
+      "source": "src/components/model_trainer.py:class:ModelTrainer:method:initiate_model_trainer",
+      "relation": "calls",
+      "target": "src/components/model_trainer.py:call:CustomException:86",
+      "line": 86
+    },
+    {
+      "source": "src/components/data_transformation.py",
+      "relation": "contains",
+      "target": "src/components/data_transformation.py:class:DataTransformationConfig"
+    },
+    {
+      "source": "src/components/data_transformation.py",
+      "relation": "contains",
+      "target": "src/components/data_transformation.py:class:DataTransformation"
+    },
+    {
+      "source": "src/components/data_transformation.py:class:DataTransformation",
+      "relation": "contains",
+      "target": "src/components/data_transformation.py:class:DataTransformation:method:__init__"
+    },
+    {
+      "source": "src/components/data_transformation.py:class:DataTransformation:method:__init__",
+      "relation": "calls",
+      "target": "src/components/data_transformation.py:call:DataTransformationConfig:24",
+      "line": 24
+    },
+    {
+      "source": "src/components/data_transformation.py:class:DataTransformation",
+      "relation": "contains",
+      "target": "src/components/data_transformation.py:class:DataTransformation:method:get_data_transformer_object"
+    },
+    {
+      "source": "src/components/data_transformation.py:class:DataTransformation:method:get_data_transformer_object",
+      "relation": "calls",
+      "target": "src/components/data_transformation.py:call:logging.info:28",
+      "line": 28
+    },
+    {
+      "source": "src/components/data_transformation.py:class:DataTransformation:method:get_data_transformer_object",
+      "relation": "calls",
+      "target": "src/components/data_transformation.py:call:Pipeline:40",
+      "line": 40
+    },
+    {
+      "source": "src/components/data_transformation.py:class:DataTransformation:method:get_data_transformer_object",
+      "relation": "calls",
+      "target": "src/components/data_transformation.py:call:Pipeline:47",
+      "line": 47
+    },
+    {
+      "source": "src/components/data_transformation.py:class:DataTransformation:method:get_data_transformer_object",
+      "relation": "calls",
+      "target": "src/components/data_transformation.py:call:logging.info:55",
+      "line": 55
+    },
+    {
+      "source": "src/components/data_transformation.py:class:DataTransformation:method:get_data_transformer_object",
+      "relation": "calls",
+      "target": "src/components/data_transformation.py:call:ColumnTransformer:57",
+      "line": 57
+    },
+    {
+      "source": "src/components/data_transformation.py:class:DataTransformation:method:get_data_transformer_object",
+      "relation": "calls",
+      "target": "src/components/data_transformation.py:call:logging.info:64",
+      "line": 64
+    },
+    {
+      "source": "src/components/data_transformation.py:class:DataTransformation:method:get_data_transformer_object",
+      "relation": "calls",
+      "target": "src/components/data_transformation.py:call:CustomException:69",
+      "line": 69
+    },
+    {
+      "source": "src/components/data_transformation.py:class:DataTransformation:method:get_data_transformer_object",
+      "relation": "calls",
+      "target": "src/components/data_transformation.py:call:SimpleImputer:42",
+      "line": 42
+    },
+    {
+      "source": "src/components/data_transformation.py:class:DataTransformation:method:get_data_transformer_object",
+      "relation": "calls",
+      "target": "src/components/data_transformation.py:call:StandardScaler:43",
+      "line": 43
+    },
+    {
+      "source": "src/components/data_transformation.py:class:DataTransformation:method:get_data_transformer_object",
+      "relation": "calls",
+      "target": "src/components/data_transformation.py:call:SimpleImputer:49",
+      "line": 49
+    },
+    {
+      "source": "src/components/data_transformation.py:class:DataTransformation:method:get_data_transformer_object",
+      "relation": "calls",
+      "target": "src/components/data_transformation.py:call:OneHotEncoder:50",
+      "line": 50
+    },
+    {
+      "source": "src/components/data_transformation.py:class:DataTransformation:method:get_data_transformer_object",
+      "relation": "calls",
+      "target": "src/components/data_transformation.py:call:StandardScaler:51",
+      "line": 51
+    },
+    {
+      "source": "src/components/data_transformation.py:class:DataTransformation",
+      "relation": "contains",
+      "target": "src/components/data_transformation.py:class:DataTransformation:method:initiate_data_transformation"
+    },
+    {
+      "source": "src/components/data_transformation.py:class:DataTransformation:method:initiate_data_transformation",
+      "relation": "calls",
+      "target": "src/components/data_transformation.py:call:logging.info:73",
+      "line": 73
+    },
+    {
+      "source": "src/components/data_transformation.py:class:DataTransformation:method:initiate_data_transformation",
+      "relation": "calls",
+      "target": "src/components/data_transformation.py:call:pd.read_csv:75",
+      "line": 75
+    },
+    {
+      "source": "src/components/data_transformation.py:class:DataTransformation:method:initiate_data_transformation",
+      "relation": "calls",
+      "target": "src/components/data_transformation.py:call:pd.read_csv:76",
+      "line": 76
+    },
+    {
+      "source": "src/components/data_transformation.py:class:DataTransformation:method:initiate_data_transformation",
+      "relation": "calls",
+      "target": "src/components/data_transformation.py:call:logging.info:78",
+      "line": 78
+    },
+    {
+      "source": "src/components/data_transformation.py:class:DataTransformation:method:initiate_data_transformation",
+      "relation": "calls",
+      "target": "src/components/data_transformation.py:call:self.get_data_transformer_object:80",
+      "line": 80
+    },
+    {
+      "source": "src/components/data_transformation.py:class:DataTransformation:method:initiate_data_transformation",
+      "relation": "calls",
+      "target": "src/components/data_transformation.py:call:train_df.drop:84",
+      "line": 84
+    },
+    {
+      "source": "src/components/data_transformation.py:class:DataTransformation:method:initiate_data_transformation",
+      "relation": "calls",
+      "target": "src/components/data_transformation.py:call:test_df.drop:87",
+      "line": 87
+    },
+    {
+      "source": "src/components/data_transformation.py:class:DataTransformation:method:initiate_data_transformation",
+      "relation": "calls",
+      "target": "src/components/data_transformation.py:call:logging.info:90",
+      "line": 90
+    },
+    {
+      "source": "src/components/data_transformation.py:class:DataTransformation:method:initiate_data_transformation",
+      "relation": "calls",
+      "target": "src/components/data_transformation.py:call:preprocessing_obj.fit_transform:92",
+      "line": 92
+    },
+    {
+      "source": "src/components/data_transformation.py:class:DataTransformation:method:initiate_data_transformation",
+      "relation": "calls",
+      "target": "src/components/data_transformation.py:call:preprocessing_obj.transform:93",
+      "line": 93
+    },
+    {
+      "source": "src/components/data_transformation.py:class:DataTransformation:method:initiate_data_transformation",
+      "relation": "calls",
+      "target": "src/components/data_transformation.py:call:logging.info:98",
+      "line": 98
+    },
+    {
+      "source": "src/components/data_transformation.py:class:DataTransformation:method:initiate_data_transformation",
+      "relation": "calls",
+      "target": "src/components/data_transformation.py:call:save_object:100",
+      "line": 100
+    },
+    {
+      "source": "src/components/data_transformation.py:class:DataTransformation:method:initiate_data_transformation",
+      "relation": "calls",
+      "target": "src/components/data_transformation.py:call:logging.info:105",
+      "line": 105
+    },
+    {
+      "source": "src/components/data_transformation.py:class:DataTransformation:method:initiate_data_transformation",
+      "relation": "calls",
+      "target": "src/components/data_transformation.py:call:CustomException:114",
+      "line": 114
+    },
+    {
+      "source": "application.py:call:CustomData:22",
+      "relation": "resolves_to",
+      "target": "src/pipeline/predict_pipeline.py:class:CustomData",
+      "line": 22
+    },
+    {
+      "source": "application.py:call:PredictPipeline:34",
+      "relation": "resolves_to",
+      "target": "src/pipeline/predict_pipeline.py:class:PredictPipeline",
+      "line": 34
+    },
+    {
+      "source": "app.py:call:CustomData:22",
+      "relation": "resolves_to",
+      "target": "src/pipeline/predict_pipeline.py:class:CustomData",
+      "line": 22
+    },
+    {
+      "source": "app.py:call:PredictPipeline:34",
+      "relation": "resolves_to",
+      "target": "src/pipeline/predict_pipeline.py:class:PredictPipeline",
+      "line": 34
+    },
+    {
+      "source": "src/exception.py:call:__init__:17",
+      "relation": "resolves_to",
+      "target": "src/exception.py:method:__init__",
+      "line": 17
+    },
+    {
+      "source": "src/exception.py:call:error_message_details:18",
+      "relation": "resolves_to",
+      "target": "src/exception.py:function:error_message_details",
+      "line": 18
+    },
+    {
+      "source": "src/utils.py:call:CustomException:18",
+      "relation": "resolves_to",
+      "target": "src/exception.py:class:CustomException",
+      "line": 18
+    },
+    {
+      "source": "src/utils.py:call:CustomException:39",
+      "relation": "resolves_to",
+      "target": "src/exception.py:class:CustomException",
+      "line": 39
+    },
+    {
+      "source": "src/utils.py:call:CustomException:47",
+      "relation": "resolves_to",
+      "target": "src/exception.py:class:CustomException",
+      "line": 47
+    },
+    {
+      "source": "src/pipeline/predict_pipeline.py:call:load_object:16",
+      "relation": "resolves_to",
+      "target": "src/utils.py:function:load_object",
+      "line": 16
+    },
+    {
+      "source": "src/pipeline/predict_pipeline.py:call:load_object:17",
+      "relation": "resolves_to",
+      "target": "src/utils.py:function:load_object",
+      "line": 17
+    },
+    {
+      "source": "src/pipeline/predict_pipeline.py:call:model.predict:20",
+      "relation": "resolves_to",
+      "target": "src/pipeline/predict_pipeline.py:method:predict",
+      "line": 20
+    },
+    {
+      "source": "src/pipeline/predict_pipeline.py:call:CustomException:25",
+      "relation": "resolves_to",
+      "target": "src/exception.py:class:CustomException",
+      "line": 25
+    },
+    {
+      "source": "src/pipeline/predict_pipeline.py:call:CustomException:62",
+      "relation": "resolves_to",
+      "target": "src/exception.py:class:CustomException",
+      "line": 62
+    },
+    {
+      "source": "src/components/data_ingestion.py:call:DataIngestionConfig:25",
+      "relation": "resolves_to",
+      "target": "src/components/data_ingestion.py:class:DataIngestionConfig",
+      "line": 25
+    },
+    {
+      "source": "src/components/data_ingestion.py:call:CustomException:55",
+      "relation": "resolves_to",
+      "target": "src/exception.py:class:CustomException",
+      "line": 55
+    },
+    {
+      "source": "src/components/model_trainer.py:call:ModelTrainerConfig:29",
+      "relation": "resolves_to",
+      "target": "src/components/model_trainer.py:class:ModelTrainerConfig",
+      "line": 29
+    },
+    {
+      "source": "src/components/model_trainer.py:call:evaluate_models:55",
+      "relation": "resolves_to",
+      "target": "src/utils.py:function:evaluate_models",
+      "line": 55
+    },
+    {
+      "source": "src/components/model_trainer.py:call:save_object:75",
+      "relation": "resolves_to",
+      "target": "src/utils.py:function:save_object",
+      "line": 75
+    },
+    {
+      "source": "src/components/model_trainer.py:call:CustomException:69",
+      "relation": "resolves_to",
+      "target": "src/exception.py:class:CustomException",
+      "line": 69
+    },
+    {
+      "source": "src/components/model_trainer.py:call:CustomException:86",
+      "relation": "resolves_to",
+      "target": "src/exception.py:class:CustomException",
+      "line": 86
+    },
+    {
+      "source": "src/components/data_transformation.py:call:DataTransformationConfig:24",
+      "relation": "resolves_to",
+      "target": "src/components/data_transformation.py:class:DataTransformationConfig",
+      "line": 24
+    },
+    {
+      "source": "src/components/data_transformation.py:call:CustomException:69",
+      "relation": "resolves_to",
+      "target": "src/exception.py:class:CustomException",
+      "line": 69
+    },
+    {
+      "source": "src/components/data_transformation.py:call:self.get_data_transformer_object:80",
+      "relation": "resolves_to",
+      "target": "src/components/data_transformation.py:method:get_data_transformer_object",
+      "line": 80
+    },
+    {
+      "source": "src/components/data_transformation.py:call:save_object:100",
+      "relation": "resolves_to",
+      "target": "src/utils.py:function:save_object",
+      "line": 100
+    },
+    {
+      "source": "src/components/data_transformation.py:call:CustomException:114",
+      "relation": "resolves_to",
+      "target": "src/exception.py:class:CustomException",
+      "line": 114
+    }
+  ],
+  "statistics": {
+    "total_files": 18,
+    "total_relationships": 203,
+    "total_nodes": 178
+  }
+}

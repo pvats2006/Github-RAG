@@ -1,0 +1,42 @@
+id,category,query,expected_file,expected_symbol,file_rank,symbol_rank,file_top1,file_top3,file_top5,symbol_top1,symbol_top3,symbol_top5,top1_result
+1,training,Where is model training implemented?,src/train.py,train,1,1,True,True,True,True,True,True,src/train.py | train
+2,training,Which function trains the classifier?,src/train.py,train,1,1,True,True,True,True,True,True,src/train.py | train
+3,training,Where is the training pipeline defined?,src/train.py,train,1,1,True,True,True,True,True,True,src/train.py | train
+4,training,Which function handles model training?,src/train.py,train,1,1,True,True,True,True,True,True,src/train.py | train
+5,training,Where does model fitting happen?,src/train.py,train,,,False,False,False,False,False,False,README.md | ▶️ Train the Model
+6,training,What function runs the training stage?,src/train.py,train,1,1,True,True,True,True,True,True,src/train.py | train
+7,prediction,Where is prediction implemented?,src/predict.py,predict,1,1,True,True,True,True,True,True,src/predict.py | predict
+8,prediction,Which function performs predictions?,src/predict.py,predict,1,1,True,True,True,True,True,True,src/predict.py | predict
+9,prediction,Where is the prediction logic defined?,src/predict.py,predict,1,1,True,True,True,True,True,True,src/predict.py | predict
+10,prediction,Which function calls the trained model for inference?,src/predict.py,predict,2,2,False,True,True,False,True,True,src/train.py | train
+11,prediction,Where does inference happen?,src/predict.py,predict,1,1,True,True,True,True,True,True,src/predict.py | predict
+12,evaluation,Where is model evaluation implemented?,src/evaluate.py,evaluate,1,1,True,True,True,True,True,True,src/evaluate.py | evaluate
+13,evaluation,Which function evaluates the model?,src/evaluate.py,evaluate,1,1,True,True,True,True,True,True,src/evaluate.py | evaluate
+14,evaluation,How is model performance measured?,src/evaluate.py,evaluate,5,,False,False,True,False,False,False,README.md | ▶️ Train the Model
+15,evaluation,Where are classification metrics computed?,src/evaluate.py,evaluate,1,5,True,True,True,False,False,True,src/evaluate.py | evaluate.py
+16,features,Where is feature extraction implemented?,src/features.py,extract_features,1,1,True,True,True,True,True,True,src/features.py | extract_features
+17,features,Which function extracts image features?,src/features.py,extract_features,1,2,True,True,True,False,True,True,src/features.py | extract_hog
+18,features,Where are HOG features extracted?,src/features.py,extract_hog,2,3,False,True,True,False,True,True,README.md | 📌 Features
+19,features,Which function computes HOG features?,src/features.py,extract_hog,1,1,True,True,True,True,True,True,src/features.py | extract_hog
+20,features,Where is LBP feature extraction implemented?,src/features.py,extract_lbp,1,2,True,True,True,False,True,True,src/features.py | extract_features
+21,features,Which function normalizes feature vectors?,src/features.py,normalize_feature,1,1,True,True,True,True,True,True,src/features.py | normalize_feature
+22,dataset,Where is the dataset built?,src/dataset_builder.py,build_dataset,1,1,True,True,True,True,True,True,src/dataset_builder.py | build_dataset
+23,dataset,Which function builds the dataset?,src/dataset_builder.py,build_dataset,1,1,True,True,True,True,True,True,src/dataset_builder.py | build_dataset
+24,dataset,Where does the project read its training images?,src/dataset_builder.py,build_dataset,,,False,False,False,False,False,False,src/train.py | train
+25,dataset,Which function creates the training dataset?,src/dataset_builder.py,build_dataset,3,3,False,True,True,False,True,True,src/train.py | train
+26,preprocessing,Where is image loading implemented?,src/preprocess.py,load_image,2,2,False,True,True,False,True,True,src/predict.py | predict
+27,preprocessing,Which function loads an image?,src/preprocess.py,load_image,1,1,True,True,True,True,True,True,src/preprocess.py | load_image
+28,preprocessing,Where is image resizing implemented?,src/preprocess.py,resize_image,1,1,True,True,True,True,True,True,src/preprocess.py | resize_image
+29,preprocessing,Which function resizes images?,src/preprocess.py,resize_image,1,1,True,True,True,True,True,True,src/preprocess.py | resize_image
+30,preprocessing,Where is grayscale conversion implemented?,src/preprocess.py,convert_to_gray,1,1,True,True,True,True,True,True,src/preprocess.py | convert_to_gray
+31,api,Where is the prediction API endpoint defined?,app/main.py,predict,1,1,True,True,True,True,True,True,app/main.py | predict
+32,api,Which function handles prediction API requests?,app/main.py,predict,1,1,True,True,True,True,True,True,app/main.py | predict
+33,api,Where is the home endpoint defined?,app/main.py,home,1,1,True,True,True,True,True,True,app/main.py | home
+34,api,Where is the image prediction route implemented?,app/predictor.py,predict_image,3,3,False,True,True,False,True,True,src/predict.py | predict
+35,api,Which function processes the image for prediction?,app/predictor.py,predict_image,3,3,False,True,True,False,True,True,src/predict.py | predict
+36,utility,Where is directory creation implemented?,src/utils.py,create_directory,1,1,True,True,True,True,True,True,src/utils.py | create_directory
+37,utility,Which function creates a directory?,src/utils.py,create_directory,1,1,True,True,True,True,True,True,src/utils.py | create_directory
+38,utility,Where is the image listing function?,src/utils.py,list_images,1,1,True,True,True,True,True,True,src/utils.py | list_images
+39,utility,Which function lists images in a directory?,src/utils.py,list_images,1,1,True,True,True,True,True,True,src/utils.py | list_images
+40,class_lookup,Where is PredictionResponse defined?,app/schemas.py,PredictionResponse,1,1,True,True,True,True,True,True,app/schemas.py | PredictionResponse
+41,class_lookup,Which class defines the API response schema?,app/schemas.py,PredictionResponse,1,1,True,True,True,True,True,True,app/schemas.py | PredictionResponse

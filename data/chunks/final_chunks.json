@@ -1,0 +1,2586 @@
+[
+  {
+    "chunk_id": "application.py::file",
+    "repo": "ML-Project",
+    "file_path": "application.py",
+    "file_name": "application.py",
+    "language": "python",
+    "chunk_type": "file",
+    "symbol": null,
+    "line_start": 1,
+    "line_end": 40,
+    "content": "from flask import Flask,request,render_template\nimport numpy as np\nimport pandas as pd\n\nfrom sklearn.preprocessing import StandardScaler\nfrom src.pipeline.predict_pipeline import CustomData,PredictPipeline\napplication=Flask(__name__)\n\napp=application\n\n##Route for a home page \n\n@app.route('/')\ndef index():\n    return render_template('index.html')\n\n@app.route('/predictdata',methods=['GET','POST'])\ndef predict_datapoint():\n    if request.method=='GET':\n        return render_template('home.html')\n    else:\n        data=CustomData(\n            gender=request.form.get('gender'),\n            race_ethnicity=request.form.get('race_ethnicity'),\n            parental_level_of_education=request.form.get('parental_level_of_education'),\n            lunch=request.form.get('lunch'),\n            test_preparation_course=request.form.get('test_preparation_course'),\n            reading_score=float(request.form.get('reading_score')),\n            writing_score=float(request.form.get('writing_score'))\n        )\n\n        pred_df = data.get_data_as_data_frame()\n\n        predict_pipeline = PredictPipeline()\n        results = predict_pipeline.predict(pred_df)\n\n        return render_template('home.html', results=results[0])\n        \nif __name__ == \"__main__\":\n    app.run(host=\"0.0.0.0\", port=5000, debug=True)",
+    "imports": [
+      "CustomData",
+      "PredictPipeline"
+    ],
+    "calls": [],
+    "dependencies": [
+      "src/pipeline/predict_pipeline.py"
+    ],
+    "related_files": [
+      "src/pipeline/predict_pipeline.py"
+    ],
+    "parent_symbol": null,
+    "metadata": {
+      "relationship_enriched": true,
+      "relationship_targets": [
+        "src/pipeline/predict_pipeline.py"
+      ],
+      "repository": "ML-Project",
+      "dependency_count": 1,
+      "related_file_count": 1,
+      "call_count": 0,
+      "github_reference": "https://github.com/pvats2006/ML-Project/blob/main/application.py#L1-L40",
+      "github_reference_available": true,
+      "github_owner": "pvats2006",
+      "github_repository": "ML-Project",
+      "github_branch": "main",
+      "github_file": "application.py",
+      "github_line_start": 1,
+      "github_line_end": 40
+    }
+  },
+  {
+    "chunk_id": "application.py::function::index",
+    "repo": "ML-Project",
+    "file_path": "application.py",
+    "file_name": "application.py",
+    "language": "python",
+    "chunk_type": "function",
+    "symbol": "index",
+    "line_start": 14,
+    "line_end": 15,
+    "content": "def index():\n    return render_template('index.html')",
+    "imports": [
+      "CustomData",
+      "PredictPipeline"
+    ],
+    "calls": [
+      "app.route",
+      "render_template"
+    ],
+    "dependencies": [
+      "src/pipeline/predict_pipeline.py"
+    ],
+    "related_files": [
+      "src/pipeline/predict_pipeline.py"
+    ],
+    "parent_symbol": null,
+    "metadata": {
+      "relationship_enriched": true,
+      "relationship_targets": [
+        "src/pipeline/predict_pipeline.py"
+      ],
+      "repository": "ML-Project",
+      "dependency_count": 1,
+      "related_file_count": 1,
+      "call_count": 2,
+      "github_reference": "https://github.com/pvats2006/ML-Project/blob/main/application.py#L14-L15",
+      "github_reference_available": true,
+      "github_owner": "pvats2006",
+      "github_repository": "ML-Project",
+      "github_branch": "main",
+      "github_file": "application.py",
+      "github_line_start": 14,
+      "github_line_end": 15
+    }
+  },
+  {
+    "chunk_id": "application.py::function::predict_datapoint",
+    "repo": "ML-Project",
+    "file_path": "application.py",
+    "file_name": "application.py",
+    "language": "python",
+    "chunk_type": "function",
+    "symbol": "predict_datapoint",
+    "line_start": 18,
+    "line_end": 37,
+    "content": "def predict_datapoint():\n    if request.method=='GET':\n        return render_template('home.html')\n    else:\n        data=CustomData(\n            gender=request.form.get('gender'),\n            race_ethnicity=request.form.get('race_ethnicity'),\n            parental_level_of_education=request.form.get('parental_level_of_education'),\n            lunch=request.form.get('lunch'),\n            test_preparation_course=request.form.get('test_preparation_course'),\n            reading_score=float(request.form.get('reading_score')),\n            writing_score=float(request.form.get('writing_score'))\n        )\n\n        pred_df = data.get_data_as_data_frame()\n\n        predict_pipeline = PredictPipeline()\n        results = predict_pipeline.predict(pred_df)\n\n        return render_template('home.html', results=results[0])",
+    "imports": [
+      "CustomData",
+      "PredictPipeline"
+    ],
+    "calls": [
+      "app.route",
+      "render_template",
+      "CustomData",
+      "data.get_data_as_data_frame",
+      "PredictPipeline",
+      "predict_pipeline.predict",
+      "get",
+      "float"
+    ],
+    "dependencies": [
+      "src/pipeline/predict_pipeline.py"
+    ],
+    "related_files": [
+      "src/pipeline/predict_pipeline.py"
+    ],
+    "parent_symbol": null,
+    "metadata": {
+      "relationship_enriched": true,
+      "relationship_targets": [
+        "src/pipeline/predict_pipeline.py"
+      ],
+      "repository": "ML-Project",
+      "dependency_count": 1,
+      "related_file_count": 1,
+      "call_count": 8,
+      "github_reference": "https://github.com/pvats2006/ML-Project/blob/main/application.py#L18-L37",
+      "github_reference_available": true,
+      "github_owner": "pvats2006",
+      "github_repository": "ML-Project",
+      "github_branch": "main",
+      "github_file": "application.py",
+      "github_line_start": 18,
+      "github_line_end": 37
+    }
+  },
+  {
+    "chunk_id": "setup.py::file",
+    "repo": "ML-Project",
+    "file_path": "setup.py",
+    "file_name": "setup.py",
+    "language": "python",
+    "chunk_type": "file",
+    "symbol": null,
+    "line_start": 1,
+    "line_end": 30,
+    "content": "from setuptools import find_packages,setup\nfrom typing import List\n\n\n\ndef get_requirements(file_path:str)->list[str]:\n    '''\n    This function will return the list of requirements\n    '''\n\n    requirements=[]\n    with open(file_path) as file_obj:\n        requirements=file_obj.readlines()\n        requirements=[req.replace(\"\\n\",\"\") for req in requirements]\n\n        if \"-e .\" in requirements:\n            requirements.remove(\"-e .\")\n\n    return requirements\n\nsetup(\n    name='ML_Project',\n    version='0.0.1',\n    author='Priyanshu',\n    author_email='priyanshuvats8806@gmail.com',\n    packages=find_packages(),\n    install_requires=get_requirements('requirements.txt'),\n\n\n)",
+    "imports": [],
+    "calls": [],
+    "dependencies": [],
+    "related_files": [],
+    "parent_symbol": null,
+    "metadata": {
+      "relationship_enriched": true,
+      "relationship_targets": [],
+      "repository": "ML-Project",
+      "dependency_count": 0,
+      "related_file_count": 0,
+      "call_count": 0,
+      "github_reference": "https://github.com/pvats2006/ML-Project/blob/main/setup.py#L1-L30",
+      "github_reference_available": true,
+      "github_owner": "pvats2006",
+      "github_repository": "ML-Project",
+      "github_branch": "main",
+      "github_file": "setup.py",
+      "github_line_start": 1,
+      "github_line_end": 30
+    }
+  },
+  {
+    "chunk_id": "setup.py::function::get_requirements",
+    "repo": "ML-Project",
+    "file_path": "setup.py",
+    "file_name": "setup.py",
+    "language": "python",
+    "chunk_type": "function",
+    "symbol": "get_requirements",
+    "line_start": 6,
+    "line_end": 19,
+    "content": "def get_requirements(file_path:str)->list[str]:\n    '''\n    This function will return the list of requirements\n    '''\n\n    requirements=[]\n    with open(file_path) as file_obj:\n        requirements=file_obj.readlines()\n        requirements=[req.replace(\"\\n\",\"\") for req in requirements]\n\n        if \"-e .\" in requirements:\n            requirements.remove(\"-e .\")\n\n    return requirements",
+    "imports": [],
+    "calls": [
+      "open",
+      "file_obj.readlines",
+      "req.replace",
+      "requirements.remove"
+    ],
+    "dependencies": [],
+    "related_files": [],
+    "parent_symbol": null,
+    "metadata": {
+      "relationship_enriched": true,
+      "relationship_targets": [],
+      "repository": "ML-Project",
+      "dependency_count": 0,
+      "related_file_count": 0,
+      "call_count": 4,
+      "github_reference": "https://github.com/pvats2006/ML-Project/blob/main/setup.py#L6-L19",
+      "github_reference_available": true,
+      "github_owner": "pvats2006",
+      "github_repository": "ML-Project",
+      "github_branch": "main",
+      "github_file": "setup.py",
+      "github_line_start": 6,
+      "github_line_end": 19
+    }
+  },
+  {
+    "chunk_id": "app.py::file",
+    "repo": "ML-Project",
+    "file_path": "app.py",
+    "file_name": "app.py",
+    "language": "python",
+    "chunk_type": "file",
+    "symbol": null,
+    "line_start": 1,
+    "line_end": 45,
+    "content": "from flask import Flask,request,render_template\nimport numpy as np\nimport pandas as pd\n\nfrom sklearn.preprocessing import StandardScaler\nfrom src.pipeline.predict_pipeline import CustomData,PredictPipeline\napplication=Flask(__name__)\n\napp=application\n\n##Route for a home page \n\n@app.route('/')\ndef index():\n    return render_template('index.html')\n\n@app.route('/predictdata',methods=['GET','POST'])\ndef predict_datapoint():\n    if request.method=='GET':\n        return render_template('home.html')\n    else:\n        data=CustomData(\n            gender=request.form.get('gender'),\n            race_ethnicity=request.form.get('race_ethnicity'),\n            parental_level_of_education=request.form.get('parental_level_of_education'),\n            lunch=request.form.get('lunch'),\n            test_preparation_course=request.form.get('test_preparation_course'),\n            reading_score=float(request.form.get('reading_score')),\n            writing_score=float(request.form.get('writing_score'))\n        )\n\n        pred_df = data.get_data_as_data_frame()\n\n        predict_pipeline = PredictPipeline()\n        results = predict_pipeline.predict(pred_df)\n\n        return render_template('home.html', results=results[0])\n        \nif __name__ == \"__main__\":\n    app.run(host=\"0.0.0.0\", port=5000, debug=True)\n      \n# Initialize Flask app\n# Define routes for home and prediction\n# GET → render form\n# POST → collect input → convert to DataFrame → predict → return result",
+    "imports": [
+      "CustomData",
+      "PredictPipeline"
+    ],
+    "calls": [],
+    "dependencies": [
+      "src/pipeline/predict_pipeline.py"
+    ],
+    "related_files": [
+      "src/pipeline/predict_pipeline.py"
+    ],
+    "parent_symbol": null,
+    "metadata": {
+      "relationship_enriched": true,
+      "relationship_targets": [
+        "src/pipeline/predict_pipeline.py"
+      ],
+      "repository": "ML-Project",
+      "dependency_count": 1,
+      "related_file_count": 1,
+      "call_count": 0,
+      "github_reference": "https://github.com/pvats2006/ML-Project/blob/main/app.py#L1-L45",
+      "github_reference_available": true,
+      "github_owner": "pvats2006",
+      "github_repository": "ML-Project",
+      "github_branch": "main",
+      "github_file": "app.py",
+      "github_line_start": 1,
+      "github_line_end": 45
+    }
+  },
+  {
+    "chunk_id": "app.py::function::index",
+    "repo": "ML-Project",
+    "file_path": "app.py",
+    "file_name": "app.py",
+    "language": "python",
+    "chunk_type": "function",
+    "symbol": "index",
+    "line_start": 14,
+    "line_end": 15,
+    "content": "def index():\n    return render_template('index.html')",
+    "imports": [
+      "CustomData",
+      "PredictPipeline"
+    ],
+    "calls": [
+      "app.route",
+      "render_template"
+    ],
+    "dependencies": [
+      "src/pipeline/predict_pipeline.py"
+    ],
+    "related_files": [
+      "src/pipeline/predict_pipeline.py"
+    ],
+    "parent_symbol": null,
+    "metadata": {
+      "relationship_enriched": true,
+      "relationship_targets": [
+        "src/pipeline/predict_pipeline.py"
+      ],
+      "repository": "ML-Project",
+      "dependency_count": 1,
+      "related_file_count": 1,
+      "call_count": 2,
+      "github_reference": "https://github.com/pvats2006/ML-Project/blob/main/app.py#L14-L15",
+      "github_reference_available": true,
+      "github_owner": "pvats2006",
+      "github_repository": "ML-Project",
+      "github_branch": "main",
+      "github_file": "app.py",
+      "github_line_start": 14,
+      "github_line_end": 15
+    }
+  },
+  {
+    "chunk_id": "app.py::function::predict_datapoint",
+    "repo": "ML-Project",
+    "file_path": "app.py",
+    "file_name": "app.py",
+    "language": "python",
+    "chunk_type": "function",
+    "symbol": "predict_datapoint",
+    "line_start": 18,
+    "line_end": 37,
+    "content": "def predict_datapoint():\n    if request.method=='GET':\n        return render_template('home.html')\n    else:\n        data=CustomData(\n            gender=request.form.get('gender'),\n            race_ethnicity=request.form.get('race_ethnicity'),\n            parental_level_of_education=request.form.get('parental_level_of_education'),\n            lunch=request.form.get('lunch'),\n            test_preparation_course=request.form.get('test_preparation_course'),\n            reading_score=float(request.form.get('reading_score')),\n            writing_score=float(request.form.get('writing_score'))\n        )\n\n        pred_df = data.get_data_as_data_frame()\n\n        predict_pipeline = PredictPipeline()\n        results = predict_pipeline.predict(pred_df)\n\n        return render_template('home.html', results=results[0])",
+    "imports": [
+      "CustomData",
+      "PredictPipeline"
+    ],
+    "calls": [
+      "app.route",
+      "render_template",
+      "CustomData",
+      "data.get_data_as_data_frame",
+      "PredictPipeline",
+      "predict_pipeline.predict",
+      "get",
+      "float"
+    ],
+    "dependencies": [
+      "src/pipeline/predict_pipeline.py"
+    ],
+    "related_files": [
+      "src/pipeline/predict_pipeline.py"
+    ],
+    "parent_symbol": null,
+    "metadata": {
+      "relationship_enriched": true,
+      "relationship_targets": [
+        "src/pipeline/predict_pipeline.py"
+      ],
+      "repository": "ML-Project",
+      "dependency_count": 1,
+      "related_file_count": 1,
+      "call_count": 8,
+      "github_reference": "https://github.com/pvats2006/ML-Project/blob/main/app.py#L18-L37",
+      "github_reference_available": true,
+      "github_owner": "pvats2006",
+      "github_repository": "ML-Project",
+      "github_branch": "main",
+      "github_file": "app.py",
+      "github_line_start": 18,
+      "github_line_end": 37
+    }
+  },
+  {
+    "chunk_id": "src/exception.py::file",
+    "repo": "ML-Project",
+    "file_path": "src/exception.py",
+    "file_name": "exception.py",
+    "language": "python",
+    "chunk_type": "file",
+    "symbol": null,
+    "line_start": 1,
+    "line_end": 23,
+    "content": "import sys\n\n\ndef error_message_details(error, error_detail: sys):\n    _, _, exc_tb = error_detail.exc_info()\n    file_name = exc_tb.tb_frame.f_code.co_filename\n\n    error_message = \"Error occurred in python script name [{0}] line [{1}] error message [{2}]\".format(\n        file_name, exc_tb.tb_lineno, str(error)\n    )\n\n    return error_message\n\n\nclass CustomException(Exception):\n    def __init__(self, error_message, error_detail: sys):\n        super().__init__(error_message)\n        self.error_message = error_message_details(error_message, error_detail)\n\n    def __str__(self):\n        return self.error_message\n\n\n",
+    "imports": [],
+    "calls": [],
+    "dependencies": [],
+    "related_files": [
+      "src/utils.py",
+      "src/pipeline/predict_pipeline.py",
+      "src/components/data_ingestion.py",
+      "src/components/model_trainer.py",
+      "src/components/data_transformation.py"
+    ],
+    "parent_symbol": null,
+    "metadata": {
+      "relationship_enriched": true,
+      "relationship_targets": [
+        "src/exception.py"
+      ],
+      "repository": "ML-Project",
+      "dependency_count": 0,
+      "related_file_count": 5,
+      "call_count": 0,
+      "github_reference": "https://github.com/pvats2006/ML-Project/blob/main/src/exception.py#L1-L23",
+      "github_reference_available": true,
+      "github_owner": "pvats2006",
+      "github_repository": "ML-Project",
+      "github_branch": "main",
+      "github_file": "src/exception.py",
+      "github_line_start": 1,
+      "github_line_end": 23
+    }
+  },
+  {
+    "chunk_id": "src/exception.py::function::error_message_details",
+    "repo": "ML-Project",
+    "file_path": "src/exception.py",
+    "file_name": "exception.py",
+    "language": "python",
+    "chunk_type": "function",
+    "symbol": "error_message_details",
+    "line_start": 4,
+    "line_end": 12,
+    "content": "def error_message_details(error, error_detail: sys):\n    _, _, exc_tb = error_detail.exc_info()\n    file_name = exc_tb.tb_frame.f_code.co_filename\n\n    error_message = \"Error occurred in python script name [{0}] line [{1}] error message [{2}]\".format(\n        file_name, exc_tb.tb_lineno, str(error)\n    )\n\n    return error_message",
+    "imports": [],
+    "calls": [
+      "error_detail.exc_info",
+      "format",
+      "str"
+    ],
+    "dependencies": [],
+    "related_files": [
+      "src/utils.py",
+      "src/pipeline/predict_pipeline.py",
+      "src/components/data_ingestion.py",
+      "src/components/model_trainer.py",
+      "src/components/data_transformation.py"
+    ],
+    "parent_symbol": null,
+    "metadata": {
+      "relationship_enriched": true,
+      "relationship_targets": [
+        "src/exception.py"
+      ],
+      "repository": "ML-Project",
+      "dependency_count": 0,
+      "related_file_count": 5,
+      "call_count": 3,
+      "github_reference": "https://github.com/pvats2006/ML-Project/blob/main/src/exception.py#L4-L12",
+      "github_reference_available": true,
+      "github_owner": "pvats2006",
+      "github_repository": "ML-Project",
+      "github_branch": "main",
+      "github_file": "src/exception.py",
+      "github_line_start": 4,
+      "github_line_end": 12
+    }
+  },
+  {
+    "chunk_id": "src/exception.py::class::CustomException",
+    "repo": "ML-Project",
+    "file_path": "src/exception.py",
+    "file_name": "exception.py",
+    "language": "python",
+    "chunk_type": "class",
+    "symbol": "CustomException",
+    "line_start": 15,
+    "line_end": 21,
+    "content": "class CustomException(Exception):\n    def __init__(self, error_message, error_detail: sys):\n        super().__init__(error_message)\n        self.error_message = error_message_details(error_message, error_detail)\n\n    def __str__(self):\n        return self.error_message",
+    "imports": [],
+    "calls": [],
+    "dependencies": [],
+    "related_files": [
+      "src/utils.py",
+      "src/pipeline/predict_pipeline.py",
+      "src/components/data_ingestion.py",
+      "src/components/model_trainer.py",
+      "src/components/data_transformation.py"
+    ],
+    "parent_symbol": null,
+    "metadata": {
+      "relationship_enriched": true,
+      "relationship_targets": [
+        "src/exception.py"
+      ],
+      "repository": "ML-Project",
+      "dependency_count": 0,
+      "related_file_count": 5,
+      "call_count": 0,
+      "github_reference": "https://github.com/pvats2006/ML-Project/blob/main/src/exception.py#L15-L21",
+      "github_reference_available": true,
+      "github_owner": "pvats2006",
+      "github_repository": "ML-Project",
+      "github_branch": "main",
+      "github_file": "src/exception.py",
+      "github_line_start": 15,
+      "github_line_end": 21
+    }
+  },
+  {
+    "chunk_id": "src/exception.py::method::CustomException.__init__",
+    "repo": "ML-Project",
+    "file_path": "src/exception.py",
+    "file_name": "exception.py",
+    "language": "python",
+    "chunk_type": "method",
+    "symbol": "CustomException.__init__",
+    "line_start": 16,
+    "line_end": 18,
+    "content": "    def __init__(self, error_message, error_detail: sys):\n        super().__init__(error_message)\n        self.error_message = error_message_details(error_message, error_detail)",
+    "imports": [],
+    "calls": [
+      "__init__",
+      "error_message_details",
+      "super"
+    ],
+    "dependencies": [],
+    "related_files": [
+      "src/utils.py",
+      "src/pipeline/predict_pipeline.py",
+      "src/components/data_ingestion.py",
+      "src/components/model_trainer.py",
+      "src/components/data_transformation.py"
+    ],
+    "parent_symbol": "CustomException",
+    "metadata": {
+      "relationship_enriched": true,
+      "relationship_targets": [
+        "src/exception.py"
+      ],
+      "repository": "ML-Project",
+      "dependency_count": 0,
+      "related_file_count": 5,
+      "call_count": 3,
+      "github_reference": "https://github.com/pvats2006/ML-Project/blob/main/src/exception.py#L16-L18",
+      "github_reference_available": true,
+      "github_owner": "pvats2006",
+      "github_repository": "ML-Project",
+      "github_branch": "main",
+      "github_file": "src/exception.py",
+      "github_line_start": 16,
+      "github_line_end": 18
+    }
+  },
+  {
+    "chunk_id": "src/exception.py::method::CustomException.__str__",
+    "repo": "ML-Project",
+    "file_path": "src/exception.py",
+    "file_name": "exception.py",
+    "language": "python",
+    "chunk_type": "method",
+    "symbol": "CustomException.__str__",
+    "line_start": 20,
+    "line_end": 21,
+    "content": "    def __str__(self):\n        return self.error_message",
+    "imports": [],
+    "calls": [],
+    "dependencies": [],
+    "related_files": [
+      "src/utils.py",
+      "src/pipeline/predict_pipeline.py",
+      "src/components/data_ingestion.py",
+      "src/components/model_trainer.py",
+      "src/components/data_transformation.py"
+    ],
+    "parent_symbol": "CustomException",
+    "metadata": {
+      "relationship_enriched": true,
+      "relationship_targets": [
+        "src/exception.py"
+      ],
+      "repository": "ML-Project",
+      "dependency_count": 0,
+      "related_file_count": 5,
+      "call_count": 0,
+      "github_reference": "https://github.com/pvats2006/ML-Project/blob/main/src/exception.py#L20-L21",
+      "github_reference_available": true,
+      "github_owner": "pvats2006",
+      "github_repository": "ML-Project",
+      "github_branch": "main",
+      "github_file": "src/exception.py",
+      "github_line_start": 20,
+      "github_line_end": 21
+    }
+  },
+  {
+    "chunk_id": "src/logger.py::file",
+    "repo": "ML-Project",
+    "file_path": "src/logger.py",
+    "file_name": "logger.py",
+    "language": "python",
+    "chunk_type": "file",
+    "symbol": null,
+    "line_start": 1,
+    "line_end": 17,
+    "content": "## This file is used for logging the information during the execution of the code. \n\nimport logging\nimport os\nfrom datetime import datetime\n\nLOG_FILE=f\"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.log\"\nlogs_path=os.path.join(os.getcwd(),\"logs\",LOG_FILE)\nos.makedirs(logs_path,exist_ok=True)\n\nLOG_FILE_PATH=os.path.join(logs_path,LOG_FILE)\n\nlogging.basicConfig(\n    filename=LOG_FILE_PATH,\n    format=\"[%(asctime)s] %(lineno)d %(name)s - %(levelname)s - %(message)s\",\n    level=logging.INFO,\n)\n",
+    "imports": [],
+    "calls": [],
+    "dependencies": [],
+    "related_files": [
+      "src/components/data_ingestion.py",
+      "src/components/model_trainer.py",
+      "src/components/data_transformation.py"
+    ],
+    "parent_symbol": null,
+    "metadata": {
+      "relationship_enriched": true,
+      "relationship_targets": [
+        "src/logger.py"
+      ],
+      "repository": "ML-Project",
+      "dependency_count": 0,
+      "related_file_count": 3,
+      "call_count": 0,
+      "github_reference": "https://github.com/pvats2006/ML-Project/blob/main/src/logger.py#L1-L17",
+      "github_reference_available": true,
+      "github_owner": "pvats2006",
+      "github_repository": "ML-Project",
+      "github_branch": "main",
+      "github_file": "src/logger.py",
+      "github_line_start": 1,
+      "github_line_end": 17
+    }
+  },
+  {
+    "chunk_id": "src/utils.py::file",
+    "repo": "ML-Project",
+    "file_path": "src/utils.py",
+    "file_name": "utils.py",
+    "language": "python",
+    "chunk_type": "file",
+    "symbol": null,
+    "line_start": 1,
+    "line_end": 47,
+    "content": "import os\nimport sys\nimport dill\n\nfrom sklearn.metrics import r2_score\nfrom src.exception import CustomException\n\n\ndef save_object(file_path, obj):\n    try:\n        dir_path = os.path.dirname(file_path)\n        os.makedirs(dir_path, exist_ok=True)\n\n        with open(file_path, \"wb\") as file_obj:\n            dill.dump(obj, file_obj)\n\n    except Exception as e:\n        raise CustomException(e, sys)\n\n\ndef evaluate_models(X_train, y_train, X_test, y_test, models):\n    try:\n        report = {}\n\n        for name, model in models.items():\n            model.fit(X_train, y_train)\n\n            y_train_pred = model.predict(X_train)\n            y_test_pred = model.predict(X_test)\n\n            train_score = r2_score(y_train, y_train_pred)\n            test_score = r2_score(y_test, y_test_pred)\n\n            report[name] = test_score\n\n        return report\n\n    except Exception as e:\n        raise CustomException(e, sys)\n    \ndef load_object(file_path):\n    try:\n        with open(file_path, \"rb\") as file_obj:\n            return dill.load(file_obj)\n\n    except Exception as e:\n        raise CustomException(e, sys)",
+    "imports": [
+      "CustomException"
+    ],
+    "calls": [],
+    "dependencies": [
+      "src/exception.py"
+    ],
+    "related_files": [
+      "src/exception.py",
+      "src/pipeline/predict_pipeline.py",
+      "src/components/model_trainer.py",
+      "src/components/data_transformation.py"
+    ],
+    "parent_symbol": null,
+    "metadata": {
+      "relationship_enriched": true,
+      "relationship_targets": [
+        "src/exception.py",
+        "src/utils.py"
+      ],
+      "repository": "ML-Project",
+      "dependency_count": 1,
+      "related_file_count": 4,
+      "call_count": 0,
+      "github_reference": "https://github.com/pvats2006/ML-Project/blob/main/src/utils.py#L1-L47",
+      "github_reference_available": true,
+      "github_owner": "pvats2006",
+      "github_repository": "ML-Project",
+      "github_branch": "main",
+      "github_file": "src/utils.py",
+      "github_line_start": 1,
+      "github_line_end": 47
+    }
+  },
+  {
+    "chunk_id": "src/utils.py::function::save_object",
+    "repo": "ML-Project",
+    "file_path": "src/utils.py",
+    "file_name": "utils.py",
+    "language": "python",
+    "chunk_type": "function",
+    "symbol": "save_object",
+    "line_start": 9,
+    "line_end": 18,
+    "content": "def save_object(file_path, obj):\n    try:\n        dir_path = os.path.dirname(file_path)\n        os.makedirs(dir_path, exist_ok=True)\n\n        with open(file_path, \"wb\") as file_obj:\n            dill.dump(obj, file_obj)\n\n    except Exception as e:\n        raise CustomException(e, sys)",
+    "imports": [
+      "CustomException"
+    ],
+    "calls": [
+      "dirname",
+      "os.makedirs",
+      "open",
+      "dill.dump",
+      "CustomException"
+    ],
+    "dependencies": [
+      "src/exception.py"
+    ],
+    "related_files": [
+      "src/exception.py",
+      "src/pipeline/predict_pipeline.py",
+      "src/components/model_trainer.py",
+      "src/components/data_transformation.py"
+    ],
+    "parent_symbol": null,
+    "metadata": {
+      "relationship_enriched": true,
+      "relationship_targets": [
+        "src/exception.py",
+        "src/utils.py"
+      ],
+      "repository": "ML-Project",
+      "dependency_count": 1,
+      "related_file_count": 4,
+      "call_count": 5,
+      "github_reference": "https://github.com/pvats2006/ML-Project/blob/main/src/utils.py#L9-L18",
+      "github_reference_available": true,
+      "github_owner": "pvats2006",
+      "github_repository": "ML-Project",
+      "github_branch": "main",
+      "github_file": "src/utils.py",
+      "github_line_start": 9,
+      "github_line_end": 18
+    }
+  },
+  {
+    "chunk_id": "src/utils.py::function::evaluate_models",
+    "repo": "ML-Project",
+    "file_path": "src/utils.py",
+    "file_name": "utils.py",
+    "language": "python",
+    "chunk_type": "function",
+    "symbol": "evaluate_models",
+    "line_start": 21,
+    "line_end": 39,
+    "content": "def evaluate_models(X_train, y_train, X_test, y_test, models):\n    try:\n        report = {}\n\n        for name, model in models.items():\n            model.fit(X_train, y_train)\n\n            y_train_pred = model.predict(X_train)\n            y_test_pred = model.predict(X_test)\n\n            train_score = r2_score(y_train, y_train_pred)\n            test_score = r2_score(y_test, y_test_pred)\n\n            report[name] = test_score\n\n        return report\n\n    except Exception as e:\n        raise CustomException(e, sys)",
+    "imports": [
+      "CustomException"
+    ],
+    "calls": [
+      "models.items",
+      "model.fit",
+      "model.predict",
+      "r2_score",
+      "CustomException"
+    ],
+    "dependencies": [
+      "src/exception.py"
+    ],
+    "related_files": [
+      "src/exception.py",
+      "src/pipeline/predict_pipeline.py",
+      "src/components/model_trainer.py",
+      "src/components/data_transformation.py"
+    ],
+    "parent_symbol": null,
+    "metadata": {
+      "relationship_enriched": true,
+      "relationship_targets": [
+        "src/exception.py",
+        "src/utils.py"
+      ],
+      "repository": "ML-Project",
+      "dependency_count": 1,
+      "related_file_count": 4,
+      "call_count": 5,
+      "github_reference": "https://github.com/pvats2006/ML-Project/blob/main/src/utils.py#L21-L39",
+      "github_reference_available": true,
+      "github_owner": "pvats2006",
+      "github_repository": "ML-Project",
+      "github_branch": "main",
+      "github_file": "src/utils.py",
+      "github_line_start": 21,
+      "github_line_end": 39
+    }
+  },
+  {
+    "chunk_id": "src/utils.py::function::load_object",
+    "repo": "ML-Project",
+    "file_path": "src/utils.py",
+    "file_name": "utils.py",
+    "language": "python",
+    "chunk_type": "function",
+    "symbol": "load_object",
+    "line_start": 41,
+    "line_end": 47,
+    "content": "def load_object(file_path):\n    try:\n        with open(file_path, \"rb\") as file_obj:\n            return dill.load(file_obj)\n\n    except Exception as e:\n        raise CustomException(e, sys)",
+    "imports": [
+      "CustomException"
+    ],
+    "calls": [
+      "open",
+      "dill.load",
+      "CustomException"
+    ],
+    "dependencies": [
+      "src/exception.py"
+    ],
+    "related_files": [
+      "src/exception.py",
+      "src/pipeline/predict_pipeline.py",
+      "src/components/model_trainer.py",
+      "src/components/data_transformation.py"
+    ],
+    "parent_symbol": null,
+    "metadata": {
+      "relationship_enriched": true,
+      "relationship_targets": [
+        "src/exception.py",
+        "src/utils.py"
+      ],
+      "repository": "ML-Project",
+      "dependency_count": 1,
+      "related_file_count": 4,
+      "call_count": 3,
+      "github_reference": "https://github.com/pvats2006/ML-Project/blob/main/src/utils.py#L41-L47",
+      "github_reference_available": true,
+      "github_owner": "pvats2006",
+      "github_repository": "ML-Project",
+      "github_branch": "main",
+      "github_file": "src/utils.py",
+      "github_line_start": 41,
+      "github_line_end": 47
+    }
+  },
+  {
+    "chunk_id": "src/pipeline/predict_pipeline.py::file",
+    "repo": "ML-Project",
+    "file_path": "src/pipeline/predict_pipeline.py",
+    "file_name": "predict_pipeline.py",
+    "language": "python",
+    "chunk_type": "file",
+    "symbol": null,
+    "line_start": 1,
+    "line_end": 62,
+    "content": "import sys\nimport pandas as pd\nfrom src.exception import CustomException\nfrom src.utils import load_object\n\n\nclass PredictPipeline:\n    def __init__(self):\n        pass\n\n    def predict(self, features):\n        try:\n            model_path = \"artifacts/model.pkl\"\n            preprocessor_path = \"artifacts/preprocessor.pkl\"\n\n            model = load_object(file_path=model_path)\n            preprocessor = load_object(file_path=preprocessor_path)\n\n            data_scaled = preprocessor.transform(features)\n            preds = model.predict(data_scaled)\n\n            return preds\n\n        except Exception as e:\n            raise CustomException(e, sys)\n\n\nclass CustomData:\n    def __init__(\n        self,\n        gender: str,\n        race_ethnicity: str,\n        parental_level_of_education: str,\n        lunch: str,\n        test_preparation_course: str,\n        reading_score: int,\n        writing_score: int\n    ):\n        self.gender = gender\n        self.race_ethnicity = race_ethnicity\n        self.parental_level_of_education = parental_level_of_education\n        self.lunch = lunch\n        self.test_preparation_course = test_preparation_course\n        self.reading_score = reading_score\n        self.writing_score = writing_score\n\n    def get_data_as_data_frame(self):\n        try:\n            custom_data_input_dict = {\n                \"gender\": [self.gender],\n                \"race/ethnicity\": [self.race_ethnicity],\n                \"parental_level_of_education\": [self.parental_level_of_education],\n                \"lunch\": [self.lunch],\n                \"test_preparation_course\": [self.test_preparation_course],\n                \"reading_score\": [self.reading_score],\n                \"writing_score\": [self.writing_score]\n            }\n\n            return pd.DataFrame(custom_data_input_dict)\n\n        except Exception as e:\n            raise CustomException(e, sys)",
+    "imports": [
+      "CustomException",
+      "load_object"
+    ],
+    "calls": [],
+    "dependencies": [
+      "src/exception.py",
+      "src/utils.py"
+    ],
+    "related_files": [
+      "src/exception.py",
+      "src/utils.py",
+      "application.py",
+      "app.py"
+    ],
+    "parent_symbol": null,
+    "metadata": {
+      "relationship_enriched": true,
+      "relationship_targets": [
+        "src/pipeline/predict_pipeline.py",
+        "src/exception.py",
+        "src/utils.py"
+      ],
+      "repository": "ML-Project",
+      "dependency_count": 2,
+      "related_file_count": 4,
+      "call_count": 0,
+      "github_reference": "https://github.com/pvats2006/ML-Project/blob/main/src/pipeline/predict_pipeline.py#L1-L62",
+      "github_reference_available": true,
+      "github_owner": "pvats2006",
+      "github_repository": "ML-Project",
+      "github_branch": "main",
+      "github_file": "src/pipeline/predict_pipeline.py",
+      "github_line_start": 1,
+      "github_line_end": 62
+    }
+  },
+  {
+    "chunk_id": "src/pipeline/predict_pipeline.py::class::PredictPipeline",
+    "repo": "ML-Project",
+    "file_path": "src/pipeline/predict_pipeline.py",
+    "file_name": "predict_pipeline.py",
+    "language": "python",
+    "chunk_type": "class",
+    "symbol": "PredictPipeline",
+    "line_start": 7,
+    "line_end": 25,
+    "content": "class PredictPipeline:\n    def __init__(self):\n        pass\n\n    def predict(self, features):\n        try:\n            model_path = \"artifacts/model.pkl\"\n            preprocessor_path = \"artifacts/preprocessor.pkl\"\n\n            model = load_object(file_path=model_path)\n            preprocessor = load_object(file_path=preprocessor_path)\n\n            data_scaled = preprocessor.transform(features)\n            preds = model.predict(data_scaled)\n\n            return preds\n\n        except Exception as e:\n            raise CustomException(e, sys)",
+    "imports": [
+      "CustomException",
+      "load_object"
+    ],
+    "calls": [],
+    "dependencies": [
+      "src/exception.py",
+      "src/utils.py"
+    ],
+    "related_files": [
+      "src/exception.py",
+      "src/utils.py",
+      "application.py",
+      "app.py"
+    ],
+    "parent_symbol": null,
+    "metadata": {
+      "relationship_enriched": true,
+      "relationship_targets": [
+        "src/pipeline/predict_pipeline.py",
+        "src/exception.py",
+        "src/utils.py"
+      ],
+      "repository": "ML-Project",
+      "dependency_count": 2,
+      "related_file_count": 4,
+      "call_count": 0,
+      "github_reference": "https://github.com/pvats2006/ML-Project/blob/main/src/pipeline/predict_pipeline.py#L7-L25",
+      "github_reference_available": true,
+      "github_owner": "pvats2006",
+      "github_repository": "ML-Project",
+      "github_branch": "main",
+      "github_file": "src/pipeline/predict_pipeline.py",
+      "github_line_start": 7,
+      "github_line_end": 25
+    }
+  },
+  {
+    "chunk_id": "src/pipeline/predict_pipeline.py::method::PredictPipeline.__init__",
+    "repo": "ML-Project",
+    "file_path": "src/pipeline/predict_pipeline.py",
+    "file_name": "predict_pipeline.py",
+    "language": "python",
+    "chunk_type": "method",
+    "symbol": "PredictPipeline.__init__",
+    "line_start": 8,
+    "line_end": 9,
+    "content": "    def __init__(self):\n        pass",
+    "imports": [
+      "CustomException",
+      "load_object"
+    ],
+    "calls": [],
+    "dependencies": [
+      "src/exception.py",
+      "src/utils.py"
+    ],
+    "related_files": [
+      "src/exception.py",
+      "src/utils.py",
+      "application.py",
+      "app.py"
+    ],
+    "parent_symbol": "PredictPipeline",
+    "metadata": {
+      "relationship_enriched": true,
+      "relationship_targets": [
+        "src/pipeline/predict_pipeline.py",
+        "src/exception.py",
+        "src/utils.py"
+      ],
+      "repository": "ML-Project",
+      "dependency_count": 2,
+      "related_file_count": 4,
+      "call_count": 0,
+      "github_reference": "https://github.com/pvats2006/ML-Project/blob/main/src/pipeline/predict_pipeline.py#L8-L9",
+      "github_reference_available": true,
+      "github_owner": "pvats2006",
+      "github_repository": "ML-Project",
+      "github_branch": "main",
+      "github_file": "src/pipeline/predict_pipeline.py",
+      "github_line_start": 8,
+      "github_line_end": 9
+    }
+  },
+  {
+    "chunk_id": "src/pipeline/predict_pipeline.py::method::PredictPipeline.predict",
+    "repo": "ML-Project",
+    "file_path": "src/pipeline/predict_pipeline.py",
+    "file_name": "predict_pipeline.py",
+    "language": "python",
+    "chunk_type": "method",
+    "symbol": "PredictPipeline.predict",
+    "line_start": 11,
+    "line_end": 25,
+    "content": "    def predict(self, features):\n        try:\n            model_path = \"artifacts/model.pkl\"\n            preprocessor_path = \"artifacts/preprocessor.pkl\"\n\n            model = load_object(file_path=model_path)\n            preprocessor = load_object(file_path=preprocessor_path)\n\n            data_scaled = preprocessor.transform(features)\n            preds = model.predict(data_scaled)\n\n            return preds\n\n        except Exception as e:\n            raise CustomException(e, sys)",
+    "imports": [
+      "CustomException",
+      "load_object"
+    ],
+    "calls": [
+      "load_object",
+      "preprocessor.transform",
+      "model.predict",
+      "CustomException"
+    ],
+    "dependencies": [
+      "src/exception.py",
+      "src/utils.py"
+    ],
+    "related_files": [
+      "src/exception.py",
+      "src/utils.py",
+      "application.py",
+      "app.py"
+    ],
+    "parent_symbol": "PredictPipeline",
+    "metadata": {
+      "relationship_enriched": true,
+      "relationship_targets": [
+        "src/pipeline/predict_pipeline.py",
+        "src/exception.py",
+        "src/utils.py"
+      ],
+      "repository": "ML-Project",
+      "dependency_count": 2,
+      "related_file_count": 4,
+      "call_count": 4,
+      "github_reference": "https://github.com/pvats2006/ML-Project/blob/main/src/pipeline/predict_pipeline.py#L11-L25",
+      "github_reference_available": true,
+      "github_owner": "pvats2006",
+      "github_repository": "ML-Project",
+      "github_branch": "main",
+      "github_file": "src/pipeline/predict_pipeline.py",
+      "github_line_start": 11,
+      "github_line_end": 25
+    }
+  },
+  {
+    "chunk_id": "src/pipeline/predict_pipeline.py::class::CustomData",
+    "repo": "ML-Project",
+    "file_path": "src/pipeline/predict_pipeline.py",
+    "file_name": "predict_pipeline.py",
+    "language": "python",
+    "chunk_type": "class",
+    "symbol": "CustomData",
+    "line_start": 28,
+    "line_end": 62,
+    "content": "class CustomData:\n    def __init__(\n        self,\n        gender: str,\n        race_ethnicity: str,\n        parental_level_of_education: str,\n        lunch: str,\n        test_preparation_course: str,\n        reading_score: int,\n        writing_score: int\n    ):\n        self.gender = gender\n        self.race_ethnicity = race_ethnicity\n        self.parental_level_of_education = parental_level_of_education\n        self.lunch = lunch\n        self.test_preparation_course = test_preparation_course\n        self.reading_score = reading_score\n        self.writing_score = writing_score\n\n    def get_data_as_data_frame(self):\n        try:\n            custom_data_input_dict = {\n                \"gender\": [self.gender],\n                \"race/ethnicity\": [self.race_ethnicity],\n                \"parental_level_of_education\": [self.parental_level_of_education],\n                \"lunch\": [self.lunch],\n                \"test_preparation_course\": [self.test_preparation_course],\n                \"reading_score\": [self.reading_score],\n                \"writing_score\": [self.writing_score]\n            }\n\n            return pd.DataFrame(custom_data_input_dict)\n\n        except Exception as e:\n            raise CustomException(e, sys)",
+    "imports": [
+      "CustomException",
+      "load_object"
+    ],
+    "calls": [],
+    "dependencies": [
+      "src/exception.py",
+      "src/utils.py"
+    ],
+    "related_files": [
+      "src/exception.py",
+      "src/utils.py",
+      "application.py",
+      "app.py"
+    ],
+    "parent_symbol": null,
+    "metadata": {
+      "relationship_enriched": true,
+      "relationship_targets": [
+        "src/pipeline/predict_pipeline.py",
+        "src/exception.py",
+        "src/utils.py"
+      ],
+      "repository": "ML-Project",
+      "dependency_count": 2,
+      "related_file_count": 4,
+      "call_count": 0,
+      "github_reference": "https://github.com/pvats2006/ML-Project/blob/main/src/pipeline/predict_pipeline.py#L28-L62",
+      "github_reference_available": true,
+      "github_owner": "pvats2006",
+      "github_repository": "ML-Project",
+      "github_branch": "main",
+      "github_file": "src/pipeline/predict_pipeline.py",
+      "github_line_start": 28,
+      "github_line_end": 62
+    }
+  },
+  {
+    "chunk_id": "src/pipeline/predict_pipeline.py::method::CustomData.__init__",
+    "repo": "ML-Project",
+    "file_path": "src/pipeline/predict_pipeline.py",
+    "file_name": "predict_pipeline.py",
+    "language": "python",
+    "chunk_type": "method",
+    "symbol": "CustomData.__init__",
+    "line_start": 29,
+    "line_end": 45,
+    "content": "    def __init__(\n        self,\n        gender: str,\n        race_ethnicity: str,\n        parental_level_of_education: str,\n        lunch: str,\n        test_preparation_course: str,\n        reading_score: int,\n        writing_score: int\n    ):\n        self.gender = gender\n        self.race_ethnicity = race_ethnicity\n        self.parental_level_of_education = parental_level_of_education\n        self.lunch = lunch\n        self.test_preparation_course = test_preparation_course\n        self.reading_score = reading_score\n        self.writing_score = writing_score",
+    "imports": [
+      "CustomException",
+      "load_object"
+    ],
+    "calls": [],
+    "dependencies": [
+      "src/exception.py",
+      "src/utils.py"
+    ],
+    "related_files": [
+      "src/exception.py",
+      "src/utils.py",
+      "application.py",
+      "app.py"
+    ],
+    "parent_symbol": "CustomData",
+    "metadata": {
+      "relationship_enriched": true,
+      "relationship_targets": [
+        "src/pipeline/predict_pipeline.py",
+        "src/exception.py",
+        "src/utils.py"
+      ],
+      "repository": "ML-Project",
+      "dependency_count": 2,
+      "related_file_count": 4,
+      "call_count": 0,
+      "github_reference": "https://github.com/pvats2006/ML-Project/blob/main/src/pipeline/predict_pipeline.py#L29-L45",
+      "github_reference_available": true,
+      "github_owner": "pvats2006",
+      "github_repository": "ML-Project",
+      "github_branch": "main",
+      "github_file": "src/pipeline/predict_pipeline.py",
+      "github_line_start": 29,
+      "github_line_end": 45
+    }
+  },
+  {
+    "chunk_id": "src/pipeline/predict_pipeline.py::method::CustomData.get_data_as_data_frame",
+    "repo": "ML-Project",
+    "file_path": "src/pipeline/predict_pipeline.py",
+    "file_name": "predict_pipeline.py",
+    "language": "python",
+    "chunk_type": "method",
+    "symbol": "CustomData.get_data_as_data_frame",
+    "line_start": 47,
+    "line_end": 62,
+    "content": "    def get_data_as_data_frame(self):\n        try:\n            custom_data_input_dict = {\n                \"gender\": [self.gender],\n                \"race/ethnicity\": [self.race_ethnicity],\n                \"parental_level_of_education\": [self.parental_level_of_education],\n                \"lunch\": [self.lunch],\n                \"test_preparation_course\": [self.test_preparation_course],\n                \"reading_score\": [self.reading_score],\n                \"writing_score\": [self.writing_score]\n            }\n\n            return pd.DataFrame(custom_data_input_dict)\n\n        except Exception as e:\n            raise CustomException(e, sys)",
+    "imports": [
+      "CustomException",
+      "load_object"
+    ],
+    "calls": [
+      "pd.DataFrame",
+      "CustomException"
+    ],
+    "dependencies": [
+      "src/exception.py",
+      "src/utils.py"
+    ],
+    "related_files": [
+      "src/exception.py",
+      "src/utils.py",
+      "application.py",
+      "app.py"
+    ],
+    "parent_symbol": "CustomData",
+    "metadata": {
+      "relationship_enriched": true,
+      "relationship_targets": [
+        "src/pipeline/predict_pipeline.py",
+        "src/exception.py",
+        "src/utils.py"
+      ],
+      "repository": "ML-Project",
+      "dependency_count": 2,
+      "related_file_count": 4,
+      "call_count": 2,
+      "github_reference": "https://github.com/pvats2006/ML-Project/blob/main/src/pipeline/predict_pipeline.py#L47-L62",
+      "github_reference_available": true,
+      "github_owner": "pvats2006",
+      "github_repository": "ML-Project",
+      "github_branch": "main",
+      "github_file": "src/pipeline/predict_pipeline.py",
+      "github_line_start": 47,
+      "github_line_end": 62
+    }
+  },
+  {
+    "chunk_id": "src/components/data_ingestion.py::file",
+    "repo": "ML-Project",
+    "file_path": "src/components/data_ingestion.py",
+    "file_name": "data_ingestion.py",
+    "language": "python",
+    "chunk_type": "file",
+    "symbol": null,
+    "line_start": 1,
+    "line_end": 76,
+    "content": "import os\nimport sys\nfrom dataclasses import dataclass\nimport pandas as pd\n\nfrom sklearn.model_selection import train_test_split\n\nfrom src.exception import CustomException\nfrom src.logger import logging\nfrom src.components.data_transformation import DataTransformation\n\nfrom src.components.model_trainer import ModelTrainerConfig\nfrom src.components.model_trainer import ModelTrainer\n\n\n@dataclass\nclass DataIngestionConfig:\n    train_data_path: str = os.path.join('artifact', \"train.csv\")\n    test_data_path: str = os.path.join('artifact', \"test.csv\")\n    raw_data_path: str = os.path.join('artifact', \"raw.csv\")\n\n\nclass DataIngestion:\n    def __init__(self):\n        self.ingestion_config = DataIngestionConfig()\n\n    def initiate_data_ingestion(self):\n        logging.info(\"Entered data ingestion component\")\n        try:\n            df = pd.read_csv(r'D:\\ML-Project\\notebook\\StudentsPerformance.csv')\n\n            df.columns = df.columns.str.strip().str.replace(\" \", \"_\")\n\n            logging.info(\"Dataset read and columns normalized\")\n\n            os.makedirs(os.path.dirname(self.ingestion_config.train_data_path), exist_ok=True)\n\n            df.to_csv(self.ingestion_config.raw_data_path, index=False, header=True)\n\n            logging.info(\"Raw data saved\")\n\n            train_set, test_set = train_test_split(df, test_size=0.2, random_state=42)\n\n            train_set.to_csv(self.ingestion_config.train_data_path, index=False, header=True)\n            test_set.to_csv(self.ingestion_config.test_data_path, index=False, header=True)\n\n            logging.info(\"Train-test split completed\")\n\n            return (\n                self.ingestion_config.train_data_path,\n                self.ingestion_config.test_data_path\n            )\n\n        except Exception as e:\n            raise CustomException(e, sys)\n\n\nif __name__ == \"__main__\":\n    obj = DataIngestion()\n    train_data, test_data = obj.initiate_data_ingestion()\n\n    logging.info(\"Starting Data Transformation\")\n\n    data_transformation = DataTransformation()\n    train_arr, test_arr, _ = data_transformation.initiate_data_transformation(train_data, test_data)\n    modelTrainer=ModelTrainer()\n    print( modelTrainer.initiate_model_trainer(train_arr,test_arr))\n \n # ================================\n# DATA INGESTION MODULE\n# ================================\n# Ye file ML pipeline ka first step hai jisme:\n# 1. Dataset read hota hai\n# 2. Raw data store hota hai\n# 3. Train-test split hota hai\n# 4. Alag-alag CSV files me save hota hai",
+    "imports": [
+      "CustomException",
+      "logging",
+      "DataTransformation",
+      "ModelTrainerConfig",
+      "ModelTrainer"
+    ],
+    "calls": [],
+    "dependencies": [
+      "src/exception.py",
+      "src/logger.py",
+      "src/components/data_transformation.py",
+      "src/components/model_trainer.py"
+    ],
+    "related_files": [
+      "src/exception.py",
+      "src/logger.py",
+      "src/components/data_transformation.py",
+      "src/components/model_trainer.py"
+    ],
+    "parent_symbol": null,
+    "metadata": {
+      "relationship_enriched": true,
+      "relationship_targets": [
+        "src/exception.py",
+        "src/logger.py",
+        "src/components/data_transformation.py",
+        "src/components/model_trainer.py"
+      ],
+      "repository": "ML-Project",
+      "dependency_count": 4,
+      "related_file_count": 4,
+      "call_count": 0,
+      "github_reference": "https://github.com/pvats2006/ML-Project/blob/main/src/components/data_ingestion.py#L1-L76",
+      "github_reference_available": true,
+      "github_owner": "pvats2006",
+      "github_repository": "ML-Project",
+      "github_branch": "main",
+      "github_file": "src/components/data_ingestion.py",
+      "github_line_start": 1,
+      "github_line_end": 76
+    }
+  },
+  {
+    "chunk_id": "src/components/data_ingestion.py::class::DataIngestionConfig",
+    "repo": "ML-Project",
+    "file_path": "src/components/data_ingestion.py",
+    "file_name": "data_ingestion.py",
+    "language": "python",
+    "chunk_type": "class",
+    "symbol": "DataIngestionConfig",
+    "line_start": 17,
+    "line_end": 20,
+    "content": "class DataIngestionConfig:\n    train_data_path: str = os.path.join('artifact', \"train.csv\")\n    test_data_path: str = os.path.join('artifact', \"test.csv\")\n    raw_data_path: str = os.path.join('artifact', \"raw.csv\")",
+    "imports": [
+      "CustomException",
+      "logging",
+      "DataTransformation",
+      "ModelTrainerConfig",
+      "ModelTrainer"
+    ],
+    "calls": [],
+    "dependencies": [
+      "src/exception.py",
+      "src/logger.py",
+      "src/components/data_transformation.py",
+      "src/components/model_trainer.py"
+    ],
+    "related_files": [
+      "src/exception.py",
+      "src/logger.py",
+      "src/components/data_transformation.py",
+      "src/components/model_trainer.py"
+    ],
+    "parent_symbol": null,
+    "metadata": {
+      "relationship_enriched": true,
+      "relationship_targets": [
+        "src/exception.py",
+        "src/logger.py",
+        "src/components/data_transformation.py",
+        "src/components/model_trainer.py"
+      ],
+      "repository": "ML-Project",
+      "dependency_count": 4,
+      "related_file_count": 4,
+      "call_count": 0,
+      "github_reference": "https://github.com/pvats2006/ML-Project/blob/main/src/components/data_ingestion.py#L17-L20",
+      "github_reference_available": true,
+      "github_owner": "pvats2006",
+      "github_repository": "ML-Project",
+      "github_branch": "main",
+      "github_file": "src/components/data_ingestion.py",
+      "github_line_start": 17,
+      "github_line_end": 20
+    }
+  },
+  {
+    "chunk_id": "src/components/data_ingestion.py::class::DataIngestion",
+    "repo": "ML-Project",
+    "file_path": "src/components/data_ingestion.py",
+    "file_name": "data_ingestion.py",
+    "language": "python",
+    "chunk_type": "class",
+    "symbol": "DataIngestion",
+    "line_start": 23,
+    "line_end": 55,
+    "content": "class DataIngestion:\n    def __init__(self):\n        self.ingestion_config = DataIngestionConfig()\n\n    def initiate_data_ingestion(self):\n        logging.info(\"Entered data ingestion component\")\n        try:\n            df = pd.read_csv(r'D:\\ML-Project\\notebook\\StudentsPerformance.csv')\n\n            df.columns = df.columns.str.strip().str.replace(\" \", \"_\")\n\n            logging.info(\"Dataset read and columns normalized\")\n\n            os.makedirs(os.path.dirname(self.ingestion_config.train_data_path), exist_ok=True)\n\n            df.to_csv(self.ingestion_config.raw_data_path, index=False, header=True)\n\n            logging.info(\"Raw data saved\")\n\n            train_set, test_set = train_test_split(df, test_size=0.2, random_state=42)\n\n            train_set.to_csv(self.ingestion_config.train_data_path, index=False, header=True)\n            test_set.to_csv(self.ingestion_config.test_data_path, index=False, header=True)\n\n            logging.info(\"Train-test split completed\")\n\n            return (\n                self.ingestion_config.train_data_path,\n                self.ingestion_config.test_data_path\n            )\n\n        except Exception as e:\n            raise CustomException(e, sys)",
+    "imports": [
+      "CustomException",
+      "logging",
+      "DataTransformation",
+      "ModelTrainerConfig",
+      "ModelTrainer"
+    ],
+    "calls": [],
+    "dependencies": [
+      "src/exception.py",
+      "src/logger.py",
+      "src/components/data_transformation.py",
+      "src/components/model_trainer.py"
+    ],
+    "related_files": [
+      "src/exception.py",
+      "src/logger.py",
+      "src/components/data_transformation.py",
+      "src/components/model_trainer.py"
+    ],
+    "parent_symbol": null,
+    "metadata": {
+      "relationship_enriched": true,
+      "relationship_targets": [
+        "src/exception.py",
+        "src/logger.py",
+        "src/components/data_transformation.py",
+        "src/components/model_trainer.py"
+      ],
+      "repository": "ML-Project",
+      "dependency_count": 4,
+      "related_file_count": 4,
+      "call_count": 0,
+      "github_reference": "https://github.com/pvats2006/ML-Project/blob/main/src/components/data_ingestion.py#L23-L55",
+      "github_reference_available": true,
+      "github_owner": "pvats2006",
+      "github_repository": "ML-Project",
+      "github_branch": "main",
+      "github_file": "src/components/data_ingestion.py",
+      "github_line_start": 23,
+      "github_line_end": 55
+    }
+  },
+  {
+    "chunk_id": "src/components/data_ingestion.py::method::DataIngestion.__init__",
+    "repo": "ML-Project",
+    "file_path": "src/components/data_ingestion.py",
+    "file_name": "data_ingestion.py",
+    "language": "python",
+    "chunk_type": "method",
+    "symbol": "DataIngestion.__init__",
+    "line_start": 24,
+    "line_end": 25,
+    "content": "    def __init__(self):\n        self.ingestion_config = DataIngestionConfig()",
+    "imports": [
+      "CustomException",
+      "logging",
+      "DataTransformation",
+      "ModelTrainerConfig",
+      "ModelTrainer"
+    ],
+    "calls": [
+      "DataIngestionConfig"
+    ],
+    "dependencies": [
+      "src/exception.py",
+      "src/logger.py",
+      "src/components/data_transformation.py",
+      "src/components/model_trainer.py"
+    ],
+    "related_files": [
+      "src/exception.py",
+      "src/logger.py",
+      "src/components/data_transformation.py",
+      "src/components/model_trainer.py"
+    ],
+    "parent_symbol": "DataIngestion",
+    "metadata": {
+      "relationship_enriched": true,
+      "relationship_targets": [
+        "src/exception.py",
+        "src/logger.py",
+        "src/components/data_transformation.py",
+        "src/components/model_trainer.py"
+      ],
+      "repository": "ML-Project",
+      "dependency_count": 4,
+      "related_file_count": 4,
+      "call_count": 1,
+      "github_reference": "https://github.com/pvats2006/ML-Project/blob/main/src/components/data_ingestion.py#L24-L25",
+      "github_reference_available": true,
+      "github_owner": "pvats2006",
+      "github_repository": "ML-Project",
+      "github_branch": "main",
+      "github_file": "src/components/data_ingestion.py",
+      "github_line_start": 24,
+      "github_line_end": 25
+    }
+  },
+  {
+    "chunk_id": "src/components/data_ingestion.py::method::DataIngestion.initiate_data_ingestion",
+    "repo": "ML-Project",
+    "file_path": "src/components/data_ingestion.py",
+    "file_name": "data_ingestion.py",
+    "language": "python",
+    "chunk_type": "method",
+    "symbol": "DataIngestion.initiate_data_ingestion",
+    "line_start": 27,
+    "line_end": 55,
+    "content": "    def initiate_data_ingestion(self):\n        logging.info(\"Entered data ingestion component\")\n        try:\n            df = pd.read_csv(r'D:\\ML-Project\\notebook\\StudentsPerformance.csv')\n\n            df.columns = df.columns.str.strip().str.replace(\" \", \"_\")\n\n            logging.info(\"Dataset read and columns normalized\")\n\n            os.makedirs(os.path.dirname(self.ingestion_config.train_data_path), exist_ok=True)\n\n            df.to_csv(self.ingestion_config.raw_data_path, index=False, header=True)\n\n            logging.info(\"Raw data saved\")\n\n            train_set, test_set = train_test_split(df, test_size=0.2, random_state=42)\n\n            train_set.to_csv(self.ingestion_config.train_data_path, index=False, header=True)\n            test_set.to_csv(self.ingestion_config.test_data_path, index=False, header=True)\n\n            logging.info(\"Train-test split completed\")\n\n            return (\n                self.ingestion_config.train_data_path,\n                self.ingestion_config.test_data_path\n            )\n\n        except Exception as e:\n            raise CustomException(e, sys)",
+    "imports": [
+      "CustomException",
+      "logging",
+      "DataTransformation",
+      "ModelTrainerConfig",
+      "ModelTrainer"
+    ],
+    "calls": [
+      "logging.info",
+      "pd.read_csv",
+      "replace",
+      "os.makedirs",
+      "df.to_csv",
+      "train_test_split",
+      "train_set.to_csv",
+      "test_set.to_csv",
+      "dirname",
+      "CustomException",
+      "strip"
+    ],
+    "dependencies": [
+      "src/exception.py",
+      "src/logger.py",
+      "src/components/data_transformation.py",
+      "src/components/model_trainer.py"
+    ],
+    "related_files": [
+      "src/exception.py",
+      "src/logger.py",
+      "src/components/data_transformation.py",
+      "src/components/model_trainer.py"
+    ],
+    "parent_symbol": "DataIngestion",
+    "metadata": {
+      "relationship_enriched": true,
+      "relationship_targets": [
+        "src/exception.py",
+        "src/logger.py",
+        "src/components/data_transformation.py",
+        "src/components/model_trainer.py"
+      ],
+      "repository": "ML-Project",
+      "dependency_count": 4,
+      "related_file_count": 4,
+      "call_count": 11,
+      "github_reference": "https://github.com/pvats2006/ML-Project/blob/main/src/components/data_ingestion.py#L27-L55",
+      "github_reference_available": true,
+      "github_owner": "pvats2006",
+      "github_repository": "ML-Project",
+      "github_branch": "main",
+      "github_file": "src/components/data_ingestion.py",
+      "github_line_start": 27,
+      "github_line_end": 55
+    }
+  },
+  {
+    "chunk_id": "src/components/model_trainer.py::file",
+    "repo": "ML-Project",
+    "file_path": "src/components/model_trainer.py",
+    "file_name": "model_trainer.py",
+    "language": "python",
+    "chunk_type": "file",
+    "symbol": null,
+    "line_start": 1,
+    "line_end": 86,
+    "content": "import os\nimport sys\nfrom dataclasses import dataclass\n\nfrom catboost import CatBoostRegressor\nfrom sklearn.ensemble import (\n    AdaBoostRegressor,\n    GradientBoostingRegressor,\n    RandomForestRegressor,\n)\nfrom sklearn.linear_model import LinearRegression\nfrom sklearn.metrics import r2_score\nfrom sklearn.neighbors import KNeighborsRegressor\nfrom sklearn.tree import DecisionTreeRegressor\nfrom xgboost import XGBRegressor\n\nfrom src.exception import CustomException\nfrom src.logger import logging\nfrom src.utils import save_object, evaluate_models\n\n\n@dataclass\nclass ModelTrainerConfig:\n    trained_model_file_path = os.path.join(\"artifacts\", \"model.pkl\")\n\n\nclass ModelTrainer:\n    def __init__(self):\n        self.model_trainer_config = ModelTrainerConfig()\n\n    def initiate_model_trainer(self, train_array, test_array):\n        try:\n            logging.info(\"Splitting training and test input data\")\n\n            X_train, y_train, X_test, y_test = (\n                train_array[:, :-1],\n                train_array[:, -1],\n                test_array[:, :-1],\n                test_array[:, -1]\n            )\n\n            models = {\n                \"Random Forest\": RandomForestRegressor(),\n                \"Decision Tree\": DecisionTreeRegressor(),\n                \"Gradient Boosting\": GradientBoostingRegressor(),\n                \"Linear Regression\": LinearRegression(),\n                \"K-Neighbors Regressor\": KNeighborsRegressor(),\n                \"XGBRegressor\": XGBRegressor(),\n                \"CatBoost Regressor\": CatBoostRegressor(verbose=False),\n                \"AdaBoost Regressor\": AdaBoostRegressor()\n            }\n\n            logging.info(\"Evaluating models\")\n\n            model_report: dict = evaluate_models(\n                X_train=X_train,\n                y_train=y_train,\n                X_test=X_test,\n                y_test=y_test,\n                models=models\n            )\n\n            best_model_name = max(model_report, key=model_report.get)\n            best_model_score = model_report[best_model_name]\n\n            best_model = models[best_model_name]\n\n            if best_model_score < 0.6:\n                raise CustomException(\"No best model found\", sys)\n\n            logging.info(f\"Best model found: {best_model_name}\")\n\n            best_model.fit(X_train, y_train)\n\n            save_object(\n                file_path=self.model_trainer_config.trained_model_file_path,\n                obj=best_model\n            )\n\n            predicted = best_model.predict(X_test)\n            r2_square = r2_score(y_test, predicted)\n\n            return r2_square\n\n        except Exception as e:\n            raise CustomException(e, sys)",
+    "imports": [
+      "CustomException",
+      "logging",
+      "save_object",
+      "evaluate_models"
+    ],
+    "calls": [],
+    "dependencies": [
+      "src/exception.py",
+      "src/logger.py",
+      "src/utils.py"
+    ],
+    "related_files": [
+      "src/exception.py",
+      "src/logger.py",
+      "src/utils.py",
+      "src/components/data_ingestion.py"
+    ],
+    "parent_symbol": null,
+    "metadata": {
+      "relationship_enriched": true,
+      "relationship_targets": [
+        "src/components/model_trainer.py",
+        "src/exception.py",
+        "src/logger.py",
+        "src/utils.py"
+      ],
+      "repository": "ML-Project",
+      "dependency_count": 3,
+      "related_file_count": 4,
+      "call_count": 0,
+      "github_reference": "https://github.com/pvats2006/ML-Project/blob/main/src/components/model_trainer.py#L1-L86",
+      "github_reference_available": true,
+      "github_owner": "pvats2006",
+      "github_repository": "ML-Project",
+      "github_branch": "main",
+      "github_file": "src/components/model_trainer.py",
+      "github_line_start": 1,
+      "github_line_end": 86
+    }
+  },
+  {
+    "chunk_id": "src/components/model_trainer.py::class::ModelTrainerConfig",
+    "repo": "ML-Project",
+    "file_path": "src/components/model_trainer.py",
+    "file_name": "model_trainer.py",
+    "language": "python",
+    "chunk_type": "class",
+    "symbol": "ModelTrainerConfig",
+    "line_start": 23,
+    "line_end": 24,
+    "content": "class ModelTrainerConfig:\n    trained_model_file_path = os.path.join(\"artifacts\", \"model.pkl\")",
+    "imports": [
+      "CustomException",
+      "logging",
+      "save_object",
+      "evaluate_models"
+    ],
+    "calls": [],
+    "dependencies": [
+      "src/exception.py",
+      "src/logger.py",
+      "src/utils.py"
+    ],
+    "related_files": [
+      "src/exception.py",
+      "src/logger.py",
+      "src/utils.py",
+      "src/components/data_ingestion.py"
+    ],
+    "parent_symbol": null,
+    "metadata": {
+      "relationship_enriched": true,
+      "relationship_targets": [
+        "src/components/model_trainer.py",
+        "src/exception.py",
+        "src/logger.py",
+        "src/utils.py"
+      ],
+      "repository": "ML-Project",
+      "dependency_count": 3,
+      "related_file_count": 4,
+      "call_count": 0,
+      "github_reference": "https://github.com/pvats2006/ML-Project/blob/main/src/components/model_trainer.py#L23-L24",
+      "github_reference_available": true,
+      "github_owner": "pvats2006",
+      "github_repository": "ML-Project",
+      "github_branch": "main",
+      "github_file": "src/components/model_trainer.py",
+      "github_line_start": 23,
+      "github_line_end": 24
+    }
+  },
+  {
+    "chunk_id": "src/components/model_trainer.py::class::ModelTrainer",
+    "repo": "ML-Project",
+    "file_path": "src/components/model_trainer.py",
+    "file_name": "model_trainer.py",
+    "language": "python",
+    "chunk_type": "class",
+    "symbol": "ModelTrainer",
+    "line_start": 27,
+    "line_end": 86,
+    "content": "class ModelTrainer:\n    def __init__(self):\n        self.model_trainer_config = ModelTrainerConfig()\n\n    def initiate_model_trainer(self, train_array, test_array):\n        try:\n            logging.info(\"Splitting training and test input data\")\n\n            X_train, y_train, X_test, y_test = (\n                train_array[:, :-1],\n                train_array[:, -1],\n                test_array[:, :-1],\n                test_array[:, -1]\n            )\n\n            models = {\n                \"Random Forest\": RandomForestRegressor(),\n                \"Decision Tree\": DecisionTreeRegressor(),\n                \"Gradient Boosting\": GradientBoostingRegressor(),\n                \"Linear Regression\": LinearRegression(),\n                \"K-Neighbors Regressor\": KNeighborsRegressor(),\n                \"XGBRegressor\": XGBRegressor(),\n                \"CatBoost Regressor\": CatBoostRegressor(verbose=False),\n                \"AdaBoost Regressor\": AdaBoostRegressor()\n            }\n\n            logging.info(\"Evaluating models\")\n\n            model_report: dict = evaluate_models(\n                X_train=X_train,\n                y_train=y_train,\n                X_test=X_test,\n                y_test=y_test,\n                models=models\n            )\n\n            best_model_name = max(model_report, key=model_report.get)\n            best_model_score = model_report[best_model_name]\n\n            best_model = models[best_model_name]\n\n            if best_model_score < 0.6:\n                raise CustomException(\"No best model found\", sys)\n\n            logging.info(f\"Best model found: {best_model_name}\")\n\n            best_model.fit(X_train, y_train)\n\n            save_object(\n                file_path=self.model_trainer_config.trained_model_file_path,\n                obj=best_model\n            )\n\n            predicted = best_model.predict(X_test)\n            r2_square = r2_score(y_test, predicted)\n\n            return r2_square\n\n        except Exception as e:\n            raise CustomException(e, sys)",
+    "imports": [
+      "CustomException",
+      "logging",
+      "save_object",
+      "evaluate_models"
+    ],
+    "calls": [],
+    "dependencies": [
+      "src/exception.py",
+      "src/logger.py",
+      "src/utils.py"
+    ],
+    "related_files": [
+      "src/exception.py",
+      "src/logger.py",
+      "src/utils.py",
+      "src/components/data_ingestion.py"
+    ],
+    "parent_symbol": null,
+    "metadata": {
+      "relationship_enriched": true,
+      "relationship_targets": [
+        "src/components/model_trainer.py",
+        "src/exception.py",
+        "src/logger.py",
+        "src/utils.py"
+      ],
+      "repository": "ML-Project",
+      "dependency_count": 3,
+      "related_file_count": 4,
+      "call_count": 0,
+      "github_reference": "https://github.com/pvats2006/ML-Project/blob/main/src/components/model_trainer.py#L27-L86",
+      "github_reference_available": true,
+      "github_owner": "pvats2006",
+      "github_repository": "ML-Project",
+      "github_branch": "main",
+      "github_file": "src/components/model_trainer.py",
+      "github_line_start": 27,
+      "github_line_end": 86
+    }
+  },
+  {
+    "chunk_id": "src/components/model_trainer.py::method::ModelTrainer.__init__",
+    "repo": "ML-Project",
+    "file_path": "src/components/model_trainer.py",
+    "file_name": "model_trainer.py",
+    "language": "python",
+    "chunk_type": "method",
+    "symbol": "ModelTrainer.__init__",
+    "line_start": 28,
+    "line_end": 29,
+    "content": "    def __init__(self):\n        self.model_trainer_config = ModelTrainerConfig()",
+    "imports": [
+      "CustomException",
+      "logging",
+      "save_object",
+      "evaluate_models"
+    ],
+    "calls": [
+      "ModelTrainerConfig"
+    ],
+    "dependencies": [
+      "src/exception.py",
+      "src/logger.py",
+      "src/utils.py"
+    ],
+    "related_files": [
+      "src/exception.py",
+      "src/logger.py",
+      "src/utils.py",
+      "src/components/data_ingestion.py"
+    ],
+    "parent_symbol": "ModelTrainer",
+    "metadata": {
+      "relationship_enriched": true,
+      "relationship_targets": [
+        "src/components/model_trainer.py",
+        "src/exception.py",
+        "src/logger.py",
+        "src/utils.py"
+      ],
+      "repository": "ML-Project",
+      "dependency_count": 3,
+      "related_file_count": 4,
+      "call_count": 1,
+      "github_reference": "https://github.com/pvats2006/ML-Project/blob/main/src/components/model_trainer.py#L28-L29",
+      "github_reference_available": true,
+      "github_owner": "pvats2006",
+      "github_repository": "ML-Project",
+      "github_branch": "main",
+      "github_file": "src/components/model_trainer.py",
+      "github_line_start": 28,
+      "github_line_end": 29
+    }
+  },
+  {
+    "chunk_id": "src/components/model_trainer.py::method::ModelTrainer.initiate_model_trainer",
+    "repo": "ML-Project",
+    "file_path": "src/components/model_trainer.py",
+    "file_name": "model_trainer.py",
+    "language": "python",
+    "chunk_type": "method",
+    "symbol": "ModelTrainer.initiate_model_trainer",
+    "line_start": 31,
+    "line_end": 86,
+    "content": "    def initiate_model_trainer(self, train_array, test_array):\n        try:\n            logging.info(\"Splitting training and test input data\")\n\n            X_train, y_train, X_test, y_test = (\n                train_array[:, :-1],\n                train_array[:, -1],\n                test_array[:, :-1],\n                test_array[:, -1]\n            )\n\n            models = {\n                \"Random Forest\": RandomForestRegressor(),\n                \"Decision Tree\": DecisionTreeRegressor(),\n                \"Gradient Boosting\": GradientBoostingRegressor(),\n                \"Linear Regression\": LinearRegression(),\n                \"K-Neighbors Regressor\": KNeighborsRegressor(),\n                \"XGBRegressor\": XGBRegressor(),\n                \"CatBoost Regressor\": CatBoostRegressor(verbose=False),\n                \"AdaBoost Regressor\": AdaBoostRegressor()\n            }\n\n            logging.info(\"Evaluating models\")\n\n            model_report: dict = evaluate_models(\n                X_train=X_train,\n                y_train=y_train,\n                X_test=X_test,\n                y_test=y_test,\n                models=models\n            )\n\n            best_model_name = max(model_report, key=model_report.get)\n            best_model_score = model_report[best_model_name]\n\n            best_model = models[best_model_name]\n\n            if best_model_score < 0.6:\n                raise CustomException(\"No best model found\", sys)\n\n            logging.info(f\"Best model found: {best_model_name}\")\n\n            best_model.fit(X_train, y_train)\n\n            save_object(\n                file_path=self.model_trainer_config.trained_model_file_path,\n                obj=best_model\n            )\n\n            predicted = best_model.predict(X_test)\n            r2_square = r2_score(y_test, predicted)\n\n            return r2_square\n\n        except Exception as e:\n            raise CustomException(e, sys)",
+    "imports": [
+      "CustomException",
+      "logging",
+      "save_object",
+      "evaluate_models"
+    ],
+    "calls": [
+      "logging.info",
+      "evaluate_models",
+      "max",
+      "best_model.fit",
+      "save_object",
+      "best_model.predict",
+      "r2_score",
+      "RandomForestRegressor",
+      "DecisionTreeRegressor",
+      "GradientBoostingRegressor",
+      "LinearRegression",
+      "KNeighborsRegressor",
+      "XGBRegressor",
+      "CatBoostRegressor",
+      "AdaBoostRegressor",
+      "CustomException"
+    ],
+    "dependencies": [
+      "src/exception.py",
+      "src/logger.py",
+      "src/utils.py"
+    ],
+    "related_files": [
+      "src/exception.py",
+      "src/logger.py",
+      "src/utils.py",
+      "src/components/data_ingestion.py"
+    ],
+    "parent_symbol": "ModelTrainer",
+    "metadata": {
+      "relationship_enriched": true,
+      "relationship_targets": [
+        "src/components/model_trainer.py",
+        "src/exception.py",
+        "src/logger.py",
+        "src/utils.py"
+      ],
+      "repository": "ML-Project",
+      "dependency_count": 3,
+      "related_file_count": 4,
+      "call_count": 16,
+      "github_reference": "https://github.com/pvats2006/ML-Project/blob/main/src/components/model_trainer.py#L31-L86",
+      "github_reference_available": true,
+      "github_owner": "pvats2006",
+      "github_repository": "ML-Project",
+      "github_branch": "main",
+      "github_file": "src/components/model_trainer.py",
+      "github_line_start": 31,
+      "github_line_end": 86
+    }
+  },
+  {
+    "chunk_id": "src/components/data_transformation.py::file",
+    "repo": "ML-Project",
+    "file_path": "src/components/data_transformation.py",
+    "file_name": "data_transformation.py",
+    "language": "python",
+    "chunk_type": "file",
+    "symbol": null,
+    "line_start": 1,
+    "line_end": 119,
+    "content": "import sys\nfrom dataclasses import dataclass\nimport numpy as np\nimport pandas as pd\nimport os\n\nfrom sklearn.compose import ColumnTransformer\nfrom sklearn.impute import SimpleImputer\nfrom sklearn.pipeline import Pipeline\nfrom sklearn.preprocessing import OneHotEncoder, StandardScaler\n\nfrom src.exception import CustomException\nfrom src.logger import logging\nfrom src.utils import save_object\n\n\n@dataclass\nclass DataTransformationConfig:\n    preprocessor_obj_file_path: str = os.path.join('artifact', \"preprocessor.pkl\")\n\n\nclass DataTransformation:\n    def __init__(self):\n        self.data_transformation_config = DataTransformationConfig()\n\n    def get_data_transformer_object(self):\n        try:\n            logging.info(\"Creating data transformation pipelines\")\n\n            numerical_columns = [\"writing_score\", \"reading_score\"]\n\n            categorical_columns = [\n                \"gender\",\n                \"race/ethnicity\",\n                \"parental_level_of_education\",\n                \"lunch\",\n                \"test_preparation_course\",\n            ]\n\n            num_pipeline = Pipeline(\n                steps=[\n                    (\"imputer\", SimpleImputer(strategy=\"median\")),\n                    (\"scaler\", StandardScaler())\n                ]\n            )\n\n            cat_pipeline = Pipeline(\n                steps=[\n                    (\"imputer\", SimpleImputer(strategy=\"most_frequent\")),\n                    (\"one_hot_encoder\", OneHotEncoder(handle_unknown=\"ignore\")),\n                    (\"scaler\", StandardScaler(with_mean=False))\n                ]\n            )\n\n            logging.info(\"Pipelines created successfully\")\n\n            preprocessor = ColumnTransformer(\n                transformers=[\n                    (\"num_pipeline\", num_pipeline, numerical_columns),\n                    (\"cat_pipeline\", cat_pipeline, categorical_columns)\n                ]\n            )\n\n            logging.info(\"ColumnTransformer created successfully\")\n\n            return preprocessor\n\n        except Exception as e:\n            raise CustomException(e, sys)\n\n    def initiate_data_transformation(self, train_path, test_path):\n        try:\n            logging.info(\"Reading train and test data\")\n\n            train_df = pd.read_csv(train_path)\n            test_df = pd.read_csv(test_path)\n\n            logging.info(\"Obtaining preprocessing object\")\n\n            preprocessing_obj = self.get_data_transformer_object()\n\n            target_column_name = \"math_score\"\n\n            input_feature_train_df = train_df.drop(columns=[target_column_name], axis=1)\n            target_feature_train_df = train_df[target_column_name]\n\n            input_feature_test_df = test_df.drop(columns=[target_column_name], axis=1)\n            target_feature_test_df = test_df[target_column_name]\n\n            logging.info(\"Applying preprocessing on training and testing data\")\n\n            input_feature_train_arr = preprocessing_obj.fit_transform(input_feature_train_df)\n            input_feature_test_arr = preprocessing_obj.transform(input_feature_test_df)\n\n            train_arr = np.c_[input_feature_train_arr, target_feature_train_df.values]\n            test_arr = np.c_[input_feature_test_arr, target_feature_test_df.values]\n\n            logging.info(\"Saving preprocessing object\")\n\n            save_object(\n                file_path=self.data_transformation_config.preprocessor_obj_file_path,\n                obj=preprocessing_obj\n            )\n\n            logging.info(\"Data transformation completed\")\n\n            return (\n                train_arr,\n                test_arr,\n                self.data_transformation_config.preprocessor_obj_file_path\n            )\n\n        except Exception as e:\n            raise CustomException(e, sys)\n        \n\n        # Data Transformation Module:\n# Builds preprocessing pipeline (imputation, encoding, scaling), applies it on train/test data,\n# prevents data leakage, converts data into model-ready arrays, and saves the preprocessor for future use.",
+    "imports": [
+      "CustomException",
+      "logging",
+      "save_object"
+    ],
+    "calls": [],
+    "dependencies": [
+      "src/exception.py",
+      "src/logger.py",
+      "src/utils.py"
+    ],
+    "related_files": [
+      "src/exception.py",
+      "src/logger.py",
+      "src/utils.py",
+      "src/components/data_ingestion.py"
+    ],
+    "parent_symbol": null,
+    "metadata": {
+      "relationship_enriched": true,
+      "relationship_targets": [
+        "src/components/data_transformation.py",
+        "src/exception.py",
+        "src/logger.py",
+        "src/utils.py"
+      ],
+      "repository": "ML-Project",
+      "dependency_count": 3,
+      "related_file_count": 4,
+      "call_count": 0,
+      "github_reference": "https://github.com/pvats2006/ML-Project/blob/main/src/components/data_transformation.py#L1-L119",
+      "github_reference_available": true,
+      "github_owner": "pvats2006",
+      "github_repository": "ML-Project",
+      "github_branch": "main",
+      "github_file": "src/components/data_transformation.py",
+      "github_line_start": 1,
+      "github_line_end": 119
+    }
+  },
+  {
+    "chunk_id": "src/components/data_transformation.py::class::DataTransformationConfig",
+    "repo": "ML-Project",
+    "file_path": "src/components/data_transformation.py",
+    "file_name": "data_transformation.py",
+    "language": "python",
+    "chunk_type": "class",
+    "symbol": "DataTransformationConfig",
+    "line_start": 18,
+    "line_end": 19,
+    "content": "class DataTransformationConfig:\n    preprocessor_obj_file_path: str = os.path.join('artifact', \"preprocessor.pkl\")",
+    "imports": [
+      "CustomException",
+      "logging",
+      "save_object"
+    ],
+    "calls": [],
+    "dependencies": [
+      "src/exception.py",
+      "src/logger.py",
+      "src/utils.py"
+    ],
+    "related_files": [
+      "src/exception.py",
+      "src/logger.py",
+      "src/utils.py",
+      "src/components/data_ingestion.py"
+    ],
+    "parent_symbol": null,
+    "metadata": {
+      "relationship_enriched": true,
+      "relationship_targets": [
+        "src/components/data_transformation.py",
+        "src/exception.py",
+        "src/logger.py",
+        "src/utils.py"
+      ],
+      "repository": "ML-Project",
+      "dependency_count": 3,
+      "related_file_count": 4,
+      "call_count": 0,
+      "github_reference": "https://github.com/pvats2006/ML-Project/blob/main/src/components/data_transformation.py#L18-L19",
+      "github_reference_available": true,
+      "github_owner": "pvats2006",
+      "github_repository": "ML-Project",
+      "github_branch": "main",
+      "github_file": "src/components/data_transformation.py",
+      "github_line_start": 18,
+      "github_line_end": 19
+    }
+  },
+  {
+    "chunk_id": "src/components/data_transformation.py::class::DataTransformation",
+    "repo": "ML-Project",
+    "file_path": "src/components/data_transformation.py",
+    "file_name": "data_transformation.py",
+    "language": "python",
+    "chunk_type": "class",
+    "symbol": "DataTransformation",
+    "line_start": 22,
+    "line_end": 114,
+    "content": "class DataTransformation:\n    def __init__(self):\n        self.data_transformation_config = DataTransformationConfig()\n\n    def get_data_transformer_object(self):\n        try:\n            logging.info(\"Creating data transformation pipelines\")\n\n            numerical_columns = [\"writing_score\", \"reading_score\"]\n\n            categorical_columns = [\n                \"gender\",\n                \"race/ethnicity\",\n                \"parental_level_of_education\",\n                \"lunch\",\n                \"test_preparation_course\",\n            ]\n\n            num_pipeline = Pipeline(\n                steps=[\n                    (\"imputer\", SimpleImputer(strategy=\"median\")),\n                    (\"scaler\", StandardScaler())\n                ]\n            )\n\n            cat_pipeline = Pipeline(\n                steps=[\n                    (\"imputer\", SimpleImputer(strategy=\"most_frequent\")),\n                    (\"one_hot_encoder\", OneHotEncoder(handle_unknown=\"ignore\")),\n                    (\"scaler\", StandardScaler(with_mean=False))\n                ]\n            )\n\n            logging.info(\"Pipelines created successfully\")\n\n            preprocessor = ColumnTransformer(\n                transformers=[\n                    (\"num_pipeline\", num_pipeline, numerical_columns),\n                    (\"cat_pipeline\", cat_pipeline, categorical_columns)\n                ]\n            )\n\n            logging.info(\"ColumnTransformer created successfully\")\n\n            return preprocessor\n\n        except Exception as e:\n            raise CustomException(e, sys)\n\n    def initiate_data_transformation(self, train_path, test_path):\n        try:\n            logging.info(\"Reading train and test data\")\n\n            train_df = pd.read_csv(train_path)\n            test_df = pd.read_csv(test_path)\n\n            logging.info(\"Obtaining preprocessing object\")\n\n            preprocessing_obj = self.get_data_transformer_object()\n\n            target_column_name = \"math_score\"\n\n            input_feature_train_df = train_df.drop(columns=[target_column_name], axis=1)\n            target_feature_train_df = train_df[target_column_name]\n\n            input_feature_test_df = test_df.drop(columns=[target_column_name], axis=1)\n            target_feature_test_df = test_df[target_column_name]\n\n            logging.info(\"Applying preprocessing on training and testing data\")\n\n            input_feature_train_arr = preprocessing_obj.fit_transform(input_feature_train_df)\n            input_feature_test_arr = preprocessing_obj.transform(input_feature_test_df)\n\n            train_arr = np.c_[input_feature_train_arr, target_feature_train_df.values]\n            test_arr = np.c_[input_feature_test_arr, target_feature_test_df.values]\n\n            logging.info(\"Saving preprocessing object\")\n\n            save_object(\n                file_path=self.data_transformation_config.preprocessor_obj_file_path,\n                obj=preprocessing_obj\n            )\n\n            logging.info(\"Data transformation completed\")\n\n            return (\n                train_arr,\n                test_arr,\n                self.data_transformation_config.preprocessor_obj_file_path\n            )\n\n        except Exception as e:\n            raise CustomException(e, sys)",
+    "imports": [
+      "CustomException",
+      "logging",
+      "save_object"
+    ],
+    "calls": [],
+    "dependencies": [
+      "src/exception.py",
+      "src/logger.py",
+      "src/utils.py"
+    ],
+    "related_files": [
+      "src/exception.py",
+      "src/logger.py",
+      "src/utils.py",
+      "src/components/data_ingestion.py"
+    ],
+    "parent_symbol": null,
+    "metadata": {
+      "relationship_enriched": true,
+      "relationship_targets": [
+        "src/components/data_transformation.py",
+        "src/exception.py",
+        "src/logger.py",
+        "src/utils.py"
+      ],
+      "repository": "ML-Project",
+      "dependency_count": 3,
+      "related_file_count": 4,
+      "call_count": 0,
+      "github_reference": "https://github.com/pvats2006/ML-Project/blob/main/src/components/data_transformation.py#L22-L114",
+      "github_reference_available": true,
+      "github_owner": "pvats2006",
+      "github_repository": "ML-Project",
+      "github_branch": "main",
+      "github_file": "src/components/data_transformation.py",
+      "github_line_start": 22,
+      "github_line_end": 114
+    }
+  },
+  {
+    "chunk_id": "src/components/data_transformation.py::method::DataTransformation.__init__",
+    "repo": "ML-Project",
+    "file_path": "src/components/data_transformation.py",
+    "file_name": "data_transformation.py",
+    "language": "python",
+    "chunk_type": "method",
+    "symbol": "DataTransformation.__init__",
+    "line_start": 23,
+    "line_end": 24,
+    "content": "    def __init__(self):\n        self.data_transformation_config = DataTransformationConfig()",
+    "imports": [
+      "CustomException",
+      "logging",
+      "save_object"
+    ],
+    "calls": [
+      "DataTransformationConfig"
+    ],
+    "dependencies": [
+      "src/exception.py",
+      "src/logger.py",
+      "src/utils.py"
+    ],
+    "related_files": [
+      "src/exception.py",
+      "src/logger.py",
+      "src/utils.py",
+      "src/components/data_ingestion.py"
+    ],
+    "parent_symbol": "DataTransformation",
+    "metadata": {
+      "relationship_enriched": true,
+      "relationship_targets": [
+        "src/components/data_transformation.py",
+        "src/exception.py",
+        "src/logger.py",
+        "src/utils.py"
+      ],
+      "repository": "ML-Project",
+      "dependency_count": 3,
+      "related_file_count": 4,
+      "call_count": 1,
+      "github_reference": "https://github.com/pvats2006/ML-Project/blob/main/src/components/data_transformation.py#L23-L24",
+      "github_reference_available": true,
+      "github_owner": "pvats2006",
+      "github_repository": "ML-Project",
+      "github_branch": "main",
+      "github_file": "src/components/data_transformation.py",
+      "github_line_start": 23,
+      "github_line_end": 24
+    }
+  },
+  {
+    "chunk_id": "src/components/data_transformation.py::method::DataTransformation.get_data_transformer_object",
+    "repo": "ML-Project",
+    "file_path": "src/components/data_transformation.py",
+    "file_name": "data_transformation.py",
+    "language": "python",
+    "chunk_type": "method",
+    "symbol": "DataTransformation.get_data_transformer_object",
+    "line_start": 26,
+    "line_end": 69,
+    "content": "    def get_data_transformer_object(self):\n        try:\n            logging.info(\"Creating data transformation pipelines\")\n\n            numerical_columns = [\"writing_score\", \"reading_score\"]\n\n            categorical_columns = [\n                \"gender\",\n                \"race/ethnicity\",\n                \"parental_level_of_education\",\n                \"lunch\",\n                \"test_preparation_course\",\n            ]\n\n            num_pipeline = Pipeline(\n                steps=[\n                    (\"imputer\", SimpleImputer(strategy=\"median\")),\n                    (\"scaler\", StandardScaler())\n                ]\n            )\n\n            cat_pipeline = Pipeline(\n                steps=[\n                    (\"imputer\", SimpleImputer(strategy=\"most_frequent\")),\n                    (\"one_hot_encoder\", OneHotEncoder(handle_unknown=\"ignore\")),\n                    (\"scaler\", StandardScaler(with_mean=False))\n                ]\n            )\n\n            logging.info(\"Pipelines created successfully\")\n\n            preprocessor = ColumnTransformer(\n                transformers=[\n                    (\"num_pipeline\", num_pipeline, numerical_columns),\n                    (\"cat_pipeline\", cat_pipeline, categorical_columns)\n                ]\n            )\n\n            logging.info(\"ColumnTransformer created successfully\")\n\n            return preprocessor\n\n        except Exception as e:\n            raise CustomException(e, sys)",
+    "imports": [
+      "CustomException",
+      "logging",
+      "save_object"
+    ],
+    "calls": [
+      "logging.info",
+      "Pipeline",
+      "ColumnTransformer",
+      "CustomException",
+      "SimpleImputer",
+      "StandardScaler",
+      "OneHotEncoder"
+    ],
+    "dependencies": [
+      "src/exception.py",
+      "src/logger.py",
+      "src/utils.py"
+    ],
+    "related_files": [
+      "src/exception.py",
+      "src/logger.py",
+      "src/utils.py",
+      "src/components/data_ingestion.py"
+    ],
+    "parent_symbol": "DataTransformation",
+    "metadata": {
+      "relationship_enriched": true,
+      "relationship_targets": [
+        "src/components/data_transformation.py",
+        "src/exception.py",
+        "src/logger.py",
+        "src/utils.py"
+      ],
+      "repository": "ML-Project",
+      "dependency_count": 3,
+      "related_file_count": 4,
+      "call_count": 7,
+      "github_reference": "https://github.com/pvats2006/ML-Project/blob/main/src/components/data_transformation.py#L26-L69",
+      "github_reference_available": true,
+      "github_owner": "pvats2006",
+      "github_repository": "ML-Project",
+      "github_branch": "main",
+      "github_file": "src/components/data_transformation.py",
+      "github_line_start": 26,
+      "github_line_end": 69
+    }
+  },
+  {
+    "chunk_id": "src/components/data_transformation.py::method::DataTransformation.initiate_data_transformation",
+    "repo": "ML-Project",
+    "file_path": "src/components/data_transformation.py",
+    "file_name": "data_transformation.py",
+    "language": "python",
+    "chunk_type": "method",
+    "symbol": "DataTransformation.initiate_data_transformation",
+    "line_start": 71,
+    "line_end": 114,
+    "content": "    def initiate_data_transformation(self, train_path, test_path):\n        try:\n            logging.info(\"Reading train and test data\")\n\n            train_df = pd.read_csv(train_path)\n            test_df = pd.read_csv(test_path)\n\n            logging.info(\"Obtaining preprocessing object\")\n\n            preprocessing_obj = self.get_data_transformer_object()\n\n            target_column_name = \"math_score\"\n\n            input_feature_train_df = train_df.drop(columns=[target_column_name], axis=1)\n            target_feature_train_df = train_df[target_column_name]\n\n            input_feature_test_df = test_df.drop(columns=[target_column_name], axis=1)\n            target_feature_test_df = test_df[target_column_name]\n\n            logging.info(\"Applying preprocessing on training and testing data\")\n\n            input_feature_train_arr = preprocessing_obj.fit_transform(input_feature_train_df)\n            input_feature_test_arr = preprocessing_obj.transform(input_feature_test_df)\n\n            train_arr = np.c_[input_feature_train_arr, target_feature_train_df.values]\n            test_arr = np.c_[input_feature_test_arr, target_feature_test_df.values]\n\n            logging.info(\"Saving preprocessing object\")\n\n            save_object(\n                file_path=self.data_transformation_config.preprocessor_obj_file_path,\n                obj=preprocessing_obj\n            )\n\n            logging.info(\"Data transformation completed\")\n\n            return (\n                train_arr,\n                test_arr,\n                self.data_transformation_config.preprocessor_obj_file_path\n            )\n\n        except Exception as e:\n            raise CustomException(e, sys)",
+    "imports": [
+      "CustomException",
+      "logging",
+      "save_object"
+    ],
+    "calls": [
+      "logging.info",
+      "pd.read_csv",
+      "self.get_data_transformer_object",
+      "train_df.drop",
+      "test_df.drop",
+      "preprocessing_obj.fit_transform",
+      "preprocessing_obj.transform",
+      "save_object",
+      "CustomException"
+    ],
+    "dependencies": [
+      "src/exception.py",
+      "src/logger.py",
+      "src/utils.py"
+    ],
+    "related_files": [
+      "src/exception.py",
+      "src/logger.py",
+      "src/utils.py",
+      "src/components/data_ingestion.py"
+    ],
+    "parent_symbol": "DataTransformation",
+    "metadata": {
+      "relationship_enriched": true,
+      "relationship_targets": [
+        "src/components/data_transformation.py",
+        "src/exception.py",
+        "src/logger.py",
+        "src/utils.py"
+      ],
+      "repository": "ML-Project",
+      "dependency_count": 3,
+      "related_file_count": 4,
+      "call_count": 9,
+      "github_reference": "https://github.com/pvats2006/ML-Project/blob/main/src/components/data_transformation.py#L71-L114",
+      "github_reference_available": true,
+      "github_owner": "pvats2006",
+      "github_repository": "ML-Project",
+      "github_branch": "main",
+      "github_file": "src/components/data_transformation.py",
+      "github_line_start": 71,
+      "github_line_end": 114
+    }
+  },
+  {
+    "chunk_id": "README.md::markdown::End_to_End_Machine_Learning_project::1",
+    "repo": "ML-Project",
+    "file_path": "README.md",
+    "file_name": "README.md",
+    "language": "markdown",
+    "chunk_type": "markdown_section",
+    "symbol": "End to End Machine Learning project",
+    "line_start": 1,
+    "line_end": 1,
+    "content": "## End to End Machine Learning project",
+    "imports": [],
+    "calls": [],
+    "dependencies": [],
+    "related_files": [],
+    "parent_symbol": null,
+    "metadata": {
+      "heading_level": 2,
+      "parent_heading": null,
+      "relationship_enriched": true,
+      "relationship_targets": [],
+      "repository": "ML-Project",
+      "dependency_count": 0,
+      "related_file_count": 0,
+      "call_count": 0,
+      "github_reference": "https://github.com/pvats2006/ML-Project/blob/main/README.md#L1",
+      "github_reference_available": true,
+      "github_owner": "pvats2006",
+      "github_repository": "ML-Project",
+      "github_branch": "main",
+      "github_file": "README.md",
+      "github_line_start": 1,
+      "github_line_end": 1
+    }
+  },
+  {
+    "chunk_id": "README.md::markdown::Overview::2",
+    "repo": "ML-Project",
+    "file_path": "README.md",
+    "file_name": "README.md",
+    "language": "markdown",
+    "chunk_type": "markdown_section",
+    "symbol": "Overview",
+    "line_start": 2,
+    "line_end": 4,
+    "content": "## Overview\nThis is an end-to-end Machine Learning project that predicts a student's math score based on various demographic and academic factors. It provides a complete pipeline from data ingestion to model training and deployment via a web application.",
+    "imports": [],
+    "calls": [],
+    "dependencies": [],
+    "related_files": [],
+    "parent_symbol": null,
+    "metadata": {
+      "heading_level": 2,
+      "parent_heading": null,
+      "relationship_enriched": true,
+      "relationship_targets": [],
+      "repository": "ML-Project",
+      "dependency_count": 0,
+      "related_file_count": 0,
+      "call_count": 0,
+      "github_reference": "https://github.com/pvats2006/ML-Project/blob/main/README.md#L2-L4",
+      "github_reference_available": true,
+      "github_owner": "pvats2006",
+      "github_repository": "ML-Project",
+      "github_branch": "main",
+      "github_file": "README.md",
+      "github_line_start": 2,
+      "github_line_end": 4
+    }
+  },
+  {
+    "chunk_id": "README.md::markdown::Features::5",
+    "repo": "ML-Project",
+    "file_path": "README.md",
+    "file_name": "README.md",
+    "language": "markdown",
+    "chunk_type": "markdown_section",
+    "symbol": "Features",
+    "line_start": 5,
+    "line_end": 16,
+    "content": "## Features\n- Provides an interactive **Flask Web Application** for user input.\n- Takes the following user inputs to make a prediction:\n  - Gender\n  - Race/Ethnicity\n  - Parental Level of Education\n  - Lunch Type (Standard or Free/Reduced)\n  - Test Preparation Course (Completed or None)\n  - Reading Score\n  - Writing Score\n- Predicts the **Math Score** continuously based on a trained machine learning model.",
+    "imports": [],
+    "calls": [],
+    "dependencies": [],
+    "related_files": [],
+    "parent_symbol": null,
+    "metadata": {
+      "heading_level": 2,
+      "parent_heading": null,
+      "relationship_enriched": true,
+      "relationship_targets": [],
+      "repository": "ML-Project",
+      "dependency_count": 0,
+      "related_file_count": 0,
+      "call_count": 0,
+      "github_reference": "https://github.com/pvats2006/ML-Project/blob/main/README.md#L5-L16",
+      "github_reference_available": true,
+      "github_owner": "pvats2006",
+      "github_repository": "ML-Project",
+      "github_branch": "main",
+      "github_file": "README.md",
+      "github_line_start": 5,
+      "github_line_end": 16
+    }
+  },
+  {
+    "chunk_id": "README.md::markdown::Project_Structure::17",
+    "repo": "ML-Project",
+    "file_path": "README.md",
+    "file_name": "README.md",
+    "language": "markdown",
+    "chunk_type": "markdown_section",
+    "symbol": "Project Structure",
+    "line_start": 17,
+    "line_end": 27,
+    "content": "## Project Structure\n- `src/`: Contains the complete modular machine learning pipeline.\n  - `components/`: Data ingestion, data transformation, and model training modules.\n  - `pipeline/`: Training and prediction pipeline logic.\n  - `logger.py` & `exception.py`: Custom logging and exception handling.\n- `notebook/`: Jupyter notebooks for **Exploratory Data Analysis (EDA)** and model experimentation.\n- `application.py`: The entry point for the Flask web application.\n- `templates/`: Contains the HTML templates for the user interface (`index.html`, `home.html`).\n- `requirements.txt`: List of all project dependencies.\n- `setup.py`: Script to make the project installable as a package.",
+    "imports": [],
+    "calls": [],
+    "dependencies": [],
+    "related_files": [],
+    "parent_symbol": null,
+    "metadata": {
+      "heading_level": 2,
+      "parent_heading": null,
+      "relationship_enriched": true,
+      "relationship_targets": [],
+      "repository": "ML-Project",
+      "dependency_count": 0,
+      "related_file_count": 0,
+      "call_count": 0,
+      "github_reference": "https://github.com/pvats2006/ML-Project/blob/main/README.md#L17-L27",
+      "github_reference_available": true,
+      "github_owner": "pvats2006",
+      "github_repository": "ML-Project",
+      "github_branch": "main",
+      "github_file": "README.md",
+      "github_line_start": 17,
+      "github_line_end": 27
+    }
+  },
+  {
+    "chunk_id": "README.md::markdown::Installation::28",
+    "repo": "ML-Project",
+    "file_path": "README.md",
+    "file_name": "README.md",
+    "language": "markdown",
+    "chunk_type": "markdown_section",
+    "symbol": "Installation",
+    "line_start": 28,
+    "line_end": 46,
+    "content": "## Installation\n\n1. **Clone the repository:**\n   ```bash\n   git clone <repository_url>\n   cd ML-Project\n   ```\n\n2. **Create a virtual environment:**\n   ```bash\n   python -m venv venv\n   source venv/bin/activate  # On Windows use: venv\\Scripts\\activate\n   ```\n\n3. **Install the dependencies:**\n   ```bash\n   pip install -r requirements.txt\n   ```",
+    "imports": [],
+    "calls": [],
+    "dependencies": [],
+    "related_files": [],
+    "parent_symbol": null,
+    "metadata": {
+      "heading_level": 2,
+      "parent_heading": null,
+      "relationship_enriched": true,
+      "relationship_targets": [],
+      "repository": "ML-Project",
+      "dependency_count": 0,
+      "related_file_count": 0,
+      "call_count": 0,
+      "github_reference": "https://github.com/pvats2006/ML-Project/blob/main/README.md#L28-L46",
+      "github_reference_available": true,
+      "github_owner": "pvats2006",
+      "github_repository": "ML-Project",
+      "github_branch": "main",
+      "github_file": "README.md",
+      "github_line_start": 28,
+      "github_line_end": 46
+    }
+  },
+  {
+    "chunk_id": "README.md::markdown::Usage::47",
+    "repo": "ML-Project",
+    "file_path": "README.md",
+    "file_name": "README.md",
+    "language": "markdown",
+    "chunk_type": "markdown_section",
+    "symbol": "Usage",
+    "line_start": 47,
+    "line_end": 60,
+    "content": "## Usage\n\n1. Start the Flask web server:\n   ```bash\n   python application.py\n   ```\n\n2. Open your web browser and go to:\n   ```\n   http://127.0.0.1:5000/\n   ```\n\n3. Navigate to the prediction page to enter student details and hit \"Predict\" to see the expected math score!",
+    "imports": [],
+    "calls": [],
+    "dependencies": [],
+    "related_files": [],
+    "parent_symbol": null,
+    "metadata": {
+      "heading_level": 2,
+      "parent_heading": null,
+      "relationship_enriched": true,
+      "relationship_targets": [],
+      "repository": "ML-Project",
+      "dependency_count": 0,
+      "related_file_count": 0,
+      "call_count": 0,
+      "github_reference": "https://github.com/pvats2006/ML-Project/blob/main/README.md#L47-L60",
+      "github_reference_available": true,
+      "github_owner": "pvats2006",
+      "github_repository": "ML-Project",
+      "github_branch": "main",
+      "github_file": "README.md",
+      "github_line_start": 47,
+      "github_line_end": 60
+    }
+  },
+  {
+    "chunk_id": "README.md::markdown::Author::61",
+    "repo": "ML-Project",
+    "file_path": "README.md",
+    "file_name": "README.md",
+    "language": "markdown",
+    "chunk_type": "markdown_section",
+    "symbol": "Author",
+    "line_start": 61,
+    "line_end": 63,
+    "content": "## Author\n**Priyanshu**  \nEmail: priyanshuvats8806@gmail.com",
+    "imports": [],
+    "calls": [],
+    "dependencies": [],
+    "related_files": [],
+    "parent_symbol": null,
+    "metadata": {
+      "heading_level": 2,
+      "parent_heading": null,
+      "relationship_enriched": true,
+      "relationship_targets": [],
+      "repository": "ML-Project",
+      "dependency_count": 0,
+      "related_file_count": 0,
+      "call_count": 0,
+      "github_reference": "https://github.com/pvats2006/ML-Project/blob/main/README.md#L61-L63",
+      "github_reference_available": true,
+      "github_owner": "pvats2006",
+      "github_repository": "ML-Project",
+      "github_branch": "main",
+      "github_file": "README.md",
+      "github_line_start": 61,
+      "github_line_end": 63
+    }
+  },
+  {
+    "chunk_id": "templates/index.html::html::file",
+    "repo": "ML-Project",
+    "file_path": "templates/index.html",
+    "file_name": "index.html",
+    "language": "html",
+    "chunk_type": "html_file",
+    "symbol": "index.html",
+    "line_start": 1,
+    "line_end": 1,
+    "content": "<h1>Welcome to the home page </h1>",
+    "imports": [],
+    "calls": [],
+    "dependencies": [],
+    "related_files": [],
+    "parent_symbol": null,
+    "metadata": {
+      "html_tag": "file",
+      "line_count": 1,
+      "relationship_enriched": true,
+      "relationship_targets": [],
+      "repository": "ML-Project",
+      "dependency_count": 0,
+      "related_file_count": 0,
+      "call_count": 0,
+      "github_reference": "https://github.com/pvats2006/ML-Project/blob/main/templates/index.html#L1",
+      "github_reference_available": true,
+      "github_owner": "pvats2006",
+      "github_repository": "ML-Project",
+      "github_branch": "main",
+      "github_file": "templates/index.html",
+      "github_line_start": 1,
+      "github_line_end": 1
+    }
+  },
+  {
+    "chunk_id": "templates/home.html::html::html::2",
+    "repo": "ML-Project",
+    "file_path": "templates/home.html",
+    "file_name": "home.html",
+    "language": "html",
+    "chunk_type": "html_section",
+    "symbol": "html",
+    "line_start": 2,
+    "line_end": 117,
+    "content": "<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <title>Student Exam Performance Indicator</title>\n\n    <!-- Bootstrap for styling -->\n    <link href=\"https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css\" rel=\"stylesheet\">\n\n    <style>\n        body {\n            background-color: #f5f5f5;\n        }\n        .login {\n            width: 50%;\n            margin: auto;\n            margin-top: 50px;\n            padding: 30px;\n            background: white;\n            border-radius: 10px;\n            box-shadow: 0px 0px 10px rgba(0,0,0,0.1);\n        }\n    </style>\n</head>\n\n<body>\n    <div class=\"login\">\n        <h1 class=\"text-center\">Student Exam Performance Indicator</h1>\n\n        <form action=\"{{ url_for('predict_datapoint') }}\" method=\"post\">\n\n            <h3 class=\"text-center mb-3\">Student Exam Performance Prediction</h3>\n\n            <!-- Gender -->\n            <div class=\"mb-3\">\n                <label class=\"form-label\">Gender</label>\n                <select class=\"form-control\" name=\"gender\" required>\n                    <option selected disabled value=\"\">Select your Gender</option>\n                    <option value=\"male\">Male</option>\n                    <option value=\"female\">Female</option>\n                </select>\n            </div>\n\n            <!-- Race / Ethnicity -->\n            <div class=\"mb-3\">\n                <label class=\"form-label\">Race or Ethnicity</label>\n                <select class=\"form-control\" name=\"race_ethnicity\" required>\n                    <option selected disabled value=\"\">Select</option>\n                    <option value=\"group A\">Group A</option>\n                    <option value=\"group B\">Group B</option>\n                    <option value=\"group C\">Group C</option>\n                    <option value=\"group D\">Group D</option>\n                    <option value=\"group E\">Group E</option>\n                </select>\n            </div>\n\n            <!-- Parental Education -->\n            <div class=\"mb-3\">\n                <label class=\"form-label\">Parental Level of Education</label>\n                <select class=\"form-control\" name=\"parental_level_of_education\" required>\n                    <option selected disabled value=\"\">Select</option>\n                    <option value=\"some high school\">Some High School</option>\n                    <option value=\"high school\">High School</option>\n                    <option value=\"some college\">Some College</option>\n                    <option value=\"associate's degree\">Associate's Degree</option>\n                    <option value=\"bachelor's degree\">Bachelor's Degree</option>\n                    <option value=\"master's degree\">Master's Degree</option>\n                </select>\n            </div>\n\n            <!-- Lunch -->\n            <div class=\"mb-3\">\n                <label class=\"form-label\">Lunch Type</label>\n                <select class=\"form-control\" name=\"lunch\" required>\n                    <option selected disabled value=\"\">Select</option>\n                    <option value=\"standard\">Standard</option>\n                    <option value=\"free/reduced\">Free/Reduced</option>\n                </select>\n            </div>\n\n            <!-- Test Prep -->\n            <div class=\"mb-3\">\n                <label class=\"form-label\">Test Preparation Course</label>\n                <select class=\"form-control\" name=\"test_preparation_course\" required>\n                    <option selected disabled value=\"\">Select</option>\n                    <option value=\"none\">None</option>\n                    <option value=\"completed\">Completed</option>\n                </select>\n            </div>\n\n            <!-- Reading Score -->\n            <div class=\"mb-3\">\n                <label class=\"form-label\">Reading Score (out of 100)</label>\n                <input type=\"number\" class=\"form-control\" name=\"reading_score\" placeholder=\"Enter reading score\" required>\n            </div>\n\n            <!-- Writing Score -->\n            <div class=\"mb-3\">\n                <label class=\"form-label\">Writing Score (out of 100)</label>\n                <input type=\"number\" class=\"form-control\" name=\"writing_score\" placeholder=\"Enter writing score\" required>\n            </div>\n\n            <!-- Submit -->\n            <div class=\"text-center\">\n                <button type=\"submit\" class=\"btn btn-primary\">Predict Math Score</button>\n            </div>\n\n        </form>\n\n        <!-- Prediction Result -->\n        <br>\n        <h4 class=\"text-center\">\n            {{ results }}\n        </h4>\n    </div>\n</body>\n</html>",
+    "imports": [],
+    "calls": [],
+    "dependencies": [],
+    "related_files": [],
+    "parent_symbol": null,
+    "metadata": {
+      "html_tag": "html",
+      "line_count": 116,
+      "content_source": "original_file_lines",
+      "relationship_enriched": true,
+      "relationship_targets": [],
+      "repository": "ML-Project",
+      "dependency_count": 0,
+      "related_file_count": 0,
+      "call_count": 0,
+      "github_reference": "https://github.com/pvats2006/ML-Project/blob/main/templates/home.html#L2-L117",
+      "github_reference_available": true,
+      "github_owner": "pvats2006",
+      "github_repository": "ML-Project",
+      "github_branch": "main",
+      "github_file": "templates/home.html",
+      "github_line_start": 2,
+      "github_line_end": 117
+    }
+  },
+  {
+    "chunk_id": "templates/home.html::html::head::3",
+    "repo": "ML-Project",
+    "file_path": "templates/home.html",
+    "file_name": "home.html",
+    "language": "html",
+    "chunk_type": "html_section",
+    "symbol": "head",
+    "line_start": 3,
+    "line_end": 24,
+    "content": "<head>\n    <meta charset=\"UTF-8\">\n    <title>Student Exam Performance Indicator</title>\n\n    <!-- Bootstrap for styling -->\n    <link href=\"https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css\" rel=\"stylesheet\">\n\n    <style>\n        body {\n            background-color: #f5f5f5;\n        }\n        .login {\n            width: 50%;\n            margin: auto;\n            margin-top: 50px;\n            padding: 30px;\n            background: white;\n            border-radius: 10px;\n            box-shadow: 0px 0px 10px rgba(0,0,0,0.1);\n        }\n    </style>\n</head>",
+    "imports": [],
+    "calls": [],
+    "dependencies": [],
+    "related_files": [],
+    "parent_symbol": null,
+    "metadata": {
+      "html_tag": "head",
+      "line_count": 22,
+      "content_source": "original_file_lines",
+      "relationship_enriched": true,
+      "relationship_targets": [],
+      "repository": "ML-Project",
+      "dependency_count": 0,
+      "related_file_count": 0,
+      "call_count": 0,
+      "github_reference": "https://github.com/pvats2006/ML-Project/blob/main/templates/home.html#L3-L24",
+      "github_reference_available": true,
+      "github_owner": "pvats2006",
+      "github_repository": "ML-Project",
+      "github_branch": "main",
+      "github_file": "templates/home.html",
+      "github_line_start": 3,
+      "github_line_end": 24
+    }
+  },
+  {
+    "chunk_id": "templates/home.html::html::style::10",
+    "repo": "ML-Project",
+    "file_path": "templates/home.html",
+    "file_name": "home.html",
+    "language": "html",
+    "chunk_type": "html_section",
+    "symbol": "style",
+    "line_start": 10,
+    "line_end": 23,
+    "content": "    <style>\n        body {\n            background-color: #f5f5f5;\n        }\n        .login {\n            width: 50%;\n            margin: auto;\n            margin-top: 50px;\n            padding: 30px;\n            background: white;\n            border-radius: 10px;\n            box-shadow: 0px 0px 10px rgba(0,0,0,0.1);\n        }\n    </style>",
+    "imports": [],
+    "calls": [],
+    "dependencies": [],
+    "related_files": [],
+    "parent_symbol": null,
+    "metadata": {
+      "html_tag": "style",
+      "line_count": 14,
+      "content_source": "original_file_lines",
+      "relationship_enriched": true,
+      "relationship_targets": [],
+      "repository": "ML-Project",
+      "dependency_count": 0,
+      "related_file_count": 0,
+      "call_count": 0,
+      "github_reference": "https://github.com/pvats2006/ML-Project/blob/main/templates/home.html#L10-L23",
+      "github_reference_available": true,
+      "github_owner": "pvats2006",
+      "github_repository": "ML-Project",
+      "github_branch": "main",
+      "github_file": "templates/home.html",
+      "github_line_start": 10,
+      "github_line_end": 23
+    }
+  },
+  {
+    "chunk_id": "templates/home.html::html::body::26",
+    "repo": "ML-Project",
+    "file_path": "templates/home.html",
+    "file_name": "home.html",
+    "language": "html",
+    "chunk_type": "html_section",
+    "symbol": "body",
+    "line_start": 26,
+    "line_end": 116,
+    "content": "<body>\n    <div class=\"login\">\n        <h1 class=\"text-center\">Student Exam Performance Indicator</h1>\n\n        <form action=\"{{ url_for('predict_datapoint') }}\" method=\"post\">\n\n            <h3 class=\"text-center mb-3\">Student Exam Performance Prediction</h3>\n\n            <!-- Gender -->\n            <div class=\"mb-3\">\n                <label class=\"form-label\">Gender</label>\n                <select class=\"form-control\" name=\"gender\" required>\n                    <option selected disabled value=\"\">Select your Gender</option>\n                    <option value=\"male\">Male</option>\n                    <option value=\"female\">Female</option>\n                </select>\n            </div>\n\n            <!-- Race / Ethnicity -->\n            <div class=\"mb-3\">\n                <label class=\"form-label\">Race or Ethnicity</label>\n                <select class=\"form-control\" name=\"race_ethnicity\" required>\n                    <option selected disabled value=\"\">Select</option>\n                    <option value=\"group A\">Group A</option>\n                    <option value=\"group B\">Group B</option>\n                    <option value=\"group C\">Group C</option>\n                    <option value=\"group D\">Group D</option>\n                    <option value=\"group E\">Group E</option>\n                </select>\n            </div>\n\n            <!-- Parental Education -->\n            <div class=\"mb-3\">\n                <label class=\"form-label\">Parental Level of Education</label>\n                <select class=\"form-control\" name=\"parental_level_of_education\" required>\n                    <option selected disabled value=\"\">Select</option>\n                    <option value=\"some high school\">Some High School</option>\n                    <option value=\"high school\">High School</option>\n                    <option value=\"some college\">Some College</option>\n                    <option value=\"associate's degree\">Associate's Degree</option>\n                    <option value=\"bachelor's degree\">Bachelor's Degree</option>\n                    <option value=\"master's degree\">Master's Degree</option>\n                </select>\n            </div>\n\n            <!-- Lunch -->\n            <div class=\"mb-3\">\n                <label class=\"form-label\">Lunch Type</label>\n                <select class=\"form-control\" name=\"lunch\" required>\n                    <option selected disabled value=\"\">Select</option>\n                    <option value=\"standard\">Standard</option>\n                    <option value=\"free/reduced\">Free/Reduced</option>\n                </select>\n            </div>\n\n            <!-- Test Prep -->\n            <div class=\"mb-3\">\n                <label class=\"form-label\">Test Preparation Course</label>\n                <select class=\"form-control\" name=\"test_preparation_course\" required>\n                    <option selected disabled value=\"\">Select</option>\n                    <option value=\"none\">None</option>\n                    <option value=\"completed\">Completed</option>\n                </select>\n            </div>\n\n            <!-- Reading Score -->\n            <div class=\"mb-3\">\n                <label class=\"form-label\">Reading Score (out of 100)</label>\n                <input type=\"number\" class=\"form-control\" name=\"reading_score\" placeholder=\"Enter reading score\" required>\n            </div>\n\n            <!-- Writing Score -->\n            <div class=\"mb-3\">\n                <label class=\"form-label\">Writing Score (out of 100)</label>\n                <input type=\"number\" class=\"form-control\" name=\"writing_score\" placeholder=\"Enter writing score\" required>\n            </div>\n\n            <!-- Submit -->\n            <div class=\"text-center\">\n                <button type=\"submit\" class=\"btn btn-primary\">Predict Math Score</button>\n            </div>\n\n        </form>\n\n        <!-- Prediction Result -->\n        <br>\n        <h4 class=\"text-center\">\n            {{ results }}\n        </h4>\n    </div>\n</body>",
+    "imports": [],
+    "calls": [],
+    "dependencies": [],
+    "related_files": [],
+    "parent_symbol": null,
+    "metadata": {
+      "html_tag": "body",
+      "line_count": 91,
+      "content_source": "original_file_lines",
+      "relationship_enriched": true,
+      "relationship_targets": [],
+      "repository": "ML-Project",
+      "dependency_count": 0,
+      "related_file_count": 0,
+      "call_count": 0,
+      "github_reference": "https://github.com/pvats2006/ML-Project/blob/main/templates/home.html#L26-L116",
+      "github_reference_available": true,
+      "github_owner": "pvats2006",
+      "github_repository": "ML-Project",
+      "github_branch": "main",
+      "github_file": "templates/home.html",
+      "github_line_start": 26,
+      "github_line_end": 116
+    }
+  },
+  {
+    "chunk_id": "templates/home.html::html::form::30",
+    "repo": "ML-Project",
+    "file_path": "templates/home.html",
+    "file_name": "home.html",
+    "language": "html",
+    "chunk_type": "html_section",
+    "symbol": "form",
+    "line_start": 30,
+    "line_end": 108,
+    "content": "        <form action=\"{{ url_for('predict_datapoint') }}\" method=\"post\">\n\n            <h3 class=\"text-center mb-3\">Student Exam Performance Prediction</h3>\n\n            <!-- Gender -->\n            <div class=\"mb-3\">\n                <label class=\"form-label\">Gender</label>\n                <select class=\"form-control\" name=\"gender\" required>\n                    <option selected disabled value=\"\">Select your Gender</option>\n                    <option value=\"male\">Male</option>\n                    <option value=\"female\">Female</option>\n                </select>\n            </div>\n\n            <!-- Race / Ethnicity -->\n            <div class=\"mb-3\">\n                <label class=\"form-label\">Race or Ethnicity</label>\n                <select class=\"form-control\" name=\"race_ethnicity\" required>\n                    <option selected disabled value=\"\">Select</option>\n                    <option value=\"group A\">Group A</option>\n                    <option value=\"group B\">Group B</option>\n                    <option value=\"group C\">Group C</option>\n                    <option value=\"group D\">Group D</option>\n                    <option value=\"group E\">Group E</option>\n                </select>\n            </div>\n\n            <!-- Parental Education -->\n            <div class=\"mb-3\">\n                <label class=\"form-label\">Parental Level of Education</label>\n                <select class=\"form-control\" name=\"parental_level_of_education\" required>\n                    <option selected disabled value=\"\">Select</option>\n                    <option value=\"some high school\">Some High School</option>\n                    <option value=\"high school\">High School</option>\n                    <option value=\"some college\">Some College</option>\n                    <option value=\"associate's degree\">Associate's Degree</option>\n                    <option value=\"bachelor's degree\">Bachelor's Degree</option>\n                    <option value=\"master's degree\">Master's Degree</option>\n                </select>\n            </div>\n\n            <!-- Lunch -->\n            <div class=\"mb-3\">\n                <label class=\"form-label\">Lunch Type</label>\n                <select class=\"form-control\" name=\"lunch\" required>\n                    <option selected disabled value=\"\">Select</option>\n                    <option value=\"standard\">Standard</option>\n                    <option value=\"free/reduced\">Free/Reduced</option>\n                </select>\n            </div>\n\n            <!-- Test Prep -->\n            <div class=\"mb-3\">\n                <label class=\"form-label\">Test Preparation Course</label>\n                <select class=\"form-control\" name=\"test_preparation_course\" required>\n                    <option selected disabled value=\"\">Select</option>\n                    <option value=\"none\">None</option>\n                    <option value=\"completed\">Completed</option>\n                </select>\n            </div>\n\n            <!-- Reading Score -->\n            <div class=\"mb-3\">\n                <label class=\"form-label\">Reading Score (out of 100)</label>\n                <input type=\"number\" class=\"form-control\" name=\"reading_score\" placeholder=\"Enter reading score\" required>\n            </div>\n\n            <!-- Writing Score -->\n            <div class=\"mb-3\">\n                <label class=\"form-label\">Writing Score (out of 100)</label>\n                <input type=\"number\" class=\"form-control\" name=\"writing_score\" placeholder=\"Enter writing score\" required>\n            </div>\n\n            <!-- Submit -->\n            <div class=\"text-center\">\n                <button type=\"submit\" class=\"btn btn-primary\">Predict Math Score</button>\n            </div>\n\n        </form>",
+    "imports": [],
+    "calls": [],
+    "dependencies": [],
+    "related_files": [],
+    "parent_symbol": null,
+    "metadata": {
+      "html_tag": "form",
+      "line_count": 79,
+      "content_source": "original_file_lines",
+      "relationship_enriched": true,
+      "relationship_targets": [],
+      "repository": "ML-Project",
+      "dependency_count": 0,
+      "related_file_count": 0,
+      "call_count": 0,
+      "github_reference": "https://github.com/pvats2006/ML-Project/blob/main/templates/home.html#L30-L108",
+      "github_reference_available": true,
+      "github_owner": "pvats2006",
+      "github_repository": "ML-Project",
+      "github_branch": "main",
+      "github_file": "templates/home.html",
+      "github_line_start": 30,
+      "github_line_end": 108
+    }
+  },
+  {
+    "chunk_id": "requirements.txt::config::requirements_txt::1",
+    "repo": "ML-Project",
+    "file_path": "requirements.txt",
+    "file_name": "requirements.txt",
+    "language": "text",
+    "chunk_type": "text_file",
+    "symbol": "requirements.txt",
+    "line_start": 1,
+    "line_end": 9,
+    "content": "pandas\nnumpy\nseaborn\nmatplotlib\nscikit-learn\ndill\nxgboost\ncatboost\n#-e .",
+    "imports": [],
+    "calls": [],
+    "dependencies": [],
+    "related_files": [],
+    "parent_symbol": null,
+    "metadata": {
+      "format": "text",
+      "relationship_enriched": true,
+      "relationship_targets": [],
+      "repository": "ML-Project",
+      "dependency_count": 0,
+      "related_file_count": 0,
+      "call_count": 0,
+      "github_reference": "https://github.com/pvats2006/ML-Project/blob/main/requirements.txt#L1-L9",
+      "github_reference_available": true,
+      "github_owner": "pvats2006",
+      "github_repository": "ML-Project",
+      "github_branch": "main",
+      "github_file": "requirements.txt",
+      "github_line_start": 1,
+      "github_line_end": 9
+    }
+  },
+  {
+    "chunk_id": ".gitignore::config::gitignore_block_1::1",
+    "repo": "ML-Project",
+    "file_path": ".gitignore",
+    "file_name": ".gitignore",
+    "language": "text",
+    "chunk_type": "text_block",
+    "symbol": ".gitignore::block_1",
+    "line_start": 1,
+    "line_end": 120,
+    "content": "# Byte-compiled / optimized / DLL files\n__pycache__/\n*.py[codz]\n*$py.class\n\n# C extensions\n*.so\n\n# Distribution / packaging\n.Python\nbuild/\ndevelop-eggs/\ndist/\ndownloads/\neggs/\n.eggs/\nlib/\nlib64/\nparts/\nsdist/\nvar/\nwheels/\nshare/python-wheels/\n*.egg-info/\n.installed.cfg\n*.egg\nMANIFEST\n\n# PyInstaller\n#  Usually these files are written by a python script from a template\n#  before PyInstaller builds the exe, so as to inject date/other infos into it.\n*.manifest\n*.spec\n\n# Installer logs\npip-log.txt\npip-delete-this-directory.txt\n\n# Unit test / coverage reports\nhtmlcov/\n.tox/\n.nox/\n.coverage\n.coverage.*\n.cache\nnosetests.xml\ncoverage.xml\n*.cover\n*.py.cover\n.hypothesis/\n.pytest_cache/\ncover/\n\n# Translations\n*.mo\n*.pot\n\n# Django stuff:\n*.log\nlocal_settings.py\ndb.sqlite3\ndb.sqlite3-journal\n\n# Flask stuff:\ninstance/\n.webassets-cache\n\n# Scrapy stuff:\n.scrapy\n\n# Sphinx documentation\ndocs/_build/\n\n# PyBuilder\n.pybuilder/\ntarget/\n\n# Jupyter Notebook\n.ipynb_checkpoints\n\n# IPython\nprofile_default/\nipython_config.py\n\n# pyenv\n#   For a library or package, you might want to ignore these files since the code is\n#   intended to run in multiple environments; otherwise, check them in:\n# .python-version\n\n# pipenv\n#   According to pypa/pipenv#598, it is recommended to include Pipfile.lock in version control.\n#   However, in case of collaboration, if having platform-specific dependencies or dependencies\n#   having no cross-platform support, pipenv may install dependencies that don't work, or not\n#   install all needed dependencies.\n#Pipfile.lock\n\n# UV\n#   Similar to Pipfile.lock, it is generally recommended to include uv.lock in version control.\n#   This is especially recommended for binary packages to ensure reproducibility, and is more\n#   commonly ignored for libraries.\n#uv.lock\n\n# poetry\n#   Similar to Pipfile.lock, it is generally recommended to include poetry.lock in version control.\n#   This is especially recommended for binary packages to ensure reproducibility, and is more\n#   commonly ignored for libraries.\n#   https://python-poetry.org/docs/basic-usage/#commit-your-poetrylock-file-to-version-control\n#poetry.lock\n#poetry.toml\n\n# pdm\n#   Similar to Pipfile.lock, it is generally recommended to include pdm.lock in version control.\n#   pdm recommends including project-wide configuration in pdm.toml, but excluding .pdm-python.\n#   https://pdm-project.org/en/latest/usage/project/#working-with-version-control\n#pdm.lock\n#pdm.toml\n.pdm-python\n.pdm-build/\n\n# pixi",
+    "imports": [],
+    "calls": [],
+    "dependencies": [],
+    "related_files": [],
+    "parent_symbol": null,
+    "metadata": {
+      "format": "text",
+      "block_number": 1,
+      "relationship_enriched": false,
+      "relationship_reason": "file_not_found_in_knowledge",
+      "github_reference": "https://github.com/pvats2006/ML-Project/blob/main/.gitignore#L1-L120",
+      "github_reference_available": true,
+      "github_owner": "pvats2006",
+      "github_repository": "ML-Project",
+      "github_branch": "main",
+      "github_file": ".gitignore",
+      "github_line_start": 1,
+      "github_line_end": 120
+    }
+  },
+  {
+    "chunk_id": ".gitignore::config::gitignore_block_2::121",
+    "repo": "ML-Project",
+    "file_path": ".gitignore",
+    "file_name": ".gitignore",
+    "language": "text",
+    "chunk_type": "text_block",
+    "symbol": ".gitignore::block_2",
+    "line_start": 121,
+    "line_end": 208,
+    "content": "#   Similar to Pipfile.lock, it is generally recommended to include pixi.lock in version control.\n#pixi.lock\n#   Pixi creates a virtual environment in the .pixi directory, just like venv module creates one\n#   in the .venv directory. It is recommended not to include this directory in version control.\n.pixi\n\n# PEP 582; used by e.g. github.com/David-OConnor/pyflow and github.com/pdm-project/pdm\n__pypackages__/\n\n# Celery stuff\ncelerybeat-schedule\ncelerybeat.pid\n\n# SageMath parsed files\n*.sage.py\n\n# Environments\n.artifact/\n.env\n.envrc\n.venv\nenv/\nvenv/\nENV/\nenv.bak/\nvenv.bak/\n\n# Spyder project settings\n.spyderproject\n.spyproject\n\n# Rope project settings\n.ropeproject\n\n# mkdocs documentation\n/site\n\n# mypy\n.mypy_cache/\n.dmypy.json\ndmypy.json\n\n# Pyre type checker\n.pyre/\n\n# pytype static type analyzer\n.pytype/\n\n# Cython debug symbols\ncython_debug/\n\n# PyCharm\n#  JetBrains specific template is maintained in a separate JetBrains.gitignore that can\n#  be found at https://github.com/github/gitignore/blob/main/Global/JetBrains.gitignore\n#  and can be added to the global gitignore or merged into this file.  For a more nuclear\n#  option (not recommended) you can uncomment the following to ignore the entire idea folder.\n#.idea/\n\n# Abstra\n# Abstra is an AI-powered process automation framework.\n# Ignore directories containing user credentials, local state, and settings.\n# Learn more at https://abstra.io/docs\n.abstra/\n\n# Visual Studio Code\n#  Visual Studio Code specific template is maintained in a separate VisualStudioCode.gitignore \n#  that can be found at https://github.com/github/gitignore/blob/main/Global/VisualStudioCode.gitignore\n#  and can be added to the global gitignore or merged into this file. However, if you prefer, \n#  you could uncomment the following to ignore the entire vscode folder\n# .vscode/\n\n# Ruff stuff:\n.ruff_cache/\n\n# PyPI configuration file\n.pypirc\n\n# Cursor\n#  Cursor is an AI-powered code editor. `.cursorignore` specifies files/directories to\n#  exclude from AI features like autocomplete and code analysis. Recommended for sensitive data\n#  refer to https://docs.cursor.com/context/ignore-files\n.cursorignore\n.cursorindexingignore\n\n# Marimo\nmarimo/_static/\nmarimo/_lsp/\n__marimo__/",
+    "imports": [],
+    "calls": [],
+    "dependencies": [],
+    "related_files": [],
+    "parent_symbol": null,
+    "metadata": {
+      "format": "text",
+      "block_number": 2,
+      "relationship_enriched": false,
+      "relationship_reason": "file_not_found_in_knowledge",
+      "github_reference": "https://github.com/pvats2006/ML-Project/blob/main/.gitignore#L121-L208",
+      "github_reference_available": true,
+      "github_owner": "pvats2006",
+      "github_repository": "ML-Project",
+      "github_branch": "main",
+      "github_file": ".gitignore",
+      "github_line_start": 121,
+      "github_line_end": 208
+    }
+  }
+]

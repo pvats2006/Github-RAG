@@ -1,0 +1,1457 @@
+[
+  {
+    "chunk_id": "streamlit.py::file::e2755aae55af0c5fdd1e",
+    "repo": "pvats2006/Image-Classification-ML",
+    "file_path": "streamlit.py",
+    "file_name": "streamlit.py",
+    "language": "python",
+    "chunk_type": "file",
+    "symbol": "streamlit.py",
+    "line_start": 1,
+    "line_end": 65,
+    "content": "import tempfile\nimport joblib\nimport numpy as np\nimport streamlit as st\nfrom PIL import Image\n\nfrom src.config import MODEL_DIR, CLASS_NAMES\nfrom src.preprocess import load_image\nfrom src.features import extract_features\n\nst.set_page_config(\n    page_title=\"Flower Classifier\",\n    page_icon=\"🌸\",\n    layout=\"centered\",\n)\n\nst.title(\"🌸 Flower Classification\")\nst.write(\"Upload an image and let the model predict the flower.\")\n\nscaler = joblib.load(MODEL_DIR / \"scaler.pkl\")\nmodel = joblib.load(MODEL_DIR / \"best_model.pkl\")\n\nuploaded_file = st.file_uploader(\n    \"Choose an image\",\n    type=[\"jpg\", \"jpeg\", \"png\"]\n)\n\nif uploaded_file is not None:\n\n    image = Image.open(uploaded_file)\n\n    st.image(\n        image,\n        caption=\"Uploaded Image\",\n        use_container_width=True,\n    )\n\n    with tempfile.NamedTemporaryFile(delete=False, suffix=\".jpg\") as temp:\n        image.save(temp.name)\n\n        img = load_image(temp.name)\n\n    features = extract_features(img)\n\n    features = features.reshape(1, -1)\n\n    features = scaler.transform(features)\n\n    probabilities = model.predict_proba(features)[0]\n\n    predicted_index = np.argmax(probabilities)\n\n    prediction = CLASS_NAMES[predicted_index]\n\n    confidence = probabilities[predicted_index]\n\n    st.success(f\"Prediction: {prediction}\")\n\n    st.info(f\"Confidence: {confidence:.2%}\")\n\n    st.subheader(\"Class Probabilities\")\n\n    for cls, prob in zip(CLASS_NAMES, probabilities):\n        st.progress(float(prob))\n        st.write(f\"{cls}: {prob:.2%}\")",
+    "imports": [
+      "tempfile",
+      "joblib",
+      "numpy",
+      "streamlit",
+      "PIL.Image",
+      "src.config.MODEL_DIR",
+      "src.config.CLASS_NAMES",
+      "src.preprocess.load_image",
+      "src.features.extract_features"
+    ],
+    "calls": [],
+    "dependencies": [],
+    "related_files": [],
+    "parent_symbol": null,
+    "metadata": {
+      "github_reference": "https://github.com/pvats2006/Image-Classification-ML/blob/main/streamlit.py#L1-L65"
+    }
+  },
+  {
+    "chunk_id": "test_features.py::file::ad83e152308bed550181",
+    "repo": "pvats2006/Image-Classification-ML",
+    "file_path": "test_features.py",
+    "file_name": "test_features.py",
+    "language": "python",
+    "chunk_type": "file",
+    "symbol": "test_features.py",
+    "line_start": 1,
+    "line_end": 17,
+    "content": "from pathlib import Path\n\nfrom src.preprocess import load_image\nfrom features import extract_features\n\nimage_path = list(Path(\"data/raw/flowers/daisy\").glob(\"*\"))[0]\n\nimage = load_image(image_path)\n\nfeatures = extract_features(image)\n\nprint(\"=\" * 60)\n\nfor name, value in features.items():\n    print(f\"{name:<10} : {value.shape}\")\n\nprint(\"=\" * 60)",
+    "imports": [
+      "pathlib.Path",
+      "src.preprocess.load_image",
+      "features.extract_features"
+    ],
+    "calls": [],
+    "dependencies": [],
+    "related_files": [],
+    "parent_symbol": null,
+    "metadata": {
+      "github_reference": "https://github.com/pvats2006/Image-Classification-ML/blob/main/test_features.py#L1-L17"
+    }
+  },
+  {
+    "chunk_id": "requirements.txt::text_block::bcc3a5ed1a47f9f7a3d1",
+    "repo": "pvats2006/Image-Classification-ML",
+    "file_path": "requirements.txt",
+    "file_name": "requirements.txt",
+    "language": "text",
+    "chunk_type": "text_block",
+    "symbol": "requirements.txt",
+    "line_start": 1,
+    "line_end": 120,
+    "content": "anyio==4.12.1\nappnope==0.1.4\nargon2-cffi==25.1.0\nargon2-cffi-bindings==25.1.0\narrow==1.4.0\nasttokens==3.0.2\nasync-lru==2.0.5\nattrs==26.1.0\nbabel==2.18.0\nbeautifulsoup4==4.15.0\nbleach==6.2.0\ncertifi==2026.7.22\ncffi==2.0.0\ncharset-normalizer==3.4.9\ncomm==0.2.3\ncontourpy==1.3.0\ncycler==0.12.1\ndebugpy==1.8.21\ndecorator==5.3.1\ndefusedxml==0.7.1\nexceptiongroup==1.3.1\nexecuting==2.2.1\nfastjsonschema==2.21.2\nfonttools==4.60.2\nfqdn==1.5.1\nh11==0.16.0\nhttpcore==1.0.9\nhttpx==0.28.1\nidna==3.18\nImageIO==2.37.2\nimportlib_metadata==8.7.1\nimportlib_resources==6.5.2\nipykernel==6.31.0\nipython==8.18.1\nipywidgets==8.1.8\nisoduration==20.11.0\njedi==0.19.2\nJinja2==3.1.6\njoblib==1.5.3\njson5==0.15.0\njsonpointer==3.0.0\njsonschema==4.25.1\njsonschema-specifications==2025.9.1\njupyter==1.1.1\njupyter-console==6.6.3\njupyter-events==0.12.1\njupyter-lsp==2.3.1\njupyter_client==8.6.3\njupyter_core==5.8.1\njupyter_server==2.18.2\njupyter_server_terminals==0.5.4\njupyterlab==4.5.10\njupyterlab_pygments==0.3.0\njupyterlab_server==2.28.0\njupyterlab_widgets==3.0.16\nkiwisolver==1.4.7\nlark==1.3.1\nlazy-loader==0.5\nMarkupSafe==3.0.3\nmatplotlib==3.9.4\nmatplotlib-inline==0.2.2\nmistune==3.3.4\nnbclient==0.10.2\nnbconvert==7.17.1\nnbformat==5.10.4\nnest-asyncio==1.6.0\nnetworkx==3.2.1\nnotebook==7.5.7\nnotebook_shim==0.2.4\nnumpy==2.0.2\nopencv-python==5.0.0.93\noverrides==7.7.0\npackaging==26.2\npandas==2.3.3\npandocfilters==1.5.1\nparso==0.8.7\npexpect==4.9.0\npillow==11.3.0\nplatformdirs==4.4.0\nprometheus_client==0.26.0\nprompt_toolkit==3.0.52\npsutil==7.2.2\nptyprocess==0.7.0\npure_eval==0.2.3\npycparser==2.23\nPygments==2.20.0\npyparsing==3.3.2\npython-dateutil==2.9.0.post0\npython-json-logger==4.0.0\npytz==2026.3.post1\nPyYAML==6.0.3\npyzmq==27.1.0\nreferencing==0.36.2\nrequests==2.32.5\nrfc3339-validator==0.1.4\nrfc3986-validator==0.1.1\nrfc3987-syntax==1.1.0\nrpds-py==0.27.1\nscikit-image==0.24.0.  \nscikit-learn==1.6.1\nscipy==1.13.1\nSend2Trash==2.1.0\nsix==1.17.0\nsoupsieve==2.8.4\nstack-data==0.6.3\nterminado==0.18.1\nthreadpoolctl==3.6.0\ntifffile==2024.8.30\ntinycss2==1.4.0\ntomli==2.4.1\ntornado==6.5.7\ntqdm==4.70.0\ntraitlets==5.15.1\ntyping_extensions==4.16.0\ntzdata==2026.3\nuri-template==1.3.0\nurllib3==2.6.3\nwcwidth==0.8.2\nwebcolors==24.11.1\nwebencodings==0.5.1",
+    "imports": [],
+    "calls": [],
+    "dependencies": [],
+    "related_files": [],
+    "parent_symbol": null,
+    "metadata": {
+      "github_reference": "https://github.com/pvats2006/Image-Classification-ML/blob/main/requirements.txt#L1-L120"
+    }
+  },
+  {
+    "chunk_id": "requirements.txt::text_block::1a0bf991f553a33f276a",
+    "repo": "pvats2006/Image-Classification-ML",
+    "file_path": "requirements.txt",
+    "file_name": "requirements.txt",
+    "language": "text",
+    "chunk_type": "text_block",
+    "symbol": "requirements.txt",
+    "line_start": 109,
+    "line_end": 123,
+    "content": "tinycss2==1.4.0\ntomli==2.4.1\ntornado==6.5.7\ntqdm==4.70.0\ntraitlets==5.15.1\ntyping_extensions==4.16.0\ntzdata==2026.3\nuri-template==1.3.0\nurllib3==2.6.3\nwcwidth==0.8.2\nwebcolors==24.11.1\nwebencodings==0.5.1\nwebsocket-client==1.9.0\nwidgetsnbextension==4.0.15\nzipp==3.23.1",
+    "imports": [],
+    "calls": [],
+    "dependencies": [],
+    "related_files": [],
+    "parent_symbol": null,
+    "metadata": {
+      "github_reference": "https://github.com/pvats2006/Image-Classification-ML/blob/main/requirements.txt#L109-L123"
+    }
+  },
+  {
+    "chunk_id": "README.md::markdown_section::f28a109f0be91e53d8da",
+    "repo": "pvats2006/Image-Classification-ML",
+    "file_path": "README.md",
+    "file_name": "README.md",
+    "language": "markdown",
+    "chunk_type": "markdown_section",
+    "symbol": "Image Classification ML",
+    "line_start": 1,
+    "line_end": 6,
+    "content": "# Image Classification ML\n\nA machine learning project for image classification that demonstrates the complete workflow of building, training, evaluating, and testing image classification models using Python.\n\n---",
+    "imports": [],
+    "calls": [],
+    "dependencies": [],
+    "related_files": [],
+    "parent_symbol": null,
+    "metadata": {
+      "github_reference": "https://github.com/pvats2006/Image-Classification-ML/blob/main/README.md#L1-L6"
+    }
+  },
+  {
+    "chunk_id": "README.md::markdown_section::0a71f6f7afdc589f566d",
+    "repo": "pvats2006/Image-Classification-ML",
+    "file_path": "README.md",
+    "file_name": "README.md",
+    "language": "markdown",
+    "chunk_type": "markdown_section",
+    "symbol": "📌 Features",
+    "line_start": 7,
+    "line_end": 18,
+    "content": "## 📌 Features\n\n- Image preprocessing\n- Data loading and augmentation\n- Model training\n- Model evaluation\n- Prediction on new images\n- Modular project structure\n- Easy to extend with new datasets and models\n\n---",
+    "imports": [],
+    "calls": [],
+    "dependencies": [],
+    "related_files": [],
+    "parent_symbol": null,
+    "metadata": {
+      "github_reference": "https://github.com/pvats2006/Image-Classification-ML/blob/main/README.md#L7-L18"
+    }
+  },
+  {
+    "chunk_id": "README.md::markdown_section::49ac78cc5029c45d1bd8",
+    "repo": "pvats2006/Image-Classification-ML",
+    "file_path": "README.md",
+    "file_name": "README.md",
+    "language": "markdown",
+    "chunk_type": "markdown_section",
+    "symbol": "📂 Project Structure",
+    "line_start": 19,
+    "line_end": 41,
+    "content": "## 📂 Project Structure\n\n```\nImage-Classification-ML/\n│\n├── data/                 # Dataset\n├── models/               # Saved trained models\n├── notebooks/            # Jupyter notebooks\n├── src/                  # Source code\n│   ├── data_loader.py\n│   ├── preprocessing.py\n│   ├── train.py\n│   ├── predict.py\n│   └── utils.py\n│\n├── test_setup.py         # Environment verification script\n├── requirements.txt\n├── README.md\n└── .gitignore\n```\n\n---",
+    "imports": [],
+    "calls": [],
+    "dependencies": [],
+    "related_files": [],
+    "parent_symbol": null,
+    "metadata": {
+      "github_reference": "https://github.com/pvats2006/Image-Classification-ML/blob/main/README.md#L19-L41"
+    }
+  },
+  {
+    "chunk_id": "README.md::markdown_section::0795d6aa1d08d4280b18",
+    "repo": "pvats2006/Image-Classification-ML",
+    "file_path": "README.md",
+    "file_name": "README.md",
+    "language": "markdown",
+    "chunk_type": "markdown_section",
+    "symbol": "🚀 Getting Started",
+    "line_start": 42,
+    "line_end": 43,
+    "content": "## 🚀 Getting Started",
+    "imports": [],
+    "calls": [],
+    "dependencies": [],
+    "related_files": [],
+    "parent_symbol": null,
+    "metadata": {
+      "github_reference": "https://github.com/pvats2006/Image-Classification-ML/blob/main/README.md#L42-L43"
+    }
+  },
+  {
+    "chunk_id": "README.md::markdown_section::0bae6df7ee74ea212716",
+    "repo": "pvats2006/Image-Classification-ML",
+    "file_path": "README.md",
+    "file_name": "README.md",
+    "language": "markdown",
+    "chunk_type": "markdown_section",
+    "symbol": "1. Clone the Repository",
+    "line_start": 44,
+    "line_end": 52,
+    "content": "### 1. Clone the Repository\n\n```bash\ngit clone <repository-url>\ncd Image-Classification-ML\n```\n\n---",
+    "imports": [],
+    "calls": [],
+    "dependencies": [],
+    "related_files": [],
+    "parent_symbol": null,
+    "metadata": {
+      "github_reference": "https://github.com/pvats2006/Image-Classification-ML/blob/main/README.md#L44-L52"
+    }
+  },
+  {
+    "chunk_id": "README.md::markdown_section::3b7f1c0fb35ba4ec8a60",
+    "repo": "pvats2006/Image-Classification-ML",
+    "file_path": "README.md",
+    "file_name": "README.md",
+    "language": "markdown",
+    "chunk_type": "markdown_section",
+    "symbol": "2. Create a Virtual Environment",
+    "line_start": 53,
+    "line_end": 70,
+    "content": "### 2. Create a Virtual Environment\n\n**macOS/Linux**\n\n```bash\npython3 -m venv .venv\nsource .venv/bin/activate\n```\n\n**Windows**\n\n```bash\npython -m venv .venv\n.venv\\Scripts\\activate\n```\n\n---",
+    "imports": [],
+    "calls": [],
+    "dependencies": [],
+    "related_files": [],
+    "parent_symbol": null,
+    "metadata": {
+      "github_reference": "https://github.com/pvats2006/Image-Classification-ML/blob/main/README.md#L53-L70"
+    }
+  },
+  {
+    "chunk_id": "README.md::markdown_section::8e6f7896404f2c5816ee",
+    "repo": "pvats2006/Image-Classification-ML",
+    "file_path": "README.md",
+    "file_name": "README.md",
+    "language": "markdown",
+    "chunk_type": "markdown_section",
+    "symbol": "3. Install Dependencies",
+    "line_start": 71,
+    "line_end": 78,
+    "content": "### 3. Install Dependencies\n\n```bash\npip install -r requirements.txt\n```\n\n---",
+    "imports": [],
+    "calls": [],
+    "dependencies": [],
+    "related_files": [],
+    "parent_symbol": null,
+    "metadata": {
+      "github_reference": "https://github.com/pvats2006/Image-Classification-ML/blob/main/README.md#L71-L78"
+    }
+  },
+  {
+    "chunk_id": "README.md::markdown_section::789df339e54a0f523b74",
+    "repo": "pvats2006/Image-Classification-ML",
+    "file_path": "README.md",
+    "file_name": "README.md",
+    "language": "markdown",
+    "chunk_type": "markdown_section",
+    "symbol": "✅ Verify Installation",
+    "line_start": 79,
+    "line_end": 90,
+    "content": "## ✅ Verify Installation\n\nRun the setup verification script:\n\n```bash\npython test_setup.py\n```\n\nIf everything is installed correctly, the script should display the versions of the required libraries.\n\n---",
+    "imports": [],
+    "calls": [],
+    "dependencies": [],
+    "related_files": [],
+    "parent_symbol": null,
+    "metadata": {
+      "github_reference": "https://github.com/pvats2006/Image-Classification-ML/blob/main/README.md#L79-L90"
+    }
+  },
+  {
+    "chunk_id": "README.md::markdown_section::e63478133a2ff80062cb",
+    "repo": "pvats2006/Image-Classification-ML",
+    "file_path": "README.md",
+    "file_name": "README.md",
+    "language": "markdown",
+    "chunk_type": "markdown_section",
+    "symbol": "▶️ Train the Model",
+    "line_start": 91,
+    "line_end": 98,
+    "content": "## ▶️ Train the Model\n\n```bash\npython src/train.py\n```\n\n---",
+    "imports": [],
+    "calls": [],
+    "dependencies": [],
+    "related_files": [],
+    "parent_symbol": null,
+    "metadata": {
+      "github_reference": "https://github.com/pvats2006/Image-Classification-ML/blob/main/README.md#L91-L98"
+    }
+  },
+  {
+    "chunk_id": "README.md::markdown_section::69e1dbc51e478d37802a",
+    "repo": "pvats2006/Image-Classification-ML",
+    "file_path": "README.md",
+    "file_name": "README.md",
+    "language": "markdown",
+    "chunk_type": "markdown_section",
+    "symbol": "🔍 Predict on an Image",
+    "line_start": 99,
+    "line_end": 106,
+    "content": "## 🔍 Predict on an Image\n\n```bash\npython src/predict.py --image path/to/image.jpg\n```\n\n---",
+    "imports": [],
+    "calls": [],
+    "dependencies": [],
+    "related_files": [],
+    "parent_symbol": null,
+    "metadata": {
+      "github_reference": "https://github.com/pvats2006/Image-Classification-ML/blob/main/README.md#L99-L106"
+    }
+  },
+  {
+    "chunk_id": "README.md::markdown_section::4019041bd7e0d624850a",
+    "repo": "pvats2006/Image-Classification-ML",
+    "file_path": "README.md",
+    "file_name": "README.md",
+    "language": "markdown",
+    "chunk_type": "markdown_section",
+    "symbol": "📊 Technologies Used",
+    "line_start": 107,
+    "line_end": 117,
+    "content": "## 📊 Technologies Used\n\n- Python\n- NumPy\n- Pandas\n- Matplotlib\n- Scikit-learn\n- OpenCV\n\n---",
+    "imports": [],
+    "calls": [],
+    "dependencies": [],
+    "related_files": [],
+    "parent_symbol": null,
+    "metadata": {
+      "github_reference": "https://github.com/pvats2006/Image-Classification-ML/blob/main/README.md#L107-L117"
+    }
+  },
+  {
+    "chunk_id": "README.md::markdown_section::23d4cb06fb4667a820e8",
+    "repo": "pvats2006/Image-Classification-ML",
+    "file_path": "README.md",
+    "file_name": "README.md",
+    "language": "markdown",
+    "chunk_type": "markdown_section",
+    "symbol": "📦 Requirements",
+    "line_start": 118,
+    "line_end": 127,
+    "content": "## 📦 Requirements\n\nInstall all dependencies using:\n\n```bash\npip install -r requirements.txt\n```\n\n---",
+    "imports": [],
+    "calls": [],
+    "dependencies": [],
+    "related_files": [],
+    "parent_symbol": null,
+    "metadata": {
+      "github_reference": "https://github.com/pvats2006/Image-Classification-ML/blob/main/README.md#L118-L127"
+    }
+  },
+  {
+    "chunk_id": "README.md::markdown_section::f45e44686f7489d8f042",
+    "repo": "pvats2006/Image-Classification-ML",
+    "file_path": "README.md",
+    "file_name": "README.md",
+    "language": "markdown",
+    "chunk_type": "markdown_section",
+    "symbol": "📝 Example Requirements",
+    "line_start": 128,
+    "line_end": 139,
+    "content": "## 📝 Example Requirements\n\n```text\nnumpy\npandas\nmatplotlib\nscikit-learn\nopencv-python\n```\n\n---",
+    "imports": [],
+    "calls": [],
+    "dependencies": [],
+    "related_files": [],
+    "parent_symbol": null,
+    "metadata": {
+      "github_reference": "https://github.com/pvats2006/Image-Classification-ML/blob/main/README.md#L128-L139"
+    }
+  },
+  {
+    "chunk_id": "README.md::markdown_section::14e12746272abaf61d4f",
+    "repo": "pvats2006/Image-Classification-ML",
+    "file_path": "README.md",
+    "file_name": "README.md",
+    "language": "markdown",
+    "chunk_type": "markdown_section",
+    "symbol": "📈 Future Improvements",
+    "line_start": 140,
+    "line_end": 150,
+    "content": "## 📈 Future Improvements\n\n- Deep Learning (TensorFlow/PyTorch)\n- Transfer Learning\n- Data Augmentation\n- Streamlit Web Application\n- Model Deployment\n- Docker Support\n\n---",
+    "imports": [],
+    "calls": [],
+    "dependencies": [],
+    "related_files": [],
+    "parent_symbol": null,
+    "metadata": {
+      "github_reference": "https://github.com/pvats2006/Image-Classification-ML/blob/main/README.md#L140-L150"
+    }
+  },
+  {
+    "chunk_id": "README.md::markdown_section::8e9064b9c54341a64662",
+    "repo": "pvats2006/Image-Classification-ML",
+    "file_path": "README.md",
+    "file_name": "README.md",
+    "language": "markdown",
+    "chunk_type": "markdown_section",
+    "symbol": "🤝 Contributing",
+    "line_start": 151,
+    "line_end": 162,
+    "content": "## 🤝 Contributing\n\nContributions are welcome!\n\n1. Fork the repository.\n2. Create a feature branch.\n3. Commit your changes.\n4. Push to your branch.\n5. Open a Pull Request.\n\n---",
+    "imports": [],
+    "calls": [],
+    "dependencies": [],
+    "related_files": [],
+    "parent_symbol": null,
+    "metadata": {
+      "github_reference": "https://github.com/pvats2006/Image-Classification-ML/blob/main/README.md#L151-L162"
+    }
+  },
+  {
+    "chunk_id": "README.md::markdown_section::ae93debbd15b9f71c00e",
+    "repo": "pvats2006/Image-Classification-ML",
+    "file_path": "README.md",
+    "file_name": "README.md",
+    "language": "markdown",
+    "chunk_type": "markdown_section",
+    "symbol": "📄 License",
+    "line_start": 163,
+    "line_end": 168,
+    "content": "## 📄 License\n\nThis project is licensed under the MIT License.\n\n---",
+    "imports": [],
+    "calls": [],
+    "dependencies": [],
+    "related_files": [],
+    "parent_symbol": null,
+    "metadata": {
+      "github_reference": "https://github.com/pvats2006/Image-Classification-ML/blob/main/README.md#L163-L168"
+    }
+  },
+  {
+    "chunk_id": "README.md::markdown_section::82034addd11e53ed41ce",
+    "repo": "pvats2006/Image-Classification-ML",
+    "file_path": "README.md",
+    "file_name": "README.md",
+    "language": "markdown",
+    "chunk_type": "markdown_section",
+    "symbol": "👨‍💻 Author",
+    "line_start": 169,
+    "line_end": 175,
+    "content": "## 👨‍💻 Author\n\n**Priyanshu**\n\nB.Tech Computer Science Engineering\n\nAI/ML & Data Science Enthusiast",
+    "imports": [],
+    "calls": [],
+    "dependencies": [],
+    "related_files": [],
+    "parent_symbol": null,
+    "metadata": {
+      "github_reference": "https://github.com/pvats2006/Image-Classification-ML/blob/main/README.md#L169-L175"
+    }
+  },
+  {
+    "chunk_id": "test_dataset.py::file::b47f24855c33c665a85a",
+    "repo": "pvats2006/Image-Classification-ML",
+    "file_path": "test_dataset.py",
+    "file_name": "test_dataset.py",
+    "language": "python",
+    "chunk_type": "file",
+    "symbol": "test_dataset.py",
+    "line_start": 1,
+    "line_end": 13,
+    "content": "import numpy as np\n\nX = np.load(\"data/X.npy\")\ny = np.load(\"data/y.npy\")\n\nprint(\"Feature Matrix:\", X.shape)\nprint(\"Labels:\", y.shape)\n\nprint(\"Classes:\", set(y))\n\nprint(\"First Label:\", y[0])\n\nprint(\"First Feature Vector Length:\", len(X[0]))",
+    "imports": [
+      "numpy"
+    ],
+    "calls": [],
+    "dependencies": [],
+    "related_files": [],
+    "parent_symbol": null,
+    "metadata": {
+      "github_reference": "https://github.com/pvats2006/Image-Classification-ML/blob/main/test_dataset.py#L1-L13"
+    }
+  },
+  {
+    "chunk_id": "test_preprocess.py::file::6f0170aa795e74dce7b9",
+    "repo": "pvats2006/Image-Classification-ML",
+    "file_path": "test_preprocess.py",
+    "file_name": "test_preprocess.py",
+    "language": "python",
+    "chunk_type": "file",
+    "symbol": "test_preprocess.py",
+    "line_start": 1,
+    "line_end": 23,
+    "content": "from pathlib import Path\n\nfrom src.preprocess import load_image\nfrom src.preprocess import resize_image\nfrom src.preprocess import convert_to_gray\n\nimage_path = Path(\"data/raw/flowers/daisy\").glob(\"*\")\n\nimage_path = list(image_path)[0]\n\nprint(image_path)\n\nimage = load_image(image_path)\n\nprint(\"Original Shape:\", image.shape)\n\nimage = resize_image(image)\n\nprint(\"Resized Shape:\", image.shape)\n\ngray = convert_to_gray(image)\n\nprint(\"Gray Shape:\", gray.shape)",
+    "imports": [
+      "pathlib.Path",
+      "src.preprocess.load_image",
+      "src.preprocess.resize_image",
+      "src.preprocess.convert_to_gray"
+    ],
+    "calls": [],
+    "dependencies": [],
+    "related_files": [],
+    "parent_symbol": null,
+    "metadata": {
+      "github_reference": "https://github.com/pvats2006/Image-Classification-ML/blob/main/test_preprocess.py#L1-L23"
+    }
+  },
+  {
+    "chunk_id": "app/predictor.py::function::4ae72f301cfd78e197a7",
+    "repo": "pvats2006/Image-Classification-ML",
+    "file_path": "app/predictor.py",
+    "file_name": "predictor.py",
+    "language": "python",
+    "chunk_type": "function",
+    "symbol": "predict_image",
+    "line_start": 12,
+    "line_end": 27,
+    "content": "def predict_image(image_path: str):\n\n    image = load_image(image_path)\n\n    features = extract_features(image)\n    features = features.reshape(1, -1)\n    features = scaler.transform(features)\n\n    probabilities = model.predict_proba(features)[0]\n\n    predicted_index = np.argmax(probabilities)\n\n    return {\n        \"prediction\": CLASS_NAMES[predicted_index],\n        \"confidence\": round(float(probabilities[predicted_index]), 4),\n    }",
+    "imports": [
+      "joblib",
+      "numpy",
+      "src.config.MODEL_DIR",
+      "src.config.CLASS_NAMES",
+      "src.preprocess.load_image",
+      "src.features.extract_features"
+    ],
+    "calls": [
+      "load_image",
+      "extract_features",
+      "reshape",
+      "transform",
+      "argmax",
+      "predict_proba",
+      "round",
+      "float"
+    ],
+    "dependencies": [],
+    "related_files": [],
+    "parent_symbol": null,
+    "metadata": {
+      "github_reference": "https://github.com/pvats2006/Image-Classification-ML/blob/main/app/predictor.py#L12-L27"
+    }
+  },
+  {
+    "chunk_id": "app/predictor.py::file::69b54139398affeb39d2",
+    "repo": "pvats2006/Image-Classification-ML",
+    "file_path": "app/predictor.py",
+    "file_name": "predictor.py",
+    "language": "python",
+    "chunk_type": "file",
+    "symbol": "predictor.py",
+    "line_start": 1,
+    "line_end": 27,
+    "content": "import joblib\nimport numpy as np\n\nfrom src.config import MODEL_DIR, CLASS_NAMES\nfrom src.preprocess import load_image\nfrom src.features import extract_features\n\nscaler = joblib.load(MODEL_DIR / \"scaler.pkl\")\nmodel = joblib.load(MODEL_DIR / \"best_model.pkl\")\n\n\ndef predict_image(image_path: str):\n\n    image = load_image(image_path)\n\n    features = extract_features(image)\n    features = features.reshape(1, -1)\n    features = scaler.transform(features)\n\n    probabilities = model.predict_proba(features)[0]\n\n    predicted_index = np.argmax(probabilities)\n\n    return {\n        \"prediction\": CLASS_NAMES[predicted_index],\n        \"confidence\": round(float(probabilities[predicted_index]), 4),\n    }",
+    "imports": [
+      "joblib",
+      "numpy",
+      "src.config.MODEL_DIR",
+      "src.config.CLASS_NAMES",
+      "src.preprocess.load_image",
+      "src.features.extract_features"
+    ],
+    "calls": [],
+    "dependencies": [],
+    "related_files": [],
+    "parent_symbol": null,
+    "metadata": {
+      "github_reference": "https://github.com/pvats2006/Image-Classification-ML/blob/main/app/predictor.py#L1-L27"
+    }
+  },
+  {
+    "chunk_id": "app/schemas.py::class::c0356b923d69e119a9e3",
+    "repo": "pvats2006/Image-Classification-ML",
+    "file_path": "app/schemas.py",
+    "file_name": "schemas.py",
+    "language": "python",
+    "chunk_type": "class",
+    "symbol": "PredictionResponse",
+    "line_start": 4,
+    "line_end": 5,
+    "content": "class PredictionResponse(BaseModel):\n    prediction: str",
+    "imports": [],
+    "calls": [],
+    "dependencies": [],
+    "related_files": [],
+    "parent_symbol": null,
+    "metadata": {
+      "github_reference": "https://github.com/pvats2006/Image-Classification-ML/blob/main/app/schemas.py#L4-L5"
+    }
+  },
+  {
+    "chunk_id": "app/schemas.py::file::ccdee88faf8144b7b3cd",
+    "repo": "pvats2006/Image-Classification-ML",
+    "file_path": "app/schemas.py",
+    "file_name": "schemas.py",
+    "language": "python",
+    "chunk_type": "file",
+    "symbol": "schemas.py",
+    "line_start": 1,
+    "line_end": 5,
+    "content": "from pydantic import BaseModel\n\n\nclass PredictionResponse(BaseModel):\n    prediction: str",
+    "imports": [
+      "pydantic.BaseModel"
+    ],
+    "calls": [],
+    "dependencies": [],
+    "related_files": [],
+    "parent_symbol": null,
+    "metadata": {
+      "github_reference": "https://github.com/pvats2006/Image-Classification-ML/blob/main/app/schemas.py#L1-L5"
+    }
+  },
+  {
+    "chunk_id": "app/main.py::function::634401a76995407f37bb",
+    "repo": "pvats2006/Image-Classification-ML",
+    "file_path": "app/main.py",
+    "file_name": "main.py",
+    "language": "python",
+    "chunk_type": "function",
+    "symbol": "home",
+    "line_start": 15,
+    "line_end": 16,
+    "content": "def home():\n    return {\"message\": \"Flower Classification API Running\"}",
+    "imports": [
+      "pathlib.Path",
+      "fastapi.FastAPI",
+      "fastapi.UploadFile",
+      "fastapi.File",
+      "fastapi.responses.JSONResponse",
+      "app.predictor.predict_image"
+    ],
+    "calls": [
+      "get"
+    ],
+    "dependencies": [],
+    "related_files": [],
+    "parent_symbol": null,
+    "metadata": {
+      "github_reference": "https://github.com/pvats2006/Image-Classification-ML/blob/main/app/main.py#L15-L16"
+    }
+  },
+  {
+    "chunk_id": "app/main.py::function::beb1509144ca1e54fa25",
+    "repo": "pvats2006/Image-Classification-ML",
+    "file_path": "app/main.py",
+    "file_name": "main.py",
+    "language": "python",
+    "chunk_type": "function",
+    "symbol": "predict",
+    "line_start": 20,
+    "line_end": 31,
+    "content": "async def predict(file: UploadFile = File(...)):\n\n    file_path = UPLOAD_DIR / file.filename\n\n    with open(file_path, \"wb\") as f:\n        f.write(await file.read())\n\n    result = predict_image(str(file_path))\n\n    file_path.unlink(missing_ok=True)\n\n    return JSONResponse(result)",
+    "imports": [
+      "pathlib.Path",
+      "fastapi.FastAPI",
+      "fastapi.UploadFile",
+      "fastapi.File",
+      "fastapi.responses.JSONResponse",
+      "app.predictor.predict_image"
+    ],
+    "calls": [
+      "post",
+      "File",
+      "predict_image",
+      "unlink",
+      "JSONResponse",
+      "open",
+      "write",
+      "str",
+      "read"
+    ],
+    "dependencies": [],
+    "related_files": [],
+    "parent_symbol": null,
+    "metadata": {
+      "github_reference": "https://github.com/pvats2006/Image-Classification-ML/blob/main/app/main.py#L20-L31"
+    }
+  },
+  {
+    "chunk_id": "app/main.py::file::3a21cda718046ba7114d",
+    "repo": "pvats2006/Image-Classification-ML",
+    "file_path": "app/main.py",
+    "file_name": "main.py",
+    "language": "python",
+    "chunk_type": "file",
+    "symbol": "main.py",
+    "line_start": 1,
+    "line_end": 31,
+    "content": "from pathlib import Path\n\nfrom fastapi import FastAPI, UploadFile, File\nfrom fastapi.responses import JSONResponse\n\nfrom app.predictor import predict_image\n\nUPLOAD_DIR = Path(\"temp\")\nUPLOAD_DIR.mkdir(exist_ok=True)\n\napp = FastAPI()\n\n\n@app.get(\"/\")\ndef home():\n    return {\"message\": \"Flower Classification API Running\"}\n\n\n@app.post(\"/predict\")\nasync def predict(file: UploadFile = File(...)):\n\n    file_path = UPLOAD_DIR / file.filename\n\n    with open(file_path, \"wb\") as f:\n        f.write(await file.read())\n\n    result = predict_image(str(file_path))\n\n    file_path.unlink(missing_ok=True)\n\n    return JSONResponse(result)",
+    "imports": [
+      "pathlib.Path",
+      "fastapi.FastAPI",
+      "fastapi.UploadFile",
+      "fastapi.File",
+      "fastapi.responses.JSONResponse",
+      "app.predictor.predict_image"
+    ],
+    "calls": [],
+    "dependencies": [],
+    "related_files": [],
+    "parent_symbol": null,
+    "metadata": {
+      "github_reference": "https://github.com/pvats2006/Image-Classification-ML/blob/main/app/main.py#L1-L31"
+    }
+  },
+  {
+    "chunk_id": "src/config.py::file::dff576d703fe9611058c",
+    "repo": "pvats2006/Image-Classification-ML",
+    "file_path": "src/config.py",
+    "file_name": "config.py",
+    "language": "python",
+    "chunk_type": "file",
+    "symbol": "config.py",
+    "line_start": 1,
+    "line_end": 38,
+    "content": "from pathlib import Path\n\n# ==============================\n# PROJECT PATHS\n# ==============================\n\n# Root directory\nBASE_DIR = Path(__file__).resolve().parent.parent\n\n# Data directories\nDATA_DIR = BASE_DIR / \"data\"\nRAW_DATA_DIR = DATA_DIR / \"raw\" / \"flowers\"\nPROCESSED_DATA_DIR = DATA_DIR / \"processed\"\nTEST_DATA_DIR = DATA_DIR / \"test\"\n\n# Models\nMODEL_DIR = BASE_DIR / \"models\"\n\n# Reports\nREPORT_DIR = BASE_DIR / \"reports\"\n\n# ==============================\n# IMAGE SETTINGS\n# ==============================\n\nIMAGE_SIZE = (224, 224)\n\n# Flower classes\nCLASS_NAMES= [\n    \"daisy\",\n    \"dandelion\",\n    \"rose\",\n    \"sunflower\",\n    \"tulip\",\n]\n\n# Random seed\nRANDOM_STATE = 42",
+    "imports": [
+      "pathlib.Path"
+    ],
+    "calls": [],
+    "dependencies": [],
+    "related_files": [],
+    "parent_symbol": null,
+    "metadata": {
+      "github_reference": "https://github.com/pvats2006/Image-Classification-ML/blob/main/src/config.py#L1-L38"
+    }
+  },
+  {
+    "chunk_id": "src/preprocess.py::function::3a5a054ce638388dbcf8",
+    "repo": "pvats2006/Image-Classification-ML",
+    "file_path": "src/preprocess.py",
+    "file_name": "preprocess.py",
+    "language": "python",
+    "chunk_type": "function",
+    "symbol": "load_image",
+    "line_start": 5,
+    "line_end": 15,
+    "content": "def load_image(image_path):\n    \"\"\"\n    Read image using OpenCV.\n    \"\"\"\n\n    image = cv2.imread(str(image_path))\n\n    if image is None:\n        raise ValueError(f\"Cannot load image: {image_path}\")\n\n    return image",
+    "imports": [
+      "cv2",
+      "src.config.IMAGE_SIZE"
+    ],
+    "calls": [
+      "imread",
+      "str",
+      "ValueError"
+    ],
+    "dependencies": [],
+    "related_files": [],
+    "parent_symbol": null,
+    "metadata": {
+      "github_reference": "https://github.com/pvats2006/Image-Classification-ML/blob/main/src/preprocess.py#L5-L15"
+    }
+  },
+  {
+    "chunk_id": "src/preprocess.py::function::adaa9208af5b995ac8e5",
+    "repo": "pvats2006/Image-Classification-ML",
+    "file_path": "src/preprocess.py",
+    "file_name": "preprocess.py",
+    "language": "python",
+    "chunk_type": "function",
+    "symbol": "resize_image",
+    "line_start": 18,
+    "line_end": 23,
+    "content": "def resize_image(image):\n    \"\"\"\n    Resize image.\n    \"\"\"\n\n    return cv2.resize(image, IMAGE_SIZE)",
+    "imports": [
+      "cv2",
+      "src.config.IMAGE_SIZE"
+    ],
+    "calls": [
+      "resize"
+    ],
+    "dependencies": [],
+    "related_files": [],
+    "parent_symbol": null,
+    "metadata": {
+      "github_reference": "https://github.com/pvats2006/Image-Classification-ML/blob/main/src/preprocess.py#L18-L23"
+    }
+  },
+  {
+    "chunk_id": "src/preprocess.py::function::49d433e5788bbbf33741",
+    "repo": "pvats2006/Image-Classification-ML",
+    "file_path": "src/preprocess.py",
+    "file_name": "preprocess.py",
+    "language": "python",
+    "chunk_type": "function",
+    "symbol": "convert_to_gray",
+    "line_start": 26,
+    "line_end": 31,
+    "content": "def convert_to_gray(image):\n    \"\"\"\n    Convert BGR to Gray.\n    \"\"\"\n\n    return cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)",
+    "imports": [
+      "cv2",
+      "src.config.IMAGE_SIZE"
+    ],
+    "calls": [
+      "cvtColor"
+    ],
+    "dependencies": [],
+    "related_files": [],
+    "parent_symbol": null,
+    "metadata": {
+      "github_reference": "https://github.com/pvats2006/Image-Classification-ML/blob/main/src/preprocess.py#L26-L31"
+    }
+  },
+  {
+    "chunk_id": "src/preprocess.py::function::1cf96fa3f4d1e0f21f1e",
+    "repo": "pvats2006/Image-Classification-ML",
+    "file_path": "src/preprocess.py",
+    "file_name": "preprocess.py",
+    "language": "python",
+    "chunk_type": "function",
+    "symbol": "save_image",
+    "line_start": 34,
+    "line_end": 39,
+    "content": "def save_image(path, image):\n    \"\"\"\n    Save image.\n    \"\"\"\n\n    cv2.imwrite(str(path), image)",
+    "imports": [
+      "cv2",
+      "src.config.IMAGE_SIZE"
+    ],
+    "calls": [
+      "imwrite",
+      "str"
+    ],
+    "dependencies": [],
+    "related_files": [],
+    "parent_symbol": null,
+    "metadata": {
+      "github_reference": "https://github.com/pvats2006/Image-Classification-ML/blob/main/src/preprocess.py#L34-L39"
+    }
+  },
+  {
+    "chunk_id": "src/preprocess.py::file::2cfc2221d700286b9df4",
+    "repo": "pvats2006/Image-Classification-ML",
+    "file_path": "src/preprocess.py",
+    "file_name": "preprocess.py",
+    "language": "python",
+    "chunk_type": "file",
+    "symbol": "preprocess.py",
+    "line_start": 1,
+    "line_end": 39,
+    "content": "import cv2\n\nfrom src.config import IMAGE_SIZE\n\ndef load_image(image_path):\n    \"\"\"\n    Read image using OpenCV.\n    \"\"\"\n\n    image = cv2.imread(str(image_path))\n\n    if image is None:\n        raise ValueError(f\"Cannot load image: {image_path}\")\n\n    return image\n\n\ndef resize_image(image):\n    \"\"\"\n    Resize image.\n    \"\"\"\n\n    return cv2.resize(image, IMAGE_SIZE)\n\n\ndef convert_to_gray(image):\n    \"\"\"\n    Convert BGR to Gray.\n    \"\"\"\n\n    return cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)\n\n\ndef save_image(path, image):\n    \"\"\"\n    Save image.\n    \"\"\"\n\n    cv2.imwrite(str(path), image)",
+    "imports": [
+      "cv2",
+      "src.config.IMAGE_SIZE"
+    ],
+    "calls": [],
+    "dependencies": [],
+    "related_files": [],
+    "parent_symbol": null,
+    "metadata": {
+      "github_reference": "https://github.com/pvats2006/Image-Classification-ML/blob/main/src/preprocess.py#L1-L39"
+    }
+  },
+  {
+    "chunk_id": "src/predict.py::function::0eae0ebbae266465242a",
+    "repo": "pvats2006/Image-Classification-ML",
+    "file_path": "src/predict.py",
+    "file_name": "predict.py",
+    "language": "python",
+    "chunk_type": "function",
+    "symbol": "predict",
+    "line_start": 10,
+    "line_end": 42,
+    "content": "def predict(image_path):\n\n    print(\"=\" * 60)\n    print(\"Loading Model...\")\n    print(\"=\" * 60)\n\n    scaler = joblib.load(\n        MODEL_DIR / \"scaler.pkl\"\n    )\n\n    model = joblib.load(\n        MODEL_DIR / \"best_model.pkl\"\n    )\n\n    print(\"Loading Image...\")\n\n    image = load_image(image_path)\n\n    features = extract_features(image)\n\n    features = features.reshape(1, -1)\n\n    features = scaler.transform(features)\n\n    prediction = model.predict(features)[0]\n\n    class_name = CLASS_NAMES[int(prediction)]\n\n    print(\"\\nPrediction\")\n    print(\"-\" * 40)\n    print(f\"Predicted Class : {class_name}\")\n\n    return class_name",
+    "imports": [
+      "argparse",
+      "joblib",
+      "numpy",
+      "src.config.MODEL_DIR",
+      "src.config.CLASS_NAMES",
+      "src.preprocess.load_image",
+      "src.features.extract_features"
+    ],
+    "calls": [
+      "print",
+      "load",
+      "load_image",
+      "extract_features",
+      "reshape",
+      "transform",
+      "predict",
+      "int"
+    ],
+    "dependencies": [],
+    "related_files": [],
+    "parent_symbol": null,
+    "metadata": {
+      "github_reference": "https://github.com/pvats2006/Image-Classification-ML/blob/main/src/predict.py#L10-L42"
+    }
+  },
+  {
+    "chunk_id": "src/predict.py::file::05b14692f26fdb819fcd",
+    "repo": "pvats2006/Image-Classification-ML",
+    "file_path": "src/predict.py",
+    "file_name": "predict.py",
+    "language": "python",
+    "chunk_type": "file",
+    "symbol": "predict.py",
+    "line_start": 1,
+    "line_end": 57,
+    "content": "import argparse\nimport joblib\nimport numpy as np\n\nfrom src.config import MODEL_DIR, CLASS_NAMES\nfrom src.preprocess import load_image\nfrom src.features import extract_features\n\n\ndef predict(image_path):\n\n    print(\"=\" * 60)\n    print(\"Loading Model...\")\n    print(\"=\" * 60)\n\n    scaler = joblib.load(\n        MODEL_DIR / \"scaler.pkl\"\n    )\n\n    model = joblib.load(\n        MODEL_DIR / \"best_model.pkl\"\n    )\n\n    print(\"Loading Image...\")\n\n    image = load_image(image_path)\n\n    features = extract_features(image)\n\n    features = features.reshape(1, -1)\n\n    features = scaler.transform(features)\n\n    prediction = model.predict(features)[0]\n\n    class_name = CLASS_NAMES[int(prediction)]\n\n    print(\"\\nPrediction\")\n    print(\"-\" * 40)\n    print(f\"Predicted Class : {class_name}\")\n\n    return class_name\n\n\nif __name__ == \"__main__\":\n\n    parser = argparse.ArgumentParser()\n\n    parser.add_argument(\n        \"--image\",\n        required=True,\n        help=\"Path to input image\",\n    )\n\n    args = parser.parse_args()\n\n    predict(args.image)",
+    "imports": [
+      "argparse",
+      "joblib",
+      "numpy",
+      "src.config.MODEL_DIR",
+      "src.config.CLASS_NAMES",
+      "src.preprocess.load_image",
+      "src.features.extract_features"
+    ],
+    "calls": [],
+    "dependencies": [],
+    "related_files": [],
+    "parent_symbol": null,
+    "metadata": {
+      "github_reference": "https://github.com/pvats2006/Image-Classification-ML/blob/main/src/predict.py#L1-L57"
+    }
+  },
+  {
+    "chunk_id": "src/features.py::function::c5056e1847f02d6503b2",
+    "repo": "pvats2006/Image-Classification-ML",
+    "file_path": "src/features.py",
+    "file_name": "features.py",
+    "language": "python",
+    "chunk_type": "function",
+    "symbol": "extract_color_histogram",
+    "line_start": 15,
+    "line_end": 30,
+    "content": "def extract_color_histogram(image, bins=8):\n    \"\"\"\n    Extract normalized color histogram.\n    \"\"\"\n\n    hist = cv2.calcHist(\n        [image],\n        [0, 1, 2],\n        None,\n        [bins, bins, bins],\n        [0, 256, 0, 256, 0, 256],\n    )\n\n    hist = cv2.normalize(hist, hist)\n\n    return hist.flatten()",
+    "imports": [
+      "cv2",
+      "numpy",
+      "skimage.feature.hog",
+      "skimage.feature.local_binary_pattern",
+      "src.preprocess.resize_image",
+      "src.preprocess.convert_to_gray"
+    ],
+    "calls": [
+      "calcHist",
+      "normalize",
+      "flatten"
+    ],
+    "dependencies": [],
+    "related_files": [],
+    "parent_symbol": null,
+    "metadata": {
+      "github_reference": "https://github.com/pvats2006/Image-Classification-ML/blob/main/src/features.py#L15-L30"
+    }
+  },
+  {
+    "chunk_id": "src/features.py::function::32917cbcf10447282ff4",
+    "repo": "pvats2006/Image-Classification-ML",
+    "file_path": "src/features.py",
+    "file_name": "features.py",
+    "language": "python",
+    "chunk_type": "function",
+    "symbol": "extract_hog",
+    "line_start": 37,
+    "line_end": 51,
+    "content": "def extract_hog(image):\n\n    gray = convert_to_gray(image)\n\n    features = hog(\n        gray,\n        orientations=9,\n        pixels_per_cell=(16, 16),\n        cells_per_block=(2, 2),\n        transform_sqrt=True,\n        block_norm=\"L2-Hys\",\n        feature_vector=True,\n    )\n\n    return features.astype(\"float32\")",
+    "imports": [
+      "cv2",
+      "numpy",
+      "skimage.feature.hog",
+      "skimage.feature.local_binary_pattern",
+      "src.preprocess.resize_image",
+      "src.preprocess.convert_to_gray"
+    ],
+    "calls": [
+      "convert_to_gray",
+      "hog",
+      "astype"
+    ],
+    "dependencies": [],
+    "related_files": [],
+    "parent_symbol": null,
+    "metadata": {
+      "github_reference": "https://github.com/pvats2006/Image-Classification-ML/blob/main/src/features.py#L37-L51"
+    }
+  },
+  {
+    "chunk_id": "src/features.py::function::7f39ec55c565df7a595c",
+    "repo": "pvats2006/Image-Classification-ML",
+    "file_path": "src/features.py",
+    "file_name": "features.py",
+    "language": "python",
+    "chunk_type": "function",
+    "symbol": "extract_lbp",
+    "line_start": 57,
+    "line_end": 78,
+    "content": "def extract_lbp(image):\n\n    gray = convert_to_gray(image)\n\n    lbp = local_binary_pattern(\n        gray,\n        P=8,\n        R=1,\n        method=\"uniform\",\n    )\n\n    hist, _ = np.histogram(\n        lbp.ravel(),\n        bins=np.arange(0, 11),\n        range=(0, 10),\n    )\n\n    hist = hist.astype(\"float\")\n\n    hist /= hist.sum()\n\n    return hist",
+    "imports": [
+      "cv2",
+      "numpy",
+      "skimage.feature.hog",
+      "skimage.feature.local_binary_pattern",
+      "src.preprocess.resize_image",
+      "src.preprocess.convert_to_gray"
+    ],
+    "calls": [
+      "convert_to_gray",
+      "local_binary_pattern",
+      "histogram",
+      "astype",
+      "sum",
+      "ravel",
+      "arange"
+    ],
+    "dependencies": [],
+    "related_files": [],
+    "parent_symbol": null,
+    "metadata": {
+      "github_reference": "https://github.com/pvats2006/Image-Classification-ML/blob/main/src/features.py#L57-L78"
+    }
+  },
+  {
+    "chunk_id": "src/features.py::function::98828369b642b4a651b0",
+    "repo": "pvats2006/Image-Classification-ML",
+    "file_path": "src/features.py",
+    "file_name": "features.py",
+    "language": "python",
+    "chunk_type": "function",
+    "symbol": "extract_orb",
+    "line_start": 85,
+    "line_end": 96,
+    "content": "def extract_orb(image):\n\n    gray = convert_to_gray(image)\n\n    orb = cv2.ORB_create(nfeatures=100)\n\n    keypoints, descriptors = orb.detectAndCompute(gray, None)\n\n    if descriptors is None:\n        return np.zeros(3200)\n\n    return descriptors.flatten()",
+    "imports": [
+      "cv2",
+      "numpy",
+      "skimage.feature.hog",
+      "skimage.feature.local_binary_pattern",
+      "src.preprocess.resize_image",
+      "src.preprocess.convert_to_gray"
+    ],
+    "calls": [
+      "convert_to_gray",
+      "ORB_create",
+      "detectAndCompute",
+      "flatten",
+      "zeros"
+    ],
+    "dependencies": [],
+    "related_files": [],
+    "parent_symbol": null,
+    "metadata": {
+      "github_reference": "https://github.com/pvats2006/Image-Classification-ML/blob/main/src/features.py#L85-L96"
+    }
+  },
+  {
+    "chunk_id": "src/features.py::function::6351ff6ac804d0cd7d30",
+    "repo": "pvats2006/Image-Classification-ML",
+    "file_path": "src/features.py",
+    "file_name": "features.py",
+    "language": "python",
+    "chunk_type": "function",
+    "symbol": "normalize_feature",
+    "line_start": 104,
+    "line_end": 113,
+    "content": "def normalize_feature(feature):\n\n    feature = feature.astype(\"float32\")\n\n    norm = np.linalg.norm(feature)\n\n    if norm > 0:\n        feature = feature / norm\n\n    return feature",
+    "imports": [
+      "cv2",
+      "numpy",
+      "skimage.feature.hog",
+      "skimage.feature.local_binary_pattern",
+      "src.preprocess.resize_image",
+      "src.preprocess.convert_to_gray"
+    ],
+    "calls": [
+      "astype",
+      "norm"
+    ],
+    "dependencies": [],
+    "related_files": [],
+    "parent_symbol": null,
+    "metadata": {
+      "github_reference": "https://github.com/pvats2006/Image-Classification-ML/blob/main/src/features.py#L104-L113"
+    }
+  },
+  {
+    "chunk_id": "src/features.py::function::ba7e3b8a5e0ac3914e07",
+    "repo": "pvats2006/Image-Classification-ML",
+    "file_path": "src/features.py",
+    "file_name": "features.py",
+    "language": "python",
+    "chunk_type": "function",
+    "symbol": "extract_features",
+    "line_start": 116,
+    "line_end": 138,
+    "content": "def extract_features(image):\n\n    image = resize_image(image)\n\n    color = normalize_feature(\n        extract_color_histogram(image)\n    )\n\n    hog_feature = normalize_feature(\n        extract_hog(image)\n    )\n\n    lbp = normalize_feature(\n        extract_lbp(image)\n    )\n\n    features = np.concatenate([\n        color,\n        hog_feature,\n        lbp\n    ])\n\n    return features.astype(\"float32\")",
+    "imports": [
+      "cv2",
+      "numpy",
+      "skimage.feature.hog",
+      "skimage.feature.local_binary_pattern",
+      "src.preprocess.resize_image",
+      "src.preprocess.convert_to_gray"
+    ],
+    "calls": [
+      "resize_image",
+      "normalize_feature",
+      "concatenate",
+      "astype",
+      "extract_color_histogram",
+      "extract_hog",
+      "extract_lbp"
+    ],
+    "dependencies": [],
+    "related_files": [],
+    "parent_symbol": null,
+    "metadata": {
+      "github_reference": "https://github.com/pvats2006/Image-Classification-ML/blob/main/src/features.py#L116-L138"
+    }
+  },
+  {
+    "chunk_id": "src/features.py::file::aea4b60c5cb921cfecaf",
+    "repo": "pvats2006/Image-Classification-ML",
+    "file_path": "src/features.py",
+    "file_name": "features.py",
+    "language": "python",
+    "chunk_type": "file",
+    "symbol": "features.py",
+    "line_start": 1,
+    "line_end": 138,
+    "content": "import cv2\nimport numpy as np\n\nfrom skimage.feature import hog\nfrom skimage.feature import local_binary_pattern\n\nfrom src.preprocess import resize_image\nfrom src.preprocess import convert_to_gray\n\n\n# --------------------------\n# COLOR HISTOGRAM\n# --------------------------\n\ndef extract_color_histogram(image, bins=8):\n    \"\"\"\n    Extract normalized color histogram.\n    \"\"\"\n\n    hist = cv2.calcHist(\n        [image],\n        [0, 1, 2],\n        None,\n        [bins, bins, bins],\n        [0, 256, 0, 256, 0, 256],\n    )\n\n    hist = cv2.normalize(hist, hist)\n\n    return hist.flatten()\n\n\n# --------------------------\n# HOG\n# --------------------------\n\ndef extract_hog(image):\n\n    gray = convert_to_gray(image)\n\n    features = hog(\n        gray,\n        orientations=9,\n        pixels_per_cell=(16, 16),\n        cells_per_block=(2, 2),\n        transform_sqrt=True,\n        block_norm=\"L2-Hys\",\n        feature_vector=True,\n    )\n\n    return features.astype(\"float32\")\n\n# --------------------------\n# LBP\n# --------------------------\n\ndef extract_lbp(image):\n\n    gray = convert_to_gray(image)\n\n    lbp = local_binary_pattern(\n        gray,\n        P=8,\n        R=1,\n        method=\"uniform\",\n    )\n\n    hist, _ = np.histogram(\n        lbp.ravel(),\n        bins=np.arange(0, 11),\n        range=(0, 10),\n    )\n\n    hist = hist.astype(\"float\")\n\n    hist /= hist.sum()\n\n    return hist\n\n\n# --------------------------\n# ORB\n# --------------------------\n\ndef extract_orb(image):\n\n    gray = convert_to_gray(image)\n\n    orb = cv2.ORB_create(nfeatures=100)\n\n    keypoints, descriptors = orb.detectAndCompute(gray, None)\n\n    if descriptors is None:\n        return np.zeros(3200)\n\n    return descriptors.flatten()\n\n\n# --------------------------\n# COMBINE\n# --------------------------\n\n\ndef normalize_feature(feature):\n\n    feature = feature.astype(\"float32\")\n\n    norm = np.linalg.norm(feature)\n\n    if norm > 0:\n        feature = feature / norm\n\n    return feature\n\n\ndef extract_features(image):\n\n    image = resize_image(image)\n\n    color = normalize_feature(\n        extract_color_histogram(image)\n    )\n\n    hog_feature = normalize_feature(\n        extract_hog(image)\n    )\n\n    lbp = normalize_feature(\n        extract_lbp(image)\n    )\n\n    features = np.concatenate([\n        color,\n        hog_feature,\n        lbp\n    ])\n\n    return features.astype(\"float32\")",
+    "imports": [
+      "cv2",
+      "numpy",
+      "skimage.feature.hog",
+      "skimage.feature.local_binary_pattern",
+      "src.preprocess.resize_image",
+      "src.preprocess.convert_to_gray"
+    ],
+    "calls": [],
+    "dependencies": [],
+    "related_files": [],
+    "parent_symbol": null,
+    "metadata": {
+      "github_reference": "https://github.com/pvats2006/Image-Classification-ML/blob/main/src/features.py#L1-L138"
+    }
+  },
+  {
+    "chunk_id": "src/dataset_builder.py::function::a1580f56b8bb7d747561",
+    "repo": "pvats2006/Image-Classification-ML",
+    "file_path": "src/dataset_builder.py",
+    "file_name": "dataset_builder.py",
+    "language": "python",
+    "chunk_type": "function",
+    "symbol": "build_dataset",
+    "line_start": 13,
+    "line_end": 56,
+    "content": "def build_dataset():\n\n    X = []\n    y = []\n\n    for label, class_name in enumerate(CLASSES):\n\n        folder = RAW_DATA_DIR / class_name\n\n        print(f\"\\nProcessing {class_name}\")\n\n        images = list(folder.glob(\"*\"))\n\n        for image_path in tqdm(images):\n\n            try:\n\n                image = load_image(image_path)\n\n                feature_vector = extract_features(image)\n\n                X.append(feature_vector)\n\n                y.append(label)\n\n            except Exception as e:\n\n                print(image_path, e)\n\n    X = np.array(X)\n\n    y = np.array(y)\n\n    print()\n\n    print(\"Dataset Created\")\n\n    print(\"X Shape :\", X.shape)\n\n    print(\"y Shape :\", y.shape)\n\n    np.save(\"data/X.npy\", X)\n\n    np.save(\"data/y.npy\", y)",
+    "imports": [
+      "pathlib.Path",
+      "numpy",
+      "tqdm.tqdm",
+      "src.config.RAW_DATA_DIR",
+      "src.config.CLASSES",
+      "src.preprocess.load_image",
+      "src.features.extract_features"
+    ],
+    "calls": [
+      "enumerate",
+      "array",
+      "print",
+      "save",
+      "list",
+      "tqdm",
+      "glob",
+      "load_image",
+      "extract_features",
+      "append"
+    ],
+    "dependencies": [],
+    "related_files": [],
+    "parent_symbol": null,
+    "metadata": {
+      "github_reference": "https://github.com/pvats2006/Image-Classification-ML/blob/main/src/dataset_builder.py#L13-L56"
+    }
+  },
+  {
+    "chunk_id": "src/dataset_builder.py::file::4327a8fff486866eb8a8",
+    "repo": "pvats2006/Image-Classification-ML",
+    "file_path": "src/dataset_builder.py",
+    "file_name": "dataset_builder.py",
+    "language": "python",
+    "chunk_type": "file",
+    "symbol": "dataset_builder.py",
+    "line_start": 1,
+    "line_end": 61,
+    "content": "from pathlib import Path\n\nimport numpy as np\nfrom tqdm import tqdm\n\nfrom src.config import RAW_DATA_DIR\nfrom src.config import CLASSES\n\nfrom src.preprocess import load_image\nfrom src.features import extract_features\n\n\ndef build_dataset():\n\n    X = []\n    y = []\n\n    for label, class_name in enumerate(CLASSES):\n\n        folder = RAW_DATA_DIR / class_name\n\n        print(f\"\\nProcessing {class_name}\")\n\n        images = list(folder.glob(\"*\"))\n\n        for image_path in tqdm(images):\n\n            try:\n\n                image = load_image(image_path)\n\n                feature_vector = extract_features(image)\n\n                X.append(feature_vector)\n\n                y.append(label)\n\n            except Exception as e:\n\n                print(image_path, e)\n\n    X = np.array(X)\n\n    y = np.array(y)\n\n    print()\n\n    print(\"Dataset Created\")\n\n    print(\"X Shape :\", X.shape)\n\n    print(\"y Shape :\", y.shape)\n\n    np.save(\"data/X.npy\", X)\n\n    np.save(\"data/y.npy\", y)\n\n\nif __name__ == \"__main__\":\n\n    build_dataset()",
+    "imports": [
+      "pathlib.Path",
+      "numpy",
+      "tqdm.tqdm",
+      "src.config.RAW_DATA_DIR",
+      "src.config.CLASSES",
+      "src.preprocess.load_image",
+      "src.features.extract_features"
+    ],
+    "calls": [],
+    "dependencies": [],
+    "related_files": [],
+    "parent_symbol": null,
+    "metadata": {
+      "github_reference": "https://github.com/pvats2006/Image-Classification-ML/blob/main/src/dataset_builder.py#L1-L61"
+    }
+  },
+  {
+    "chunk_id": "src/utils.py::function::45e055c7b2fd96179356",
+    "repo": "pvats2006/Image-Classification-ML",
+    "file_path": "src/utils.py",
+    "file_name": "utils.py",
+    "language": "python",
+    "chunk_type": "function",
+    "symbol": "create_directory",
+    "line_start": 4,
+    "line_end": 8,
+    "content": "def create_directory(path):\n    \"\"\"\n    Create directory if it does not exist.\n    \"\"\"\n    Path(path).mkdir(parents=True, exist_ok=True)",
+    "imports": [
+      "pathlib.Path"
+    ],
+    "calls": [
+      "mkdir",
+      "Path"
+    ],
+    "dependencies": [],
+    "related_files": [],
+    "parent_symbol": null,
+    "metadata": {
+      "github_reference": "https://github.com/pvats2006/Image-Classification-ML/blob/main/src/utils.py#L4-L8"
+    }
+  },
+  {
+    "chunk_id": "src/utils.py::function::d3eb16bf9707ff5d5da1",
+    "repo": "pvats2006/Image-Classification-ML",
+    "file_path": "src/utils.py",
+    "file_name": "utils.py",
+    "language": "python",
+    "chunk_type": "function",
+    "symbol": "print_header",
+    "line_start": 11,
+    "line_end": 17,
+    "content": "def print_header(title):\n    \"\"\"\n    Print formatted title.\n    \"\"\"\n    print(\"\\n\" + \"=\" * 60)\n    print(title)\n    print(\"=\" * 60)",
+    "imports": [
+      "pathlib.Path"
+    ],
+    "calls": [
+      "print"
+    ],
+    "dependencies": [],
+    "related_files": [],
+    "parent_symbol": null,
+    "metadata": {
+      "github_reference": "https://github.com/pvats2006/Image-Classification-ML/blob/main/src/utils.py#L11-L17"
+    }
+  },
+  {
+    "chunk_id": "src/utils.py::function::5aaabbe34b5681dc193a",
+    "repo": "pvats2006/Image-Classification-ML",
+    "file_path": "src/utils.py",
+    "file_name": "utils.py",
+    "language": "python",
+    "chunk_type": "function",
+    "symbol": "list_images",
+    "line_start": 20,
+    "line_end": 31,
+    "content": "def list_images(folder):\n    \"\"\"\n    Return all image paths.\n    \"\"\"\n    image_extensions = [\".jpg\", \".jpeg\", \".png\"]\n\n    images = []\n\n    for ext in image_extensions:\n        images.extend(Path(folder).rglob(f\"*{ext}\"))\n\n    return sorted(images)",
+    "imports": [
+      "pathlib.Path"
+    ],
+    "calls": [
+      "sorted",
+      "extend",
+      "rglob",
+      "Path"
+    ],
+    "dependencies": [],
+    "related_files": [],
+    "parent_symbol": null,
+    "metadata": {
+      "github_reference": "https://github.com/pvats2006/Image-Classification-ML/blob/main/src/utils.py#L20-L31"
+    }
+  },
+  {
+    "chunk_id": "src/utils.py::file::e0a8dee8feff54e8c717",
+    "repo": "pvats2006/Image-Classification-ML",
+    "file_path": "src/utils.py",
+    "file_name": "utils.py",
+    "language": "python",
+    "chunk_type": "file",
+    "symbol": "utils.py",
+    "line_start": 1,
+    "line_end": 31,
+    "content": "from pathlib import Path\n\n\ndef create_directory(path):\n    \"\"\"\n    Create directory if it does not exist.\n    \"\"\"\n    Path(path).mkdir(parents=True, exist_ok=True)\n\n\ndef print_header(title):\n    \"\"\"\n    Print formatted title.\n    \"\"\"\n    print(\"\\n\" + \"=\" * 60)\n    print(title)\n    print(\"=\" * 60)\n\n\ndef list_images(folder):\n    \"\"\"\n    Return all image paths.\n    \"\"\"\n    image_extensions = [\".jpg\", \".jpeg\", \".png\"]\n\n    images = []\n\n    for ext in image_extensions:\n        images.extend(Path(folder).rglob(f\"*{ext}\"))\n\n    return sorted(images)",
+    "imports": [
+      "pathlib.Path"
+    ],
+    "calls": [],
+    "dependencies": [],
+    "related_files": [],
+    "parent_symbol": null,
+    "metadata": {
+      "github_reference": "https://github.com/pvats2006/Image-Classification-ML/blob/main/src/utils.py#L1-L31"
+    }
+  },
+  {
+    "chunk_id": "src/train.py::function::6c486aa00574ea727ad1",
+    "repo": "pvats2006/Image-Classification-ML",
+    "file_path": "src/train.py",
+    "file_name": "train.py",
+    "language": "python",
+    "chunk_type": "function",
+    "symbol": "train",
+    "line_start": 20,
+    "line_end": 261,
+    "content": "def train():\n\n    print(\"=\" * 60)\n    print(\"Loading Dataset...\")\n    print(\"=\" * 60)\n\n    X = np.load(\"data/X.npy\")\n    y = np.load(\"data/y.npy\")\n\n    print(f\"Feature Matrix : {X.shape}\")\n    print(f\"Labels         : {y.shape}\")\n\n    # ==========================================================\n    # Train Test Split\n    # ==========================================================\n\n    print(\"\\nSplitting Dataset...\")\n\n    X_train, X_test, y_train, y_test = train_test_split(\n        X,\n        y,\n        test_size=0.20,\n        random_state=42,\n        stratify=y,\n    )\n\n    print(f\"Training Samples : {len(X_train)}\")\n    print(f\"Testing Samples  : {len(X_test)}\")\n\n    # ==========================================================\n    # Feature Scaling\n    # ==========================================================\n\n    print(\"\\nScaling Features...\")\n\n    scaler = StandardScaler()\n\n    X_train = scaler.fit_transform(X_train)\n    X_test = scaler.transform(X_test)\n\n    MODEL_DIR.mkdir(parents=True, exist_ok=True)\n\n    joblib.dump(\n        scaler,\n        MODEL_DIR / \"scaler.pkl\",\n    )\n\n    # ==========================================================\n    # SVM\n    # ==========================================================\n\n    print(\"\\n\" + \"=\" * 60)\n    print(\"Training SVM\")\n    print(\"=\" * 60)\n\n    svm = SVC(\n        kernel=\"rbf\",\n        C=10,\n        gamma=\"scale\",\n        random_state=42,\n    )\n\n    svm.fit(X_train, y_train)\n\n    svm_pred = svm.predict(X_test)\n\n    svm_acc = accuracy_score(y_test, svm_pred)\n\n    print(f\"\\nSVM Accuracy : {svm_acc:.4f}\\n\")\n\n    print(classification_report(y_test, svm_pred))\n\n    print(\"Confusion Matrix\")\n\n    print(confusion_matrix(y_test, svm_pred))\n\n    joblib.dump(\n        svm,\n        MODEL_DIR / \"svm_model.pkl\",\n    )\n\n    # ==========================================================\n    # Random Forest\n    # ==========================================================\n\n    print(\"\\n\" + \"=\" * 60)\n    print(\"Random Forest Hyperparameter Tuning\")\n    print(\"=\" * 60)\n\n    param_grid = {\n        \"n_estimators\": [200, 300, 500],\n        \"max_depth\": [10, 20, 30, None],\n        \"min_samples_split\": [2, 5, 10],\n        \"min_samples_leaf\": [1, 2, 4],\n        \"max_features\": [\"sqrt\", \"log2\"],\n    }\n\n    rf = RandomForestClassifier(\n        random_state=42,\n        n_jobs=-1,\n    )\n\n    search = RandomizedSearchCV(\n        estimator=rf,\n        param_distributions=param_grid,\n        n_iter=20,\n        cv=5,\n        scoring=\"accuracy\",\n        random_state=42,\n        n_jobs=-1,\n        verbose=2,\n    )\n\n    search.fit(X_train, y_train)\n\n    rf_best = search.best_estimator_\n\n    print(\"\\nBest Parameters\")\n\n    print(search.best_params_)\n\n    rf_pred = rf_best.predict(X_test)\n\n    rf_acc = accuracy_score(\n        y_test,\n        rf_pred,\n    )\n\n    print(f\"\\nRandom Forest Accuracy : {rf_acc:.4f}\\n\")\n\n    print(classification_report(y_test, rf_pred))\n\n    print(\"Confusion Matrix\")\n\n    print(confusion_matrix(y_test, rf_pred))\n\n    joblib.dump(\n        rf_best,\n        MODEL_DIR / \"random_forest.pkl\",\n    )\n\n    # ==========================================================\n    # XGBoost\n    # ==========================================================\n\n    print(\"\\n\" + \"=\" * 60)\n    print(\"Training XGBoost\")\n    print(\"=\" * 60)\n\n    xgb = XGBClassifier(\n        objective=\"multi:softprob\",\n        num_class=len(np.unique(y)),\n        n_estimators=300,\n        learning_rate=0.05,\n        max_depth=6,\n        min_child_weight=3,\n        subsample=0.8,\n        colsample_bytree=0.8,\n        gamma=0.1,\n        reg_alpha=0.1,\n        reg_lambda=1.0,\n        random_state=42,\n        tree_method=\"hist\",\n        eval_metric=\"mlogloss\",\n        n_jobs=-1,\n    )\n\n    xgb.fit(X_train, y_train)\n\n    xgb_pred = xgb.predict(X_test)\n\n    xgb_acc = accuracy_score(\n        y_test,\n        xgb_pred,\n    )\n\n    print(f\"\\nXGBoost Accuracy : {xgb_acc:.4f}\\n\")\n\n    print(classification_report(y_test, xgb_pred))\n\n    print(\"Confusion Matrix\")\n\n    print(confusion_matrix(y_test, xgb_pred))\n\n    joblib.dump(\n        xgb,\n        MODEL_DIR / \"xgboost_model.pkl\",\n    )\n\n    # ==========================================================\n    # Model Comparison\n    # ==========================================================\n\n    print(\"\\n\" + \"=\" * 60)\n    print(\"Model Comparison\")\n    print(\"=\" * 60)\n\n    results = {\n        \"SVM\": svm_acc,\n        \"Random Forest\": rf_acc,\n        \"XGBoost\": xgb_acc,\n    }\n\n    for model, score in sorted(\n        results.items(),\n        key=lambda item: item[1],\n        reverse=True,\n    ):\n        print(f\"{model:<20}: {score:.4f}\")\n\n    best_model_name = max(\n        results,\n        key=results.get,\n    )\n\n    print(\"\\n\" + \"=\" * 60)\n    print(f\"🏆 Best Model : {best_model_name}\")\n    print(\"=\" * 60)\n\n    if best_model_name == \"SVM\":\n        best_model = svm\n\n    elif best_model_name == \"Random Forest\":\n        best_model = rf_best\n\n    else:\n        best_model = xgb\n\n    joblib.dump(\n        best_model,\n        MODEL_DIR / \"best_model.pkl\",\n    )\n\n    print(\"\\nSaved Models:\")\n\n    print(\"✓ scaler.pkl\")\n    print(\"✓ svm_model.pkl\")\n    print(\"✓ random_forest.pkl\")\n    print(\"✓ xgboost_model.pkl\")\n    print(\"✓ best_model.pkl\")\n\n    print(\"\\nTraining Completed Successfully!\")",
+    "imports": [
+      "joblib",
+      "numpy",
+      "sklearn.model_selection.train_test_split",
+      "sklearn.model_selection.RandomizedSearchCV",
+      "sklearn.preprocessing.StandardScaler",
+      "sklearn.svm.SVC",
+      "sklearn.ensemble.RandomForestClassifier",
+      "xgboost.XGBClassifier",
+      "sklearn.metrics.accuracy_score",
+      "sklearn.metrics.classification_report",
+      "sklearn.metrics.confusion_matrix",
+      "src.config.MODEL_DIR"
+    ],
+    "calls": [
+      "print",
+      "load",
+      "train_test_split",
+      "StandardScaler",
+      "fit_transform",
+      "transform",
+      "mkdir",
+      "dump",
+      "SVC",
+      "fit",
+      "predict",
+      "accuracy_score",
+      "RandomForestClassifier",
+      "RandomizedSearchCV",
+      "XGBClassifier",
+      "sorted",
+      "max",
+      "classification_report",
+      "confusion_matrix",
+      "items"
+    ],
+    "dependencies": [],
+    "related_files": [],
+    "parent_symbol": null,
+    "metadata": {
+      "github_reference": "https://github.com/pvats2006/Image-Classification-ML/blob/main/src/train.py#L20-L261"
+    }
+  },
+  {
+    "chunk_id": "src/train.py::file::9511f1c9c541bd8f6875",
+    "repo": "pvats2006/Image-Classification-ML",
+    "file_path": "src/train.py",
+    "file_name": "train.py",
+    "language": "python",
+    "chunk_type": "file",
+    "symbol": "train.py",
+    "line_start": 1,
+    "line_end": 265,
+    "content": "import joblib\nimport numpy as np\n\nfrom sklearn.model_selection import train_test_split, RandomizedSearchCV\nfrom sklearn.preprocessing import StandardScaler\n\nfrom sklearn.svm import SVC\nfrom sklearn.ensemble import RandomForestClassifier\nfrom xgboost import XGBClassifier\n\nfrom sklearn.metrics import (\n    accuracy_score,\n    classification_report,\n    confusion_matrix,\n)\n\nfrom src.config import MODEL_DIR\n\n\ndef train():\n\n    print(\"=\" * 60)\n    print(\"Loading Dataset...\")\n    print(\"=\" * 60)\n\n    X = np.load(\"data/X.npy\")\n    y = np.load(\"data/y.npy\")\n\n    print(f\"Feature Matrix : {X.shape}\")\n    print(f\"Labels         : {y.shape}\")\n\n    # ==========================================================\n    # Train Test Split\n    # ==========================================================\n\n    print(\"\\nSplitting Dataset...\")\n\n    X_train, X_test, y_train, y_test = train_test_split(\n        X,\n        y,\n        test_size=0.20,\n        random_state=42,\n        stratify=y,\n    )\n\n    print(f\"Training Samples : {len(X_train)}\")\n    print(f\"Testing Samples  : {len(X_test)}\")\n\n    # ==========================================================\n    # Feature Scaling\n    # ==========================================================\n\n    print(\"\\nScaling Features...\")\n\n    scaler = StandardScaler()\n\n    X_train = scaler.fit_transform(X_train)\n    X_test = scaler.transform(X_test)\n\n    MODEL_DIR.mkdir(parents=True, exist_ok=True)\n\n    joblib.dump(\n        scaler,\n        MODEL_DIR / \"scaler.pkl\",\n    )\n\n    # ==========================================================\n    # SVM\n    # ==========================================================\n\n    print(\"\\n\" + \"=\" * 60)\n    print(\"Training SVM\")\n    print(\"=\" * 60)\n\n    svm = SVC(\n        kernel=\"rbf\",\n        C=10,\n        gamma=\"scale\",\n        random_state=42,\n    )\n\n    svm.fit(X_train, y_train)\n\n    svm_pred = svm.predict(X_test)\n\n    svm_acc = accuracy_score(y_test, svm_pred)\n\n    print(f\"\\nSVM Accuracy : {svm_acc:.4f}\\n\")\n\n    print(classification_report(y_test, svm_pred))\n\n    print(\"Confusion Matrix\")\n\n    print(confusion_matrix(y_test, svm_pred))\n\n    joblib.dump(\n        svm,\n        MODEL_DIR / \"svm_model.pkl\",\n    )\n\n    # ==========================================================\n    # Random Forest\n    # ==========================================================\n\n    print(\"\\n\" + \"=\" * 60)\n    print(\"Random Forest Hyperparameter Tuning\")\n    print(\"=\" * 60)\n\n    param_grid = {\n        \"n_estimators\": [200, 300, 500],\n        \"max_depth\": [10, 20, 30, None],\n        \"min_samples_split\": [2, 5, 10],\n        \"min_samples_leaf\": [1, 2, 4],\n        \"max_features\": [\"sqrt\", \"log2\"],\n    }\n\n    rf = RandomForestClassifier(\n        random_state=42,\n        n_jobs=-1,\n    )\n\n    search = RandomizedSearchCV(\n        estimator=rf,\n        param_distributions=param_grid,\n        n_iter=20,\n        cv=5,\n        scoring=\"accuracy\",\n        random_state=42,\n        n_jobs=-1,\n        verbose=2,\n    )\n\n    search.fit(X_train, y_train)\n\n    rf_best = search.best_estimator_\n\n    print(\"\\nBest Parameters\")\n\n    print(search.best_params_)\n\n    rf_pred = rf_best.predict(X_test)\n\n    rf_acc = accuracy_score(\n        y_test,\n        rf_pred,\n    )\n\n    print(f\"\\nRandom Forest Accuracy : {rf_acc:.4f}\\n\")\n\n    print(classification_report(y_test, rf_pred))\n\n    print(\"Confusion Matrix\")\n\n    print(confusion_matrix(y_test, rf_pred))\n\n    joblib.dump(\n        rf_best,\n        MODEL_DIR / \"random_forest.pkl\",\n    )\n\n    # ==========================================================\n    # XGBoost\n    # ==========================================================\n\n    print(\"\\n\" + \"=\" * 60)\n    print(\"Training XGBoost\")\n    print(\"=\" * 60)\n\n    xgb = XGBClassifier(\n        objective=\"multi:softprob\",\n        num_class=len(np.unique(y)),\n        n_estimators=300,\n        learning_rate=0.05,\n        max_depth=6,\n        min_child_weight=3,\n        subsample=0.8,\n        colsample_bytree=0.8,\n        gamma=0.1,\n        reg_alpha=0.1,\n        reg_lambda=1.0,\n        random_state=42,\n        tree_method=\"hist\",\n        eval_metric=\"mlogloss\",\n        n_jobs=-1,\n    )\n\n    xgb.fit(X_train, y_train)\n\n    xgb_pred = xgb.predict(X_test)\n\n    xgb_acc = accuracy_score(\n        y_test,\n        xgb_pred,\n    )\n\n    print(f\"\\nXGBoost Accuracy : {xgb_acc:.4f}\\n\")\n\n    print(classification_report(y_test, xgb_pred))\n\n    print(\"Confusion Matrix\")\n\n    print(confusion_matrix(y_test, xgb_pred))\n\n    joblib.dump(\n        xgb,\n        MODEL_DIR / \"xgboost_model.pkl\",\n    )\n\n    # ==========================================================\n    # Model Comparison\n    # ==========================================================\n\n    print(\"\\n\" + \"=\" * 60)\n    print(\"Model Comparison\")\n    print(\"=\" * 60)\n\n    results = {\n        \"SVM\": svm_acc,\n        \"Random Forest\": rf_acc,\n        \"XGBoost\": xgb_acc,\n    }\n\n    for model, score in sorted(\n        results.items(),\n        key=lambda item: item[1],\n        reverse=True,\n    ):\n        print(f\"{model:<20}: {score:.4f}\")\n\n    best_model_name = max(\n        results,\n        key=results.get,\n    )\n\n    print(\"\\n\" + \"=\" * 60)\n    print(f\"🏆 Best Model : {best_model_name}\")\n    print(\"=\" * 60)\n\n    if best_model_name == \"SVM\":\n        best_model = svm\n\n    elif best_model_name == \"Random Forest\":\n        best_model = rf_best\n\n    else:\n        best_model = xgb\n\n    joblib.dump(\n        best_model,\n        MODEL_DIR / \"best_model.pkl\",\n    )\n\n    print(\"\\nSaved Models:\")\n\n    print(\"✓ scaler.pkl\")\n    print(\"✓ svm_model.pkl\")\n    print(\"✓ random_forest.pkl\")\n    print(\"✓ xgboost_model.pkl\")\n    print(\"✓ best_model.pkl\")\n\n    print(\"\\nTraining Completed Successfully!\")\n\n\nif __name__ == \"__main__\":\n    train()",
+    "imports": [
+      "joblib",
+      "numpy",
+      "sklearn.model_selection.train_test_split",
+      "sklearn.model_selection.RandomizedSearchCV",
+      "sklearn.preprocessing.StandardScaler",
+      "sklearn.svm.SVC",
+      "sklearn.ensemble.RandomForestClassifier",
+      "xgboost.XGBClassifier",
+      "sklearn.metrics.accuracy_score",
+      "sklearn.metrics.classification_report",
+      "sklearn.metrics.confusion_matrix",
+      "src.config.MODEL_DIR"
+    ],
+    "calls": [],
+    "dependencies": [],
+    "related_files": [],
+    "parent_symbol": null,
+    "metadata": {
+      "github_reference": "https://github.com/pvats2006/Image-Classification-ML/blob/main/src/train.py#L1-L265"
+    }
+  },
+  {
+    "chunk_id": "src/evaluate.py::function::8e6068ef6f0dc6bfb97c",
+    "repo": "pvats2006/Image-Classification-ML",
+    "file_path": "src/evaluate.py",
+    "file_name": "evaluate.py",
+    "language": "python",
+    "chunk_type": "function",
+    "symbol": "evaluate",
+    "line_start": 20,
+    "line_end": 168,
+    "content": "def evaluate():\n\n    REPORT_DIR.mkdir(parents=True, exist_ok=True)\n\n    print(\"=\" * 60)\n    print(\"Loading Dataset\")\n    print(\"=\" * 60)\n\n    X = np.load(\"data/X.npy\")\n    y = np.load(\"data/y.npy\")\n\n    X_train, X_test, y_train, y_test = train_test_split(\n        X,\n        y,\n        test_size=0.20,\n        random_state=42,\n        stratify=y,\n    )\n\n    scaler = joblib.load(MODEL_DIR / \"scaler.pkl\")\n\n    X_test = scaler.transform(X_test)\n\n    svm = joblib.load(MODEL_DIR / \"svm_model.pkl\")\n    rf = joblib.load(MODEL_DIR / \"random_forest.pkl\")\n    xgb = joblib.load(MODEL_DIR / \"xgboost_model.pkl\")\n\n    models = {\n        \"SVM\": svm,\n        \"Random Forest\": rf,\n        \"XGBoost\": xgb,\n    }\n\n    scores = {}\n\n    best_pred = None\n\n    for name, model in models.items():\n\n        print(f\"\\nEvaluating {name}\")\n\n        pred = model.predict(X_test)\n\n        acc = accuracy_score(y_test, pred)\n\n        scores[name] = acc\n\n        print(f\"Accuracy : {acc:.4f}\")\n\n        if name == \"XGBoost\":\n            best_pred = pred\n\n            report = classification_report(\n                y_test,\n                pred,\n                target_names=CLASS_NAMES,\n            )\n\n            with open(\n                REPORT_DIR / \"classification_report.txt\",\n                \"w\",\n            ) as f:\n                f.write(report)\n\n    print(\"\\nGenerating Confusion Matrix...\")\n\n    cm = confusion_matrix(y_test, best_pred)\n\n    plt.figure(figsize=(8, 6))\n\n    plt.imshow(cm)\n\n    plt.title(\"Confusion Matrix\")\n\n    plt.colorbar()\n\n    plt.xticks(range(len(CLASS_NAMES)), CLASS_NAMES, rotation=45)\n\n    plt.yticks(range(len(CLASS_NAMES)), CLASS_NAMES)\n\n    plt.xlabel(\"Predicted\")\n\n    plt.ylabel(\"Actual\")\n\n    plt.tight_layout()\n\n    plt.savefig(REPORT_DIR / \"confusion_matrix.png\")\n\n    plt.close()\n\n    print(\"Generating Model Comparison...\")\n\n    plt.figure(figsize=(6, 4))\n\n    plt.bar(scores.keys(), scores.values())\n\n    plt.ylabel(\"Accuracy\")\n\n    plt.ylim(0, 1)\n\n    for i, value in enumerate(scores.values()):\n        plt.text(i, value + 0.01, f\"{value:.3f}\", ha=\"center\")\n\n    plt.tight_layout()\n\n    plt.savefig(REPORT_DIR / \"model_comparison.png\")\n\n    plt.close()\n\n    print(\"Generating Feature Importance...\")\n\n    plt.figure(figsize=(10, 8))\n\n    plot_importance(\n        xgb,\n        max_num_features=20,\n        importance_type=\"gain\",\n    )\n\n    plt.tight_layout()\n\n    plt.savefig(REPORT_DIR / \"feature_importance.png\")\n\n    plt.close()\n\n    best_model = max(scores, key=scores.get)\n\n    with open(\n        REPORT_DIR / \"training_summary.txt\",\n        \"w\",\n    ) as f:\n\n        f.write(\"IMAGE CLASSIFICATION PROJECT\\n\")\n        f.write(\"=\" * 40 + \"\\n\\n\")\n\n        f.write(f\"Dataset Size : {len(X)}\\n\")\n\n        f.write(f\"Feature Count : {X.shape[1]}\\n\\n\")\n\n        f.write(\"Model Accuracies\\n\")\n\n        for model, score in scores.items():\n            f.write(f\"{model:<20}: {score:.4f}\\n\")\n\n        f.write(f\"\\nBest Model : {best_model}\\n\")\n\n    print(\"\\nReports Generated Successfully!\")\n\n    print(REPORT_DIR)",
+    "imports": [
+      "joblib",
+      "numpy",
+      "matplotlib.pyplot",
+      "pathlib.Path",
+      "sklearn.model_selection.train_test_split",
+      "sklearn.preprocessing.StandardScaler",
+      "sklearn.metrics.accuracy_score",
+      "sklearn.metrics.classification_report",
+      "sklearn.metrics.confusion_matrix",
+      "xgboost.plot_importance",
+      "src.config.MODEL_DIR",
+      "src.config.REPORT_DIR",
+      "src.config.CLASS_NAMES"
+    ],
+    "calls": [
+      "mkdir",
+      "print",
+      "load",
+      "train_test_split",
+      "transform",
+      "items",
+      "confusion_matrix",
+      "figure",
+      "imshow",
+      "title",
+      "colorbar",
+      "xticks",
+      "yticks",
+      "xlabel",
+      "ylabel",
+      "tight_layout",
+      "savefig",
+      "close",
+      "bar",
+      "ylim"
+    ],
+    "dependencies": [],
+    "related_files": [],
+    "parent_symbol": null,
+    "metadata": {
+      "github_reference": "https://github.com/pvats2006/Image-Classification-ML/blob/main/src/evaluate.py#L20-L168"
+    }
+  },
+  {
+    "chunk_id": "src/evaluate.py::file::4a3bceec2c7a18982496",
+    "repo": "pvats2006/Image-Classification-ML",
+    "file_path": "src/evaluate.py",
+    "file_name": "evaluate.py",
+    "language": "python",
+    "chunk_type": "file",
+    "symbol": "evaluate.py",
+    "line_start": 1,
+    "line_end": 172,
+    "content": "import joblib\nimport numpy as np\nimport matplotlib.pyplot as plt\n\nfrom pathlib import Path\n\nfrom sklearn.model_selection import train_test_split\nfrom sklearn.preprocessing import StandardScaler\nfrom sklearn.metrics import (\n    accuracy_score,\n    classification_report,\n    confusion_matrix,\n)\n\nfrom xgboost import plot_importance\n\nfrom src.config import MODEL_DIR, REPORT_DIR, CLASS_NAMES\n\n\ndef evaluate():\n\n    REPORT_DIR.mkdir(parents=True, exist_ok=True)\n\n    print(\"=\" * 60)\n    print(\"Loading Dataset\")\n    print(\"=\" * 60)\n\n    X = np.load(\"data/X.npy\")\n    y = np.load(\"data/y.npy\")\n\n    X_train, X_test, y_train, y_test = train_test_split(\n        X,\n        y,\n        test_size=0.20,\n        random_state=42,\n        stratify=y,\n    )\n\n    scaler = joblib.load(MODEL_DIR / \"scaler.pkl\")\n\n    X_test = scaler.transform(X_test)\n\n    svm = joblib.load(MODEL_DIR / \"svm_model.pkl\")\n    rf = joblib.load(MODEL_DIR / \"random_forest.pkl\")\n    xgb = joblib.load(MODEL_DIR / \"xgboost_model.pkl\")\n\n    models = {\n        \"SVM\": svm,\n        \"Random Forest\": rf,\n        \"XGBoost\": xgb,\n    }\n\n    scores = {}\n\n    best_pred = None\n\n    for name, model in models.items():\n\n        print(f\"\\nEvaluating {name}\")\n\n        pred = model.predict(X_test)\n\n        acc = accuracy_score(y_test, pred)\n\n        scores[name] = acc\n\n        print(f\"Accuracy : {acc:.4f}\")\n\n        if name == \"XGBoost\":\n            best_pred = pred\n\n            report = classification_report(\n                y_test,\n                pred,\n                target_names=CLASS_NAMES,\n            )\n\n            with open(\n                REPORT_DIR / \"classification_report.txt\",\n                \"w\",\n            ) as f:\n                f.write(report)\n\n    print(\"\\nGenerating Confusion Matrix...\")\n\n    cm = confusion_matrix(y_test, best_pred)\n\n    plt.figure(figsize=(8, 6))\n\n    plt.imshow(cm)\n\n    plt.title(\"Confusion Matrix\")\n\n    plt.colorbar()\n\n    plt.xticks(range(len(CLASS_NAMES)), CLASS_NAMES, rotation=45)\n\n    plt.yticks(range(len(CLASS_NAMES)), CLASS_NAMES)\n\n    plt.xlabel(\"Predicted\")\n\n    plt.ylabel(\"Actual\")\n\n    plt.tight_layout()\n\n    plt.savefig(REPORT_DIR / \"confusion_matrix.png\")\n\n    plt.close()\n\n    print(\"Generating Model Comparison...\")\n\n    plt.figure(figsize=(6, 4))\n\n    plt.bar(scores.keys(), scores.values())\n\n    plt.ylabel(\"Accuracy\")\n\n    plt.ylim(0, 1)\n\n    for i, value in enumerate(scores.values()):\n        plt.text(i, value + 0.01, f\"{value:.3f}\", ha=\"center\")\n\n    plt.tight_layout()\n\n    plt.savefig(REPORT_DIR / \"model_comparison.png\")\n\n    plt.close()\n\n    print(\"Generating Feature Importance...\")\n\n    plt.figure(figsize=(10, 8))\n\n    plot_importance(\n        xgb,\n        max_num_features=20,\n        importance_type=\"gain\",\n    )\n\n    plt.tight_layout()\n\n    plt.savefig(REPORT_DIR / \"feature_importance.png\")\n\n    plt.close()\n\n    best_model = max(scores, key=scores.get)\n\n    with open(\n        REPORT_DIR / \"training_summary.txt\",\n        \"w\",\n    ) as f:\n\n        f.write(\"IMAGE CLASSIFICATION PROJECT\\n\")\n        f.write(\"=\" * 40 + \"\\n\\n\")\n\n        f.write(f\"Dataset Size : {len(X)}\\n\")\n\n        f.write(f\"Feature Count : {X.shape[1]}\\n\\n\")\n\n        f.write(\"Model Accuracies\\n\")\n\n        for model, score in scores.items():\n            f.write(f\"{model:<20}: {score:.4f}\\n\")\n\n        f.write(f\"\\nBest Model : {best_model}\\n\")\n\n    print(\"\\nReports Generated Successfully!\")\n\n    print(REPORT_DIR)\n\n\nif __name__ == \"__main__\":\n    evaluate()",
+    "imports": [
+      "joblib",
+      "numpy",
+      "matplotlib.pyplot",
+      "pathlib.Path",
+      "sklearn.model_selection.train_test_split",
+      "sklearn.preprocessing.StandardScaler",
+      "sklearn.metrics.accuracy_score",
+      "sklearn.metrics.classification_report",
+      "sklearn.metrics.confusion_matrix",
+      "xgboost.plot_importance",
+      "src.config.MODEL_DIR",
+      "src.config.REPORT_DIR",
+      "src.config.CLASS_NAMES"
+    ],
+    "calls": [],
+    "dependencies": [],
+    "related_files": [],
+    "parent_symbol": null,
+    "metadata": {
+      "github_reference": "https://github.com/pvats2006/Image-Classification-ML/blob/main/src/evaluate.py#L1-L172"
+    }
+  }
+]
