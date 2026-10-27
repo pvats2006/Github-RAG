@@ -31,6 +31,7 @@ from app.repo_indexer import (
     BINARY_EXTENSIONS,
     _make_chunk_dict,
 )
+from app.validation.grounded_validator import GroundedAnswerValidator
 
 
 # ---------------------------------------------------------------------------
@@ -258,6 +259,74 @@ class TestChunkRepository:
         for c in chunks:
             assert c["repo"] == "owner/my-repo"
 
+
+class FakeLLM:
+    def __init__(self, response: str = "GROUNDING: PASS\nUNSUPPORTED_CLAIMS:\n- None\n"):
+        self.calls = 0
+        self.response = response
+        self.last_prompt = None
+
+    def generate(self, prompt: str, **kwargs):
+        self.calls += 1
+        self.last_prompt = prompt
+        return self.response
+
+
+class TestGroundedAnswerValidatorFastPath:
+    def test_large_context_is_truncated_for_prompt_generation(self):
+        pipeline = RAGPipeline.__new__(RAGPipeline)
+        large_content = "\n".join(["print('x')" for _ in range(2000)])
+
+        prompt = pipeline.build_citation_prompt(
+            query="What does this repo do?",
+            chunks=[{
+                "file_path": "src/large.py",
+                "symbol": "big_module",
+                "content": large_content,
+            }],
+        )
+
+        assert "truncated" in prompt.lower()
+        assert len(prompt) < 5000
+
+    def test_insufficient_answer_skips_expensive_llm_validation(self):
+        llm = FakeLLM()
+        validator = GroundedAnswerValidator(llm=llm)
+
+        result = validator.validate(
+            question="What kind of repo is this?",
+            answer="The repository context is insufficient to determine the project type.",
+            chunks=[{
+                "file_path": "src/app.py",
+                "symbol": "main",
+                "content": "def main():\n    return 'hello'\n",
+            }],
+        )
+
+        assert result["passed"] is True
+        assert result["unsupported_claims"] == []
+        assert llm.calls == 0
+
+    def test_relevant_chunks_are_used_for_citationed_answers(self):
+        llm = FakeLLM()
+        validator = GroundedAnswerValidator(llm=llm)
+
+        chunks = [
+            {"file_path": "src/a.py", "symbol": "alpha", "content": "VALUE = 1"},
+            {"file_path": "src/b.py", "symbol": "beta", "content": "VALUE = 2"},
+            {"file_path": "src/c.py", "symbol": "gamma", "content": "VALUE = 3"},
+        ]
+
+        validator.validate(
+            question="What does this project do?",
+            answer="This project defines a service. [1]",
+            chunks=chunks,
+        )
+
+        assert llm.calls == 1
+        assert "[1] src/a.py" in llm.last_prompt
+        assert "src/b.py" not in llm.last_prompt
+
     def test_ignored_dirs_skipped(self, tmp_path):
         (tmp_path / "__pycache__").mkdir()
         (tmp_path / "__pycache__" / "cached.pyc").write_bytes(b"garbage")
@@ -353,9 +422,9 @@ class TestGroqClient:
         assert client.model == DEFAULT_GROQ_MODEL
 
     def test_custom_model_from_env(self, monkeypatch):
-        monkeypatch.setenv("GROQ_MODEL", "llama-3.1-8b-instant")
+        monkeypatch.setenv("GROQ_MODEL", "openai/gpt-oss-20b")
         client = GroqClient(api_key="mock_key")
-        assert client.model == "llama-3.1-8b-instant"
+        assert client.model == "openai/gpt-oss-20b"
 
     @patch("groq.Groq")
     def test_successful_generate(self, mock_groq_class):
